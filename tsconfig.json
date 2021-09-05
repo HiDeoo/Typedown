@@ -1,20 +1,11 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es6"],
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "exactOptionalPropertyTypes": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  }
+    "lib": ["es6"]
+  },
+  "exclude": ["src/webview"]
 }
