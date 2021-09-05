@@ -1,0 +1,4 @@
+// https://code.visualstudio.com/docs/editor/extension-marketplace#_workspace-recommended-extensions
+{
+  "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+}
