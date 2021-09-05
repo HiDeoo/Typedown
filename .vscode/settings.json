@@ -1,0 +1,4 @@
+// https://code.visualstudio.com/docs/getstarted/settings
+{
+  "typescript.tsc.autoDetect": "off"
+}

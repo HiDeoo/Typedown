@@ -1,0 +1,32 @@
+{
+  "name": "typedown",
+  "version": "0.0.1",
+  "author": "HiDeoo",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "activationEvents": [
+    "onCommand:typedown.tsToMd"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "typedown.tsToMd",
+        "title": "TypeScript to Markdown"
+      }
+    ]
+  },
+  "main": "dist",
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc --watch -p ."
+  },
+  "devDependencies": {
+    "@types/vscode": "1.60.0",
+    "typescript": "4.4.2",
+    "vscode-test": "1.6.1"
+  },
+  "repository": "https://github.com/HiDeoo/Typedown",
+  "private": true
+}
