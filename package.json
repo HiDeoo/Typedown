@@ -44,7 +44,7 @@
     "mocha": "9.1.1",
     "prettier": "2.3.2",
     "rimraf": "3.0.2",
-    "typescript": "4.4.2",
+    "typescript": "4.3.5",
     "vscode-test": "1.6.1"
   },
   "lint-staged": {
