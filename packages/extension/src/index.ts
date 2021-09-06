@@ -1,7 +1,7 @@
-import { commands, ExtensionContext, Uri, window } from 'vscode'
+import { commands, ExtensionContext, window } from 'vscode'
 
-import { getFolderTSConfig } from './typescript'
-import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, VSCodeError } from './vscode'
+import { getFolderTSConfig, getSchema } from './typescript'
+import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
 
 export function activate(context: ExtensionContext): void {
   context.subscriptions.push(commands.registerCommand('typedown.tsToMd', () => tsToMd(context)))
@@ -9,22 +9,10 @@ export function activate(context: ExtensionContext): void {
 
 async function tsToMd(_context: ExtensionContext) {
   try {
-    const folder = getWorkspaceSingleFolder()
-    const tsConfig = await getFolderTSConfig(folder.uri)
-    let file: Uri | undefined
+    const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
+    const schema = getSchema(tsConfig, currentFile)
 
-    if (!tsConfig) {
-      try {
-        file = await getActiveTextEditorDiskURI()
-      } catch (error) {
-        throw new VSCodeError(
-          'Could not find either a TSConfig file in your workspace or an active text editor for a file on disk.'
-        )
-      }
-    }
-
-    console.log('tsConfig ', tsConfig)
-    console.log('file ', file)
+    console.log('schema ', schema)
   } catch (error) {
     console.error(error)
 
@@ -35,4 +23,22 @@ async function tsToMd(_context: ExtensionContext) {
 
     window.showErrorMessage(message, { detail, modal: true })
   }
+}
+
+async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: MaybeURI]> {
+  const folder = getWorkspaceSingleFolder()
+  const tsConfig = await getFolderTSConfig(folder.uri)
+  let currentFile: MaybeURI
+
+  if (!tsConfig) {
+    try {
+      currentFile = await getActiveTextEditorDiskURI()
+    } catch (error) {
+      throw new VSCodeError(
+        'Could not find either a TSConfig file in your workspace or an active text editor for a file on disk.'
+      )
+    }
+  }
+
+  return [tsConfig, currentFile]
 }
