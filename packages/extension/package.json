@@ -6,7 +6,12 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf ../../dist",
-    "build": "tsc -p ."
+    "build": "tsc",
+    "pretest": "yarn build",
+    "test": "node ../../dist/tests"
+  },
+  "dependencies": {
+    "ts-json-schema-generator": "0.95.0"
   },
   "devDependencies": {
     "@types/glob": "7.1.4",

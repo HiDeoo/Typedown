@@ -14,8 +14,7 @@
     "build": "yarn workspace typedown-extension run build",
     "postbuild": "yarn workspace typedown-webview run build",
     "lint": "prettier --check . && eslint --max-warnings=0 --ext .ts,.svelte packages && yarn workspace typedown-webview run lint",
-    "pretest": "yarn workspace typedown-extension run build",
-    "test": "node dist/tests",
+    "test": "yarn workspace typedown-extension run test",
     "prepare": "husky install"
   },
   "activationEvents": [
