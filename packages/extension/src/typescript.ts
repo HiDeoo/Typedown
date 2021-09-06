@@ -12,9 +12,9 @@ export async function getFolderTSConfig(uri: Uri): Promise<MaybeURI> {
 }
 
 export function getSchema(tsConfig: MaybeURI, currentFile: MaybeURI): TSSchema {
-  // TODO(HiDeoo)
   const config: schemaGenerator.Config = {
     path: currentFile?.fsPath,
+    skipTypeCheck: true,
     tsconfig: tsConfig?.fsPath,
     type: '*',
   }
