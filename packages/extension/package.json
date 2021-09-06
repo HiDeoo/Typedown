@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf ../../dist",
-    "build": "tsc",
+    "build": "tsc -b",
     "pretest": "yarn build",
     "test": "node ../../dist/tests"
   },

@@ -1,18 +1,21 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
+  import { isVSCodeMessageDefinitions, VSCodeMessage, WebviewMessageReady } from 'typedown-messages'
 
   onMount(() => {
-    window.addEventListener('message', onMessage)
+    window.addEventListener('message', onVSCodeMessage)
+
+    vscode.postMessage<WebviewMessageReady>({ type: 'ready' })
   })
 
   onDestroy(() => {
-    window.removeEventListener('message', onMessage)
+    window.removeEventListener('message', onVSCodeMessage)
   })
 
-  function onMessage(event: unknown) {
-    console.log('event ', event)
-
-    vscode.postMessage({ message: 'Hello from webview' })
+  function onVSCodeMessage(event: MessageEvent<VSCodeMessage>) {
+    if (isVSCodeMessageDefinitions(event.data)) {
+      console.log('> definitions ', event.data.schema)
+    }
   }
 </script>
 

@@ -2,3 +2,4 @@ node_modules
 dist
 .vscode-test
 yarn-error.log
+tsconfig.tsbuildinfo

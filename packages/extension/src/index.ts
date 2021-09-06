@@ -1,18 +1,20 @@
 import { commands, ExtensionContext, window } from 'vscode'
+import { isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-messages'
 
-import { getFolderTSConfig, getSchema } from './typescript'
+import { getFolderTSConfig, getSchema, TSSchema } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
+import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
   context.subscriptions.push(commands.registerCommand('typedown.tsToMd', () => tsToMd(context)))
 }
 
-async function tsToMd(_context: ExtensionContext) {
+async function tsToMd(context: ExtensionContext) {
   try {
     const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
     const schema = getSchema(tsConfig, currentFile)
 
-    console.log('schema ', schema)
+    showWebviewWithSchema(context, schema)
   } catch (error) {
     console.error(error)
 
@@ -23,6 +25,19 @@ async function tsToMd(_context: ExtensionContext) {
 
     window.showErrorMessage(message, { detail, modal: true })
   }
+}
+
+function showWebviewWithSchema(context: ExtensionContext, schema: TSSchema) {
+  const panel = createWebviewPanel(context)
+
+  panel.webview.onDidReceiveMessage((event) => {
+    if (isWebviewMessageReady(event)) {
+      // TODO(HiDeoo) Could this be called multiple times if the webview is hidden/shown?
+
+      const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
+      panel.webview.postMessage(message)
+    }
+  })
 }
 
 async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: MaybeURI]> {
