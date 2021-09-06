@@ -1,11 +1,10 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "../../dist",
     "target": "es6",
     "module": "commonjs",
     "lib": ["es6"]
-  },
-  "exclude": ["src/webview"]
+  }
 }

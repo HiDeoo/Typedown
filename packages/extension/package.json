@@ -1,0 +1,21 @@
+{
+  "name": "typedown-extension",
+  "version": "0.0.1",
+  "author": "HiDeoo",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prebuild": "rimraf ../../dist",
+    "build": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/glob": "7.1.4",
+    "@types/mocha": "9.0.0",
+    "@types/vscode": "1.60.0",
+    "glob": "7.1.7",
+    "mocha": "9.1.1",
+    "rimraf": "3.0.2",
+    "typescript": "4.4.2",
+    "vscode-test": "1.6.1"
+  }
+}
