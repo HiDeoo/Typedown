@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf ../../dist",
-    "build": "tsc -p ."
+    "build": "tsc",
+    "pretest": "yarn build",
+    "test": "node ../../dist/tests"
   },
   "devDependencies": {
     "@types/glob": "7.1.4",
