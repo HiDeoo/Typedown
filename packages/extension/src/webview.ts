@@ -17,8 +17,17 @@ export function createWebviewPanel(context: ExtensionContext): void {
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      const vscode = acquireVsCodeApi();
+    </script>
   </body>
 </html>`
+
+  panel.webview.postMessage({ message: 'Hello from extension ' })
+
+  panel.webview.onDidReceiveMessage((event) => {
+    console.log('event ', event)
+  })
 }
 
 function getWebviewPanelAssetURI(panel: WebviewPanel, name: string, context: ExtensionContext): Uri {

@@ -1,4 +1,10 @@
 {
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "vscode": "readonly"
+  },
   "plugins": ["@typescript-eslint", "svelte3"],
   "overrides": [
     {

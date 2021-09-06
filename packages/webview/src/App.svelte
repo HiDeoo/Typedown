@@ -1,5 +1,21 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte'
+
   import Counter from './Counter.svelte'
+
+  onMount(() => {
+    window.addEventListener('message', onMessage)
+  })
+
+  onDestroy(() => {
+    window.removeEventListener('message', onMessage)
+  })
+
+  function onMessage(event: unknown) {
+    console.log('event ', event)
+
+    vscode.postMessage({ message: 'Hello from webview' })
+  }
 </script>
 
 <main>

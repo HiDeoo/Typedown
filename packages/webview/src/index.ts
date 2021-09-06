@@ -5,3 +5,9 @@ const app = new App({
 })
 
 export default app
+
+declare global {
+  const vscode: {
+    postMessage(message: unknown): void
+  }
+}
