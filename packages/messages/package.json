@@ -1,0 +1,17 @@
+{
+  "name": "typedown-messages",
+  "version": "0.0.1",
+  "author": "HiDeoo",
+  "license": "MIT",
+  "private": true,
+  "main": "dist",
+  "types": "dist/index.d.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "ts-json-schema-generator": "0.95.0",
+    "typescript": "4.4.2"
+  }
+}

@@ -34,10 +34,10 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Lint
-        run: yarn lint
-
       - name: Test
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: yarn test
+
+      - name: Lint
+        run: yarn lint
