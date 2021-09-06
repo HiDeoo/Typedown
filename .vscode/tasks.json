@@ -4,9 +4,8 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "watch",
-      "problemMatcher": "$tsc-watch",
-      "isBackground": true,
+      "script": "build",
+      "problemMatcher": "$tsc",
       "group": {
         "kind": "build",
         "isDefault": true

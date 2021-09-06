@@ -1,14 +1,9 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "target": "es6",
-    "module": "commonjs",
-    "lib": ["es6"],
     "sourceMap": true,
     "esModuleInterop": true,
     "strict": true,
-    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
