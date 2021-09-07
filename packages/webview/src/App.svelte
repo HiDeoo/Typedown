@@ -2,6 +2,8 @@
   import { onDestroy, onMount } from 'svelte'
   import { isVSCodeMessageDefinitions, VSCodeMessage, WebviewMessageReady } from 'typedown-messages'
 
+  import { definitions } from './stores/definition'
+
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
@@ -14,7 +16,7 @@
 
   function onVSCodeMessage(event: MessageEvent<VSCodeMessage>) {
     if (isVSCodeMessageDefinitions(event.data)) {
-      console.log('> definitions ', event.data.schema)
+      definitions.setSchema(event.data.schema)
     }
   }
 </script>
