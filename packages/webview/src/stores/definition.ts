@@ -1,17 +1,17 @@
-import { writable } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 import type { VSCodeMessageDefinitions } from 'typedown-messages'
 
 function createDefinitions() {
-  const { subscribe, update } = writable<SchemaWithDefinitions | undefined>(undefined)
+  const definitions = writable<SchemaWithDefinitions | undefined>(undefined)
 
   return {
-    subscribe,
+    subscribe: definitions.subscribe,
     setSchema: (schema: Schema) =>
-      update(() => {
+      definitions.update(() => {
         return isSchemaWithDefinitions(schema) ? schema : undefined
       }),
     toggle: (identifier: string) =>
-      update((self) => {
+      definitions.update((self) => {
         const definition = self?.definitions[identifier]
 
         if (definition) {
@@ -20,6 +20,21 @@ function createDefinitions() {
 
         return self
       }),
+    export: (): Definitions => {
+      const schema = get(definitions)
+
+      if (!schema) {
+        return {}
+      }
+
+      return Object.entries(schema.definitions).reduce<Definitions>((acc, [identifier, definition]) => {
+        if (definition.selected) {
+          acc[identifier] = definition
+        }
+
+        return acc
+      }, {})
+    },
   }
 }
 
