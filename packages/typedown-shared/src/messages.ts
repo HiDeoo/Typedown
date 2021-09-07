@@ -4,11 +4,11 @@ export function isMessage(message: unknown): message is WebviewMessages | VSCode
   return message !== null && typeof message === 'object' && typeof (message as Message).type === 'string'
 }
 
-type WebviewMessages = WebviewMessageReady | WebviewMessageExport
+type WebviewMessages = WebviewMessageInit | WebviewMessageExport
 type VSCodeMessages = VSCodeMessageDefinitions
 
-export interface WebviewMessageReady extends Message {
-  type: 'ready'
+export interface WebviewMessageInit extends Message {
+  type: 'init'
 }
 
 export interface WebviewMessageExport extends Message {

@@ -40,7 +40,7 @@ function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
   panel.webview.onDidReceiveMessage((event) => {
     if (isMessage(event)) {
       switch (event.type) {
-        case 'ready': {
+        case 'init': {
           const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
           panel.webview.postMessage(message)
           break
