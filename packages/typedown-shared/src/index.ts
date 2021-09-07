@@ -1,2 +1,1 @@
-export * from './vscode'
-export * from './webview'
+export * from './messages'
