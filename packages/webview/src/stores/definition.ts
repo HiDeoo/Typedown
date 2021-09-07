@@ -2,7 +2,7 @@ import { writable } from 'svelte/store'
 import type { VSCodeMessageDefinitions } from 'typedown-messages'
 
 function createDefinitions() {
-  const { subscribe, update } = writable<DefinitionStore>()
+  const { subscribe, update } = writable<DefinitionStore>({ schema: undefined })
 
   return {
     subscribe,
@@ -17,5 +17,8 @@ function createDefinitions() {
 export const definitions = createDefinitions()
 
 interface DefinitionStore {
-  schema: VSCodeMessageDefinitions['schema']
+  schema: VSCodeMessageDefinitions['schema'] | undefined
 }
+
+type Definitions = Exclude<Exclude<DefinitionStore['schema'], undefined>['definitions'], undefined>
+export type Definition = Definitions[keyof Definitions]

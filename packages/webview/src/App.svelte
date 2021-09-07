@@ -2,6 +2,7 @@
   import { onDestroy, onMount } from 'svelte'
   import { isVSCodeMessageDefinitions, VSCodeMessage, WebviewMessageReady } from 'typedown-messages'
 
+  import Definitions from './components/Definitions.svelte'
   import { definitions } from './stores/definition'
 
   onMount(() => {
@@ -22,7 +23,7 @@
 </script>
 
 <main>
-  <h1>Hello</h1>
+  <Definitions />
 </main>
 
 <style>
