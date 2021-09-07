@@ -2,14 +2,20 @@ import { writable } from 'svelte/store'
 import type { VSCodeMessageDefinitions } from 'typedown-messages'
 
 function createDefinitions() {
-  const { subscribe, update } = writable<DefinitionStore>({ schema: undefined })
+  const { subscribe, update } = writable<SchemaWithDefinitions | undefined>(undefined)
 
   return {
     subscribe,
     setSchema: (schema: Schema) =>
+      update(() => {
+        return isSchemaWithDefinitions(schema) ? schema : undefined
+      }),
+    toggle: (identifier: string) =>
       update((self) => {
-        if (isSchemaWithDefinitions(schema)) {
-          self.schema = schema
+        const definition = self?.definitions[identifier]
+
+        if (definition) {
+          definition.selected = definition.selected ? false : true
         }
 
         return self
@@ -20,11 +26,7 @@ function createDefinitions() {
 export const definitions = createDefinitions()
 
 function isSchemaWithDefinitions(schema: Schema): schema is SchemaWithDefinitions {
-  return typeof schema.$ref !== 'undefined' && typeof schema.definitions !== 'undefined'
-}
-
-interface DefinitionStore {
-  schema?: SchemaWithDefinitions
+  return typeof schema.definitions !== 'undefined'
 }
 
 type Schema = VSCodeMessageDefinitions['schema']
@@ -32,6 +34,7 @@ type Definitions = Exclude<Exclude<Schema, undefined>['definitions'], undefined>
 export type Definition = Definitions[keyof Definitions]
 
 interface SchemaWithDefinitions extends Schema {
-  $ref: string
-  definitions: Definitions
+  definitions: {
+    [key: string]: Definition & { selected?: boolean }
+  }
 }

@@ -3,8 +3,8 @@
   import Definition from './Definition.svelte'
 </script>
 
-{#if $definitions?.schema?.definitions}
-  {#each Object.entries($definitions.schema.definitions) as [name, definition] (name)}
-    <Definition {name} {definition} />
+{#if $definitions?.definitions}
+  {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
+    <Definition {identifier} {definition} />
   {/each}
 {/if}

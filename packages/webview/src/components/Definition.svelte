@@ -1,10 +1,15 @@
 <script lang="ts">
-  import type { Definition } from '../stores/definition'
+  import { definitions, Definition } from '../stores/definition'
 
-  export let name: string
+  export let identifier: string
   export let definition: Definition
+
+  function onClick() {
+    definitions.toggle(identifier)
+  }
 </script>
 
-<h1>{name}</h1>
+<h1>{identifier}</h1>
 <div>{JSON.stringify(definition)}</div>
+<div><button on:click={onClick}>Toggle</button></div>
 <hr />
