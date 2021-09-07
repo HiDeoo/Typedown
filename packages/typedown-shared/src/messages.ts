@@ -1,4 +1,4 @@
-import type * as schemaGenerator from 'ts-json-schema-generator'
+import { Definitions, Schema } from './definitions'
 
 export function isMessage(message: unknown): message is WebviewMessages | VSCodeMessages {
   return message !== null && typeof message === 'object' && typeof (message as Message).type === 'string'
@@ -13,12 +13,12 @@ export interface WebviewMessageReady extends Message {
 
 export interface WebviewMessageExport extends Message {
   type: 'export'
-  definitions: Exclude<schemaGenerator.Schema['definitions'], undefined>
+  definitions: Definitions
 }
 
 export interface VSCodeMessageDefinitions extends Message {
   type: 'definitions'
-  schema: schemaGenerator.Schema
+  schema: Schema
 }
 
 export interface Message {

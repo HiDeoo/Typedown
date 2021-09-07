@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, window } from 'vscode'
-import { isMessage, VSCodeMessageDefinitions } from 'typedown-shared'
+import { isMessage, Schema, VSCodeMessageDefinitions } from 'typedown-shared'
 
-import { getFolderTSConfig, getSchema, TSSchema } from './typescript'
+import { getFolderTSConfig, getSchema } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
 import { createWebviewPanel } from './webview'
 
@@ -27,7 +27,7 @@ async function tsToMd(context: ExtensionContext) {
   }
 }
 
-function showWebviewWithSchema(context: ExtensionContext, schema: TSSchema) {
+function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
   const panel = createWebviewPanel(context)
 
   panel.webview.onDidReceiveMessage((event) => {
