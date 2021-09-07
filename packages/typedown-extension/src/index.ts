@@ -35,13 +35,12 @@ async function tsToMd(context: ExtensionContext) {
 }
 
 function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
-  const panel = createWebviewPanel(context)
+  const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
 
-  panel.webview.onDidReceiveMessage((event) => {
+  const panel = createWebviewPanel(context, (event) => {
     if (isMessage(event)) {
       switch (event.type) {
         case 'init': {
-          const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
           panel.webview.postMessage(message)
           break
         }
@@ -56,6 +55,11 @@ function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
       }
     }
   })
+
+  if (!panel.visible) {
+    panel.webview.postMessage(message)
+    panel.reveal()
+  }
 }
 
 async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: MaybeURI]> {
