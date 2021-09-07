@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { isVSCodeMessageDefinitions, VSCodeMessage, WebviewMessageReady } from 'typedown-messages'
+  import { isVSCodeMessageDefinitions, VSCodeMessage, WebviewMessageReady } from 'typedown-shared'
 
   import Header from './components/Header.svelte'
   import Definitions from './components/Definitions.svelte'

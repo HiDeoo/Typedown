@@ -1,5 +1,5 @@
 import { commands, ExtensionContext, window } from 'vscode'
-import { isWebviewMessageExport, isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-messages'
+import { isWebviewMessageExport, isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-shared'
 
 import { getFolderTSConfig, getSchema, TSSchema } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'

@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store'
-import type { VSCodeMessageDefinitions } from 'typedown-messages'
+import type { VSCodeMessageDefinitions } from 'typedown-shared'
 
 function createDefinitions() {
   const definitions = writable<SchemaWithDefinitions | undefined>(undefined)
