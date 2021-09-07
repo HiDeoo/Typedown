@@ -5,11 +5,18 @@
   import Header from './components/Header.svelte'
   import Definitions from './components/Definitions.svelte'
   import { definitions } from './stores/definition'
+  import { getSchemaFromState } from './state'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
-    vscode.postMessage<WebviewMessageReady>({ type: 'ready' })
+    const schema = getSchemaFromState()
+
+    if (schema) {
+      definitions.setSchema(schema)
+    } else {
+      vscode.postMessage<WebviewMessageReady>({ type: 'ready' })
+    }
   })
 
   onDestroy(() => {

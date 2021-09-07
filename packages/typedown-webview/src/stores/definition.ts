@@ -1,21 +1,32 @@
 import { get, writable } from 'svelte/store'
 import type { Definitions, Schema } from 'typedown-shared'
 
+import { setSchemaToState } from '../state'
+
 function createDefinitions() {
   const definitions = writable<Schema | undefined>(undefined)
 
   return {
     subscribe: definitions.subscribe,
-    setSchema: (schema: Schema) => definitions.update(() => schema),
+    setSchema: (schema: Schema) =>
+      definitions.update(() => {
+        setSchemaToState(schema)
+
+        return schema
+      }),
     toggle: (identifier: string) =>
-      definitions.update((self) => {
-        const definition = self?.definitions[identifier]
+      definitions.update((schema) => {
+        const definition = schema?.definitions[identifier]
 
         if (definition) {
           definition.selected = definition.selected ? false : true
         }
 
-        return self
+        if (schema) {
+          setSchemaToState(schema)
+        }
+
+        return schema
       }),
     export: (): Definitions => {
       const schema = get(definitions)
