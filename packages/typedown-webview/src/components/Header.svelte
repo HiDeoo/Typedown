@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WebviewMessageExport } from 'typedown-messages'
+  import type { WebviewMessageExport } from 'typedown-shared'
 
   import { definitions } from '../stores/definition'
 

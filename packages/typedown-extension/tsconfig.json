@@ -7,5 +7,5 @@
     "module": "commonjs",
     "lib": ["es6"]
   },
-  "references": [{ "path": "../messages" }]
+  "references": [{ "path": "../typedown-shared" }]
 }

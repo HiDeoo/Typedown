@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { definitions, Definition } from '../stores/definition'
+  import type { Definition } from 'typedown-shared'
+
+  import { definitions } from '../stores/definition'
 
   export let identifier: string
   export let definition: Definition

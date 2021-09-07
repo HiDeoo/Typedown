@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, window } from 'vscode'
-import { isWebviewMessageExport, isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-messages'
+import { isMessage, Schema, VSCodeMessageDefinitions } from 'typedown-shared'
 
-import { getFolderTSConfig, getSchema, TSSchema } from './typescript'
+import { getFolderTSConfig, getSchema } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
 import { createWebviewPanel } from './webview'
 
@@ -27,17 +27,26 @@ async function tsToMd(context: ExtensionContext) {
   }
 }
 
-function showWebviewWithSchema(context: ExtensionContext, schema: TSSchema) {
+function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
   const panel = createWebviewPanel(context)
 
   panel.webview.onDidReceiveMessage((event) => {
-    if (isWebviewMessageReady(event)) {
-      // TODO(HiDeoo) Could this be called multiple times if the webview is hidden/shown?
-
-      const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
-      panel.webview.postMessage(message)
-    } else if (isWebviewMessageExport(event)) {
-      console.log('event.data ', event.definitions)
+    if (isMessage(event)) {
+      switch (event.type) {
+        case 'ready': {
+          const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
+          panel.webview.postMessage(message)
+          break
+        }
+        case 'export': {
+          console.log('event ', event.definitions)
+          break
+        }
+        default: {
+          console.error('Unknown message type received from the webview.')
+          break
+        }
+      }
     }
   })
 }
