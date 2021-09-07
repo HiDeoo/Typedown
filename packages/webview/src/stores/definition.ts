@@ -6,9 +6,12 @@ function createDefinitions() {
 
   return {
     subscribe,
-    setSchema: (schema: DefinitionStore['schema']) =>
+    setSchema: (schema: Schema) =>
       update((self) => {
-        self.schema = schema
+        if (isSchemaWithDefinitions(schema)) {
+          self.schema = schema
+        }
+
         return self
       }),
   }
@@ -16,9 +19,19 @@ function createDefinitions() {
 
 export const definitions = createDefinitions()
 
-interface DefinitionStore {
-  schema: VSCodeMessageDefinitions['schema'] | undefined
+function isSchemaWithDefinitions(schema: Schema): schema is SchemaWithDefinitions {
+  return typeof schema.$ref !== 'undefined' && typeof schema.definitions !== 'undefined'
 }
 
-type Definitions = Exclude<Exclude<DefinitionStore['schema'], undefined>['definitions'], undefined>
+interface DefinitionStore {
+  schema?: SchemaWithDefinitions
+}
+
+type Schema = VSCodeMessageDefinitions['schema']
+type Definitions = Exclude<Exclude<Schema, undefined>['definitions'], undefined>
 export type Definition = Definitions[keyof Definitions]
+
+interface SchemaWithDefinitions extends Schema {
+  $ref: string
+  definitions: Definitions
+}
