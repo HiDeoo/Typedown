@@ -1,5 +1,5 @@
 import { commands, ExtensionContext, window } from 'vscode'
-import { isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-messages'
+import { isWebviewMessageExport, isWebviewMessageReady, VSCodeMessageDefinitions } from 'typedown-messages'
 
 import { getFolderTSConfig, getSchema, TSSchema } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
@@ -36,6 +36,8 @@ function showWebviewWithSchema(context: ExtensionContext, schema: TSSchema) {
 
       const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
       panel.webview.postMessage(message)
+    } else if (isWebviewMessageExport(event)) {
+      console.log('event.data ', event.definitions)
     }
   })
 }
