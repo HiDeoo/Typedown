@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, window } from 'vscode'
+import { commands, ExtensionContext, StatusBarAlignment, window } from 'vscode'
 import { isMessage, Schema, VSCodeMessageDefinitions } from 'typedown-shared'
 
 import { getFolderTSConfig, getSchema } from './typescript'
@@ -11,10 +11,17 @@ export function activate(context: ExtensionContext): void {
 
 async function tsToMd(context: ExtensionContext) {
   try {
+    const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left)
+    statusBarItem.name = 'Typedown Indicator'
+    statusBarItem.text = '$(sync~spin) Generating definitions'
+    statusBarItem.show()
+
     const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
     const schema = getSchema(tsConfig, currentFile)
 
     showWebviewWithSchema(context, schema)
+
+    statusBarItem.dispose()
   } catch (error) {
     console.error(error)
 
