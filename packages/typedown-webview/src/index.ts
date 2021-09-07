@@ -9,6 +9,8 @@ export default app
 
 declare global {
   const vscode: {
+    getState<T>(): T
     postMessage<T extends Message>(message: T): void
+    setState<T>(state: T): void
   }
 }

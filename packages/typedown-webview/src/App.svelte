@@ -1,15 +1,22 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { isMessage, Message, WebviewMessageReady } from 'typedown-shared'
+  import { isMessage, Message, WebviewMessageInit } from 'typedown-shared'
 
   import Header from './components/Header.svelte'
   import Definitions from './components/Definitions.svelte'
   import { definitions } from './stores/definition'
+  import { getSchemaFromState } from './state'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
-    vscode.postMessage<WebviewMessageReady>({ type: 'ready' })
+    const schema = getSchemaFromState()
+
+    if (schema) {
+      definitions.setSchema(schema)
+    } else {
+      vscode.postMessage<WebviewMessageInit>({ type: 'init' })
+    }
   })
 
   onDestroy(() => {

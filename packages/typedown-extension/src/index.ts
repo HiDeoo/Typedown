@@ -10,18 +10,16 @@ export function activate(context: ExtensionContext): void {
 }
 
 async function tsToMd(context: ExtensionContext) {
-  try {
-    const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left)
-    statusBarItem.name = 'Typedown Indicator'
-    statusBarItem.text = '$(sync~spin) Generating definitions'
-    statusBarItem.show()
+  const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left)
+  statusBarItem.name = 'Typedown Indicator'
+  statusBarItem.text = '$(sync~spin) Generating definitions'
+  statusBarItem.show()
 
+  try {
     const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
     const schema = getSchema(tsConfig, currentFile)
 
     showWebviewWithSchema(context, schema)
-
-    statusBarItem.dispose()
   } catch (error) {
     console.error(error)
 
@@ -31,17 +29,18 @@ async function tsToMd(context: ExtensionContext) {
     const detail = error instanceof VSCodeError ? error.detail : error instanceof Error ? error.message : undefined
 
     window.showErrorMessage(message, { detail, modal: true })
+  } finally {
+    statusBarItem.dispose()
   }
 }
 
 function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
-  const panel = createWebviewPanel(context)
+  const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
 
-  panel.webview.onDidReceiveMessage((event) => {
+  const panel = createWebviewPanel(context, (event) => {
     if (isMessage(event)) {
       switch (event.type) {
-        case 'ready': {
-          const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
+        case 'init': {
           panel.webview.postMessage(message)
           break
         }
@@ -56,6 +55,11 @@ function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
       }
     }
   })
+
+  if (!panel.visible) {
+    panel.webview.postMessage(message)
+    panel.reveal()
+  }
 }
 
 async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: MaybeURI]> {

@@ -1,7 +1,26 @@
 import { ExtensionContext, Uri, ViewColumn, WebviewPanel, window } from 'vscode'
 
-export function createWebviewPanel(context: ExtensionContext): WebviewPanel {
-  const panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, { enableScripts: true })
+let panel: WebviewPanel | undefined
+
+export function createWebviewPanel(
+  context: ExtensionContext,
+  onDidReceiveMessage: (event: unknown) => void
+): WebviewPanel {
+  if (panel) {
+    return panel
+  }
+
+  panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, { enableScripts: true })
+
+  panel.webview.onDidReceiveMessage(onDidReceiveMessage)
+
+  panel.onDidDispose(
+    () => {
+      panel = undefined
+    },
+    null,
+    context.subscriptions
+  )
 
   const jsURI = getWebviewPanelAssetURI(panel, 'index.js', context)
   const cssURI = getWebviewPanelAssetURI(panel, 'index.css', context)
