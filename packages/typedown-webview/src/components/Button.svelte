@@ -9,7 +9,6 @@
     cursor: pointer;
     line-height: 1.4em;
     margin-right: 4px;
-    margin-top: 4px;
     padding: 2px 14px;
   }
 
