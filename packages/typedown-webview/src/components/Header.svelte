@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { WebviewMessageExport } from 'typedown-shared'
 
+  import Section from './Section.svelte'
   import { definitions } from '../stores/definition'
 
   function onClickExport() {
@@ -8,6 +9,6 @@
   }
 </script>
 
-<header>
+<Section sticky>
   <button on:click={onClickExport}>Export</button>
-</header>
+</Section>
