@@ -1,6 +1,8 @@
 import App from './App.svelte'
 import type { Message } from 'typedown-shared'
 
+import 'modern-normalize/modern-normalize.css'
+
 const app = new App({
   target: document.getElementById('app') as HTMLElement,
 })
