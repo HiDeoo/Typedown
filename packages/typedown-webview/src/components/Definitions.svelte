@@ -9,29 +9,5 @@
     {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
       <Definition {identifier} {definition} />
     {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
-    {#each Object.entries($definitions.definitions) as [identifier, definition] (identifier)}
-      <Definition {identifier} {definition} />
-    {/each}
   {/if}
 </Section>
