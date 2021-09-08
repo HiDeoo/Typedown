@@ -18,7 +18,7 @@
   }
 
   button:focus-visible {
-    outline-color: #005cc5;
+    outline-color: var(--vscode-focusBorder);
     outline-width: 1px;
     outline-style: solid;
     outline-offset: 2px;
