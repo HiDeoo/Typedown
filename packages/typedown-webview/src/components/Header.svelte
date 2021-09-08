@@ -12,7 +12,10 @@
 
 <Section sticky class="header">
   <div>
-    <Button on:click={onClickExport}>Export</Button>
+    <p>0 definitions selected</p>
+    <div>
+      <Button on:click={onClickExport}>Export</Button>
+    </div>
   </div>
 </Section>
 
@@ -22,7 +25,12 @@
   }
 
   div {
+    align-items: center;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+  }
+
+  p {
+    margin: 0;
   }
 </style>
