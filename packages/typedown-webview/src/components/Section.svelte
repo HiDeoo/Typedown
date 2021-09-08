@@ -1,8 +1,10 @@
 <script lang="ts">
+  let className = ''
+  export { className as class }
   export let sticky = false
 </script>
 
-<section class:sticky>
+<section class:sticky class={className}>
   <div>
     <slot />
   </div>
