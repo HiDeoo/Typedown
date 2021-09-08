@@ -43,6 +43,10 @@
 <Definitions />
 
 <style>
+  :root {
+    cursor: default;
+  }
+
   :global(body) {
     padding: 0;
   }
