@@ -7,6 +7,8 @@
   export let identifier: string
   export let definition: Definition
 
+  $: selected = definition.selected === true
+
   function onSelectDefinition() {
     definitions.toggle(identifier)
   }
@@ -14,8 +16,11 @@
 
 <div class="definition">
   <div class="definitionMask" />
+  {#if selected}
+    <div class="definitionIndicator" />
+  {/if}
   <strong>{identifier}</strong>
-  <Checkbox checked={definition.selected === true} on:change={onSelectDefinition}
+  <Checkbox checked={selected} on:change={onSelectDefinition}
     >{JSON.stringify(definition)} - {JSON.stringify(definition)} - {JSON.stringify(definition)}</Checkbox
   >
 </div>
@@ -39,6 +44,15 @@
 
   .definition:hover .definitionMask {
     display: block;
+  }
+
+  .definitionIndicator {
+    background-color: var(--vscode-settings-modifiedItemIndicator);
+    bottom: 20px;
+    left: 4px;
+    position: absolute;
+    top: 12px;
+    width: 2px;
   }
 
   strong {
