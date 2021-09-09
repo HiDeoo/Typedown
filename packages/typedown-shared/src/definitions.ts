@@ -6,9 +6,9 @@ export function isSchema(schema: schemaGenerator.Schema): schema is Schema {
 
 export interface Schema extends schemaGenerator.Schema {
   definitions: {
-    [key: string]: Definition & { selected?: boolean }
+    [key: string]: Definition
   }
 }
 
 export type Definitions = Exclude<Exclude<schemaGenerator.Schema, undefined>['definitions'], undefined>
-export type Definition = Definitions[keyof Definitions]
+export type Definition = Definitions[keyof Definitions] & { selected?: boolean }
