@@ -28,7 +28,11 @@
   }
 
   input {
-    display: none;
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    width: 1px;
   }
 
   .checkmark {
@@ -45,6 +49,10 @@
 
   .checkmark:hover {
     opacity: 1;
+  }
+
+  input:focus-visible ~ .checkmark {
+    box-shadow: 0 0 0 1px var(--vscode-focusBorder);
   }
 
   label input:checked ~ .checkmark {
