@@ -2,10 +2,10 @@
   import { onDestroy, onMount } from 'svelte'
   import { isMessage, Message, WebviewMessageInit } from 'typedown-shared'
 
-  import Header from './components/Header.svelte'
-  import Schema from './components/Schema.svelte'
-  import { definitions } from './stores/definitions'
-  import { schema } from './stores/schema'
+  import Header from './Header.svelte'
+  import Schema from './Schema.svelte'
+  import { definitions } from '../stores/definitions'
+  import { schema } from '../stores/schema'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
