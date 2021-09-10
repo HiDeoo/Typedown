@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf ../../dist",
-    "build": "tsc -b",
-    "pretest": "yarn build",
+    "build": "node esbuild.config.mjs",
+    "pretest": "tsc -b",
     "test": "node ../../dist/tests"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "@types/glob": "7.1.4",
     "@types/mocha": "9.0.0",
     "@types/vscode": "1.60.0",
+    "esbuild": "0.12.26",
     "glob": "7.1.7",
     "mocha": "9.1.1",
     "rimraf": "3.0.2",
