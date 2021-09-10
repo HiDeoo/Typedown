@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Definition } from 'typedown-shared'
+  import { Definition, isValidDefinition } from 'typedown-shared'
 
   import { definitions } from '../stores/definitions'
   import Checkbox from './Checkbox.svelte'
@@ -13,14 +13,16 @@
   }
 </script>
 
-<div class="definition">
-  <div class="definitionMask" />
-  {#if selected}
-    <div class="definitionIndicator" />
-  {/if}
-  <strong>{definition.name}</strong>
-  <Checkbox checked={selected} on:change={onSelectDefinition}>{JSON.stringify(definition)}</Checkbox>
-</div>
+{#if isValidDefinition(definition)}
+  <div class="definition">
+    <div class="definitionMask" />
+    {#if selected}
+      <div class="definitionIndicator" />
+    {/if}
+    <strong>{definition.name}</strong>
+    <Checkbox checked={selected} on:change={onSelectDefinition}>{JSON.stringify(definition)}</Checkbox>
+  </div>
+{/if}
 
 <style>
   .definition {

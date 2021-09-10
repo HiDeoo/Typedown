@@ -13,3 +13,7 @@ export interface Definition extends TypeDoc.JSONOutput.DeclarationReflection {
 export function isSchema(schema: TypeDoc.JSONOutput.ProjectReflection): schema is Schema {
   return typeof schema.children !== 'undefined'
 }
+
+export function isValidDefinition(definition: Definition): boolean {
+  return definition.kindString !== 'Function'
+}
