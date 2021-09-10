@@ -3,10 +3,10 @@
 
   import Section from './Section.svelte'
   import Button from './Button.svelte'
-  import { definitions } from '../stores/definition'
+  import { definitions } from '../stores/definitions'
 
   function onClickExport() {
-    vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.export() })
+    vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: Object.values($definitions) })
   }
 </script>
 

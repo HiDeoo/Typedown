@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "rimraf ../../dist/typedown-webview/index.html",
+    "postbuild": "rimraf ../../dist/webview/index.html",
     "lint": "svelte-check --tsconfig tsconfig.json --fail-on-warnings --fail-on-hints"
   },
   "devDependencies": {

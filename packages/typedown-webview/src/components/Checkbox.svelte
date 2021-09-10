@@ -1,19 +1,10 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
-
   export let checked: boolean
-
-  const dispatch = createEventDispatcher<{ change: boolean }>()
-
-  function onChange() {
-    checked = !checked
-    dispatch('change', checked)
-  }
 </script>
 
 <label>
   <div><slot /></div>
-  <input type="checkbox" on:change={onChange} {checked} />
+  <input type="checkbox" {checked} on:change />
   <span class="checkmark" />
 </label>
 

@@ -1,4 +1,4 @@
-import App from './App.svelte'
+import App from './components/App.svelte'
 import type { Message } from 'typedown-shared'
 
 import 'modern-normalize/modern-normalize.css'

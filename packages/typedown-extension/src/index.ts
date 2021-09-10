@@ -1,8 +1,8 @@
-import { commands, ExtensionContext, StatusBarAlignment, window } from 'vscode'
-import { isMessage, Schema, VSCodeMessageDefinitions } from 'typedown-shared'
+import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vscode'
+import { isMessage, Schema, VSCodeMessageImport } from 'typedown-shared'
 
 import { getFolderTSConfig, getSchema } from './typescript'
-import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, VSCodeError } from './vscode'
+import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
@@ -25,8 +25,8 @@ async function tsToMd(context: ExtensionContext) {
 
     // Refactor when control flow analysis of aliased conditions works with `useUnknownInCatchVariables`
     // @see https://github.com/microsoft/TypeScript/issues/44880
-    const message = error instanceof VSCodeError ? error.message : 'Something went wrong!'
-    const detail = error instanceof VSCodeError ? error.detail : error instanceof Error ? error.message : undefined
+    const message = error instanceof TypedownError ? error.message : 'Something went wrong!'
+    const detail = error instanceof TypedownError ? error.detail : error instanceof Error ? error.message : undefined
 
     window.showErrorMessage(message, { detail, modal: true })
   } finally {
@@ -35,7 +35,7 @@ async function tsToMd(context: ExtensionContext) {
 }
 
 function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
-  const message: VSCodeMessageDefinitions = { type: 'definitions', schema }
+  const message: VSCodeMessageImport = { type: 'import', schema }
 
   const panel = createWebviewPanel(context, (event) => {
     if (isMessage(event)) {
@@ -62,20 +62,10 @@ function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
   }
 }
 
-async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: MaybeURI]> {
+async function getTSConfigAndCurrentFile(): Promise<[tsConfig: Uri, currentFile: Uri]> {
   const folder = getWorkspaceSingleFolder()
   const tsConfig = await getFolderTSConfig(folder.uri)
-  let currentFile: MaybeURI
-
-  if (!tsConfig) {
-    try {
-      currentFile = await getActiveTextEditorDiskURI()
-    } catch (error) {
-      throw new VSCodeError(
-        'Could not find either a TSConfig file in your workspace or an active text editor for a file on disk.'
-      )
-    }
-  }
+  const currentFile = await getActiveTextEditorDiskURI()
 
   return [tsConfig, currentFile]
 }

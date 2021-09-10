@@ -5,12 +5,12 @@ export function getWorkspaceSingleFolder(): WorkspaceFolder {
   const folder = folders?.[0]
 
   if (!folders || !folder) {
-    throw new VSCodeError(
+    throw new TypedownError(
       'Could not find a valid workspace folder.',
       'Please make sure to open your TypeScript project folder in VS Code.'
     )
   } else if (folders.length !== 1) {
-    throw new VSCodeError(
+    throw new TypedownError(
       'Multiple folders opened in your current workspace.',
       'Please make sure to only open a single TypeScript project folder in VS Code.'
     )
@@ -21,14 +21,14 @@ export function getWorkspaceSingleFolder(): WorkspaceFolder {
 
 export async function getActiveTextEditorDiskURI(): Promise<Uri> {
   if (!window.activeTextEditor) {
-    throw new Error('Could not find an active text editor.')
+    throw new TypedownError('Could not find an active text editor.')
   }
 
   const uri = window.activeTextEditor.document.uri
   const exists = await uriExists(uri)
 
   if (!exists) {
-    throw new Error('The active text editor is not a file on disk.')
+    throw new TypedownError('The active text editor is not a file on disk.')
   }
 
   return uri
@@ -44,11 +44,9 @@ export async function uriExists(uri: Uri): Promise<boolean> {
   }
 }
 
-export class VSCodeError extends Error {
+export class TypedownError extends Error {
   constructor(message: string, public detail?: string) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }
 }
-
-export type MaybeURI = Uri | undefined
