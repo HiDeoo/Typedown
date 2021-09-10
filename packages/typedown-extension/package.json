@@ -11,7 +11,7 @@
     "test": "node ../../dist/tests"
   },
   "dependencies": {
-    "ts-json-schema-generator": "0.95.0"
+    "typedoc": "0.21.9"
   },
   "devDependencies": {
     "@types/glob": "7.1.4",

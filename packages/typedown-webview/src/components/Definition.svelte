@@ -1,16 +1,15 @@
 <script lang="ts">
   import type { Definition } from 'typedown-shared'
 
-  import { definitions } from '../stores/definition'
+  import { definitions } from '../stores/definitions'
   import Checkbox from './Checkbox.svelte'
 
-  export let identifier: string
   export let definition: Definition
 
-  $: selected = definition.selected === true
+  $: selected = typeof $definitions[definition.id] !== 'undefined'
 
   function onSelectDefinition() {
-    definitions.toggle(identifier)
+    definitions.toggle(definition)
   }
 </script>
 
@@ -19,10 +18,8 @@
   {#if selected}
     <div class="definitionIndicator" />
   {/if}
-  <strong>{identifier}</strong>
-  <Checkbox checked={selected} on:change={onSelectDefinition}
-    >{JSON.stringify(definition)} - {JSON.stringify(definition)} - {JSON.stringify(definition)}</Checkbox
-  >
+  <strong>{definition.name}</strong>
+  <Checkbox checked={selected} on:change={onSelectDefinition}>{JSON.stringify(definition)}</Checkbox>
 </div>
 
 <style>
