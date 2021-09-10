@@ -21,8 +21,14 @@ export function getSchema(tsConfig: Uri, currentFile: Uri): Schema {
   app.options.addReader(new TypeDoc.TSConfigReader())
 
   app.bootstrap({
-    tsconfig: tsConfig.fsPath,
+    disableSources: true,
+    emit: false,
     entryPoints: [currentFile.fsPath],
+    excludeInternal: true,
+    excludePrivate: true,
+    excludeProtected: true,
+    readme: 'none',
+    tsconfig: tsConfig.fsPath,
   })
 
   const reflections = app.convert()
