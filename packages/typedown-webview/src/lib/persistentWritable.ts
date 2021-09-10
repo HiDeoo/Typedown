@@ -10,7 +10,6 @@ export function persistentWritable<T>(key: string, initialValue: T): PersistentW
       type MaybeState = { [key: string]: T }
 
       const state = vscode.getState<MaybeState>()
-      console.log('state ', state)
       const stateValue = state?.[key]
 
       if (stateValue) {
