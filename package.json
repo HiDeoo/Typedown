@@ -41,5 +41,8 @@
   "lint-staged": {
     "*.{ts,svelte}": "yarn lint",
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "typescript": "4.4.2"
   }
 }
