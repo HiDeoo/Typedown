@@ -1,26 +1,27 @@
 <script lang="ts">
-  import { Definition, isValidDefinition } from 'typedown-shared'
+  import type { DefinitionIdentifier } from 'typedown-shared'
 
   import { definitions } from '../stores/definitions'
   import Checkbox from './Checkbox.svelte'
 
-  export let definition: Definition
+  export let identifier: DefinitionIdentifier
 
-  $: selected = typeof $definitions[definition.id] !== 'undefined'
+  $: definition = $definitions.byId[identifier]
+  $: exported = definition?._exported === true
 
-  function onSelectDefinition() {
-    definitions.toggle(definition)
+  function onChangeExported() {
+    definitions.toggle(identifier)
   }
 </script>
 
-{#if isValidDefinition(definition)}
+{#if definition}
   <div class="definition">
     <div class="definitionMask" />
-    {#if selected}
+    {#if exported}
       <div class="definitionIndicator" />
     {/if}
     <strong>{definition.name}</strong>
-    <Checkbox checked={selected} on:change={onSelectDefinition}>{JSON.stringify(definition)}</Checkbox>
+    <Checkbox checked={exported} on:change={onChangeExported}>{JSON.stringify(definition)}</Checkbox>
   </div>
 {/if}
 

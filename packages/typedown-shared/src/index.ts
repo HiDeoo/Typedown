@@ -1,2 +1,2 @@
-export * from './schema'
+export * from './definitions'
 export * from './messages'

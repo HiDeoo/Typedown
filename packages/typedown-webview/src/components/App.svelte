@@ -3,17 +3,15 @@
   import { isMessage, Message, WebviewMessageInit } from 'typedown-shared'
 
   import Header from './Header.svelte'
-  import Schema from './Schema.svelte'
+  import Definitions from './Definitions.svelte'
   import { definitions } from '../stores/definitions'
-  import { schema } from '../stores/schema'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
-    const didRestoreSchema = schema.persist()
-    definitions.persist()
+    const didRestoreDefinitions = definitions.persist()
 
-    if (!didRestoreSchema) {
+    if (!didRestoreDefinitions) {
       vscode.postMessage<WebviewMessageInit>({ type: 'init' })
     }
   })
@@ -26,7 +24,7 @@
     if (isMessage(event.data)) {
       switch (event.data.type) {
         case 'import': {
-          schema.set(event.data.schema)
+          definitions.set(event.data.definitions)
           break
         }
         default: {
@@ -39,7 +37,7 @@
 </script>
 
 <Header />
-<Schema />
+<Definitions />
 
 <style>
   :root {

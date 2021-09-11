@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vscode'
-import { isMessage, Schema, VSCodeMessageImport } from 'typedown-shared'
+import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
-import { getFolderTSConfig, getSchema } from './typescript'
+import { getDefinitions, getFolderTSConfig } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
@@ -17,9 +17,9 @@ async function tsToMd(context: ExtensionContext) {
 
   try {
     const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
-    const schema = getSchema(tsConfig, currentFile)
+    const definitions = getDefinitions(tsConfig, currentFile)
 
-    showWebviewWithSchema(context, schema)
+    showWebviewWithDefinitions(context, definitions)
   } catch (error) {
     console.error(error)
 
@@ -34,8 +34,8 @@ async function tsToMd(context: ExtensionContext) {
   }
 }
 
-function showWebviewWithSchema(context: ExtensionContext, schema: Schema) {
-  const message: VSCodeMessageImport = { type: 'import', schema }
+function showWebviewWithDefinitions(context: ExtensionContext, definitions: Definitions) {
+  const message: VSCodeMessageImport = { type: 'import', definitions }
 
   const panel = createWebviewPanel(context, (event) => {
     if (isMessage(event)) {

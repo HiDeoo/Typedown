@@ -6,7 +6,7 @@
   import { definitions } from '../stores/definitions'
 
   function onClickExport() {
-    vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: Object.values($definitions) })
+    vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
   }
 </script>
 
