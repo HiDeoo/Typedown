@@ -1,6 +1,6 @@
 import { Uri } from 'vscode'
 import * as TypeDoc from 'typedoc'
-import { isSchema, Schema } from 'typedown-shared'
+import { Definition, Definitions } from 'typedown-shared'
 
 import { uriExists, TypedownError } from './vscode'
 
@@ -16,7 +16,22 @@ export async function getFolderTSConfig(uri: Uri): Promise<Uri> {
   return tsConfigURI
 }
 
-export function getSchema(tsConfig: Uri, currentFile: Uri): Schema {
+export function getDefinitions(tsConfig: Uri, currentFile: Uri): Definitions {
+  const schema = getSchema(tsConfig, currentFile)
+
+  const definitions = schema.children.filter(isValidDefinition)
+
+  if (definitions.length === 0) {
+    throw new TypedownError(
+      'Could not generate definitions for your TypeScript project.',
+      'Please make sure to export at least 1 supported type in your project.'
+    )
+  }
+
+  return definitions
+}
+
+function getSchema(tsConfig: Uri, currentFile: Uri): SchemaWithChildren {
   const app = new TypeDoc.Application()
   app.options.addReader(new TypeDoc.TSConfigReader())
 
@@ -39,7 +54,7 @@ export function getSchema(tsConfig: Uri, currentFile: Uri): Schema {
 
   const schema = app.serializer.projectToObject(reflections)
 
-  if (!isSchema(schema) || schema.children.length === 0) {
+  if (!isSchemaWithChildren(schema) || schema.children.length === 0) {
     throw new TypedownError(
       'Could not generate definitions for your TypeScript project.',
       'Please make sure to export at least 1 type in your project.'
@@ -47,4 +62,16 @@ export function getSchema(tsConfig: Uri, currentFile: Uri): Schema {
   }
 
   return schema
+}
+
+function isValidDefinition(definition: Definition): boolean {
+  return definition.kindString !== 'Function'
+}
+
+function isSchemaWithChildren(schema: TypeDoc.JSONOutput.ProjectReflection): schema is SchemaWithChildren {
+  return typeof schema.children !== 'undefined'
+}
+
+interface SchemaWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
+  children: Definitions
 }

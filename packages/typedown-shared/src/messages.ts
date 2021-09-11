@@ -1,4 +1,4 @@
-import type { Definition, Schema } from './schema'
+import type { Definitions } from './definitions'
 
 export function isMessage(message: unknown): message is WebviewMessages | VSCodeMessages {
   return message !== null && typeof message === 'object' && typeof (message as Message).type === 'string'
@@ -13,12 +13,12 @@ export interface WebviewMessageInit extends Message {
 
 export interface WebviewMessageExport extends Message {
   type: 'export'
-  definitions: Definition[]
+  definitions: Definitions
 }
 
 export interface VSCodeMessageImport extends Message {
   type: 'import'
-  schema: Schema
+  definitions: Definitions
 }
 
 export interface Message {
