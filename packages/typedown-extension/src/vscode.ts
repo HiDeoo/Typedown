@@ -50,3 +50,5 @@ export class TypedownError extends Error {
     Object.setPrototypeOf(this, new.target.prototype)
   }
 }
+
+export type MaybeURI = Uri | undefined

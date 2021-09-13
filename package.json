@@ -28,9 +28,18 @@
     "commands": [
       {
         "command": "typedown.tsToMd",
-        "title": "TypeScript to Markdown"
+        "title": "File Definitions to Markdown",
+        "category": "Typedown"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "typedown.tsToMd",
+          "when": "editorLangId == typescript || editorLangId == typescriptreact"
+        }
+      ]
+    }
   },
   "main": "dist",
   "devDependencies": {
