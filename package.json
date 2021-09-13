@@ -22,13 +22,19 @@
     "prepare": "husky install"
   },
   "activationEvents": [
-    "onCommand:typedown.fileToMd"
+    "onCommand:typedown.fileToMd",
+    "onCommand:typedown.folderToMd"
   ],
   "contributes": {
     "commands": [
       {
         "command": "typedown.fileToMd",
         "title": "File Definitions to Markdown",
+        "category": "Typedown"
+      },
+      {
+        "command": "typedown.folderToMd",
+        "title": "Folder Definitions to Markdown",
         "category": "Typedown"
       }
     ],
