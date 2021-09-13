@@ -6,10 +6,10 @@ import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, Typedow
 import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
-  context.subscriptions.push(commands.registerCommand('typedown.tsToMd', () => tsToMd(context)))
+  context.subscriptions.push(commands.registerCommand('typedown.fileToMd', () => fileToMd(context)))
 }
 
-async function tsToMd(context: ExtensionContext) {
+async function fileToMd(context: ExtensionContext) {
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left)
   statusBarItem.name = 'Typedown Indicator'
   statusBarItem.text = '$(sync~spin) Generating definitions'

@@ -22,12 +22,12 @@
     "prepare": "husky install"
   },
   "activationEvents": [
-    "onCommand:typedown.tsToMd"
+    "onCommand:typedown.fileToMd"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "typedown.tsToMd",
+        "command": "typedown.fileToMd",
         "title": "File Definitions to Markdown",
         "category": "Typedown"
       }
@@ -35,7 +35,7 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "typedown.tsToMd",
+          "command": "typedown.fileToMd",
           "when": "editorLangId == typescript || editorLangId == typescriptreact"
         }
       ]
