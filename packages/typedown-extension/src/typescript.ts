@@ -19,7 +19,7 @@ export async function getFolderTSConfig(uri: Uri): Promise<Uri> {
 export function getDefinitions(tsConfig: Uri, entryPoint: Uri): Definitions {
   const schema = getSchema(tsConfig, entryPoint)
 
-  const definitions = schema.children.filter(isValidDefinition)
+  const definitions = filterDefinitions(schema.children)
 
   if (definitions.length === 0) {
     throw new TypedownError(
@@ -31,7 +31,7 @@ export function getDefinitions(tsConfig: Uri, entryPoint: Uri): Definitions {
   return definitions
 }
 
-function getSchema(tsConfig: Uri, entryPoint: Uri): SchemaWithChildren {
+function getSchema(tsConfig: Uri, entryPoint: Uri): ReflectionWithChildren {
   const app = new TypeDoc.Application()
   app.options.addReader(new TypeDoc.TSConfigReader())
 
@@ -54,7 +54,7 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): SchemaWithChildren {
 
   const schema = app.serializer.projectToObject(reflections)
 
-  if (!isSchemaWithChildren(schema) || schema.children.length === 0) {
+  if (!isReflectionWithChildren(schema) || schema.children.length === 0) {
     throw new TypedownError(
       'Could not generate definitions for your TypeScript project.',
       'Please make sure to export at least 1 type in your project.'
@@ -64,14 +64,34 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): SchemaWithChildren {
   return schema
 }
 
+function filterDefinitions(definitions: Definitions): Definitions {
+  return definitions.reduce<Definitions>((acc, definition) => {
+    if (isValidDefinition(definition)) {
+      acc.push(definition)
+    } else if (isModuleReflectionWithChildren(definition)) {
+      acc.push(...filterDefinitions(definition.children))
+    }
+
+    return acc
+  }, [])
+}
+
 function isValidDefinition(definition: Definition): boolean {
-  return definition.kindString !== 'Function'
+  return definition.kind === TypeDoc.ReflectionKind.Interface
 }
 
-function isSchemaWithChildren(schema: TypeDoc.JSONOutput.ProjectReflection): schema is SchemaWithChildren {
-  return typeof schema.children !== 'undefined'
+function isReflectionWithChildren(
+  reflection: TypeDoc.JSONOutput.ProjectReflection
+): reflection is ReflectionWithChildren {
+  return typeof reflection.children !== 'undefined'
 }
 
-interface SchemaWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
+function isModuleReflectionWithChildren(
+  reflection: TypeDoc.JSONOutput.ProjectReflection
+): reflection is ReflectionWithChildren {
+  return isReflectionWithChildren(reflection) && reflection.kind === TypeDoc.ReflectionKind.Module
+}
+
+interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
