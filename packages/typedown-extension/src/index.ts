@@ -2,7 +2,7 @@ import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vsc
 import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
-import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, TypedownError } from './vscode'
+import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
@@ -62,7 +62,7 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
   }
 }
 
-async function getTSConfigAndCurrentFile(): Promise<[tsConfig: Uri, currentFile: Uri]> {
+async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: Uri]> {
   const folder = getWorkspaceSingleFolder()
   const tsConfig = await getFolderTSConfig(folder.uri)
   const currentFile = await getActiveTextEditorDiskURI()

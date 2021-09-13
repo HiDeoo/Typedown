@@ -2,21 +2,21 @@ import { Uri } from 'vscode'
 import * as TypeDoc from 'typedoc'
 import { Definition, Definitions } from 'typedown-shared'
 
-import { uriExists, TypedownError } from './vscode'
+import { uriExists, TypedownError, MaybeURI } from './vscode'
 
-export async function getFolderTSConfig(uri: Uri): Promise<Uri> {
+export async function getFolderTSConfig(uri: Uri): Promise<MaybeURI> {
   const tsConfigURI = Uri.joinPath(uri, 'tsconfig.json')
 
   const tsConfigExists = await uriExists(tsConfigURI)
 
   if (!tsConfigExists) {
-    throw new TypedownError('Could not find a TSConfig file in your workspace.')
+    return
   }
 
   return tsConfigURI
 }
 
-export function getDefinitions(tsConfig: Uri, currentFile: Uri): Definitions {
+export function getDefinitions(tsConfig: MaybeURI, currentFile: Uri): Definitions {
   const schema = getSchema(tsConfig, currentFile)
 
   const definitions = schema.children.filter(isValidDefinition)
@@ -31,7 +31,7 @@ export function getDefinitions(tsConfig: Uri, currentFile: Uri): Definitions {
   return definitions
 }
 
-function getSchema(tsConfig: Uri, currentFile: Uri): SchemaWithChildren {
+function getSchema(tsConfig: MaybeURI, currentFile: Uri): SchemaWithChildren {
   const app = new TypeDoc.Application()
   app.options.addReader(new TypeDoc.TSConfigReader())
 
@@ -43,8 +43,12 @@ function getSchema(tsConfig: Uri, currentFile: Uri): SchemaWithChildren {
     excludePrivate: true,
     excludeProtected: true,
     readme: 'none',
-    tsconfig: tsConfig.fsPath,
+    tsconfig: tsConfig?.fsPath,
   })
+
+  if (!tsConfig) {
+    app.options.setCompilerOptions([currentFile.fsPath], { noEmit: true }, undefined)
+  }
 
   const reflections = app.convert()
 
