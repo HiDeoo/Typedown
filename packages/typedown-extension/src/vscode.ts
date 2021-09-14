@@ -53,7 +53,10 @@ export async function pickWorkspaceFolder(): Promise<Uri | undefined> {
     absolutePath: Uri.joinPath(folder.uri, relativePath),
   }))
 
-  const pickedFolder = await window.showQuickPick(items)
+  const pickedFolder = await window.showQuickPick(items, {
+    ignoreFocusOut: true,
+    placeHolder: 'Select the folder containing the definitions to generate.',
+  })
 
   return pickedFolder?.absolutePath
 }
