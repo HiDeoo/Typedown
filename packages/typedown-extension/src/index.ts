@@ -2,22 +2,29 @@ import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vsc
 import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
-import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, MaybeURI, TypedownError } from './vscode'
+import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
-  context.subscriptions.push(commands.registerCommand('typedown.tsToMd', () => tsToMd(context)))
+  context.subscriptions.push(commands.registerCommand('typedown.fileToMd', () => tsToMd(context, Mode.File)))
+  context.subscriptions.push(commands.registerCommand('typedown.folderToMd', () => tsToMd(context, Mode.Folder)))
 }
 
-async function tsToMd(context: ExtensionContext) {
+async function tsToMd(context: ExtensionContext, mode: Mode) {
   const statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left)
   statusBarItem.name = 'Typedown Indicator'
   statusBarItem.text = '$(sync~spin) Generating definitions'
   statusBarItem.show()
 
   try {
-    const [tsConfig, currentFile] = await getTSConfigAndCurrentFile()
-    const definitions = getDefinitions(tsConfig, currentFile)
+    const tsConfig = await getWorkspaceTSConfig()
+    const entryPoint = await (mode === Mode.File ? getActiveTextEditorDiskURI : pickWorkspaceFolder)()
+
+    if (!entryPoint) {
+      return
+    }
+
+    const definitions = getDefinitions(tsConfig, entryPoint)
 
     showWebviewWithDefinitions(context, definitions)
   } catch (error) {
@@ -62,10 +69,14 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
   }
 }
 
-async function getTSConfigAndCurrentFile(): Promise<[tsConfig: MaybeURI, currentFile: Uri]> {
+async function getWorkspaceTSConfig(): Promise<Uri> {
   const folder = getWorkspaceSingleFolder()
   const tsConfig = await getFolderTSConfig(folder.uri)
-  const currentFile = await getActiveTextEditorDiskURI()
 
-  return [tsConfig, currentFile]
+  return tsConfig
+}
+
+enum Mode {
+  File,
+  Folder,
 }
