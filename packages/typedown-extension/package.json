@@ -11,7 +11,7 @@
     "test": "node ../../dist/tests"
   },
   "dependencies": {
-    "gitignore-to-glob": "0.3.0",
+    "gitignore-to-glob": "https://github.com/patbenatar/gitignore-to-glob",
     "glob": "7.1.7",
     "typedoc": "0.21.9"
   },

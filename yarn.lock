@@ -918,10 +918,9 @@ get-stream@^6.0.0:
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
-gitignore-to-glob@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/gitignore-to-glob/-/gitignore-to-glob-0.3.0.tgz#59f32ab3d9b66ce50299c3ed24cb0ef42a094ceb"
-  integrity sha1-WfMqs9m2bOUCmcPtJMsO9CoJTOs=
+"gitignore-to-glob@https://github.com/patbenatar/gitignore-to-glob":
+  version "0.3.1-pre"
+  resolved "https://github.com/patbenatar/gitignore-to-glob#bf67929c5b51d3adc812afa3fa80abd526fec9bf"
 
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
