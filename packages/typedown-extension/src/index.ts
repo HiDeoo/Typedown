@@ -2,7 +2,7 @@ import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vsc
 import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
-import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, TypedownError } from './vscode'
+import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
 export function activate(context: ExtensionContext): void {
@@ -18,9 +18,11 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
 
   try {
     const tsConfig = await getWorkspaceTSConfig()
-    const entryPoint =
-      // TODO(HiDeoo) Stop hardcoding this folder path
-      mode === Mode.File ? await getActiveTextEditorDiskURI() : Uri.file('/Users/hideo/Temp/ts-tests/src')
+    const entryPoint = await (mode === Mode.File ? getActiveTextEditorDiskURI : pickWorkspaceFolder)()
+
+    if (!entryPoint) {
+      return
+    }
 
     const definitions = getDefinitions(tsConfig, entryPoint)
 
