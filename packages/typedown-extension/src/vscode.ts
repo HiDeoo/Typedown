@@ -1,5 +1,6 @@
 import { QuickPickItem, Uri, window, workspace, WorkspaceFolder } from 'vscode'
 import { sync as glob } from 'glob'
+import gitignoreToGlob from 'gitignore-to-glob'
 
 export function getWorkspaceSingleFolder(): WorkspaceFolder {
   const folders = workspace.workspaceFolders
@@ -47,8 +48,9 @@ export async function uriExists(uri: Uri): Promise<boolean> {
 
 export async function pickWorkspaceFolder(): Promise<Uri | undefined> {
   const folder = getWorkspaceSingleFolder()
+  const ignore = await getIgnoreGlobsFromGitignore(folder.uri)
 
-  const items: WorkspaceFolderQuickPickItem[] = glob('**/', { cwd: folder.uri.fsPath }).map((relativePath) => ({
+  const items: WorkspaceFolderQuickPickItem[] = glob('**/', { cwd: folder.uri.fsPath, ignore }).map((relativePath) => ({
     absolutePath: Uri.joinPath(folder.uri, relativePath),
     label: `/${relativePath.slice(0, -1)}`,
   }))
@@ -65,6 +67,25 @@ export async function pickWorkspaceFolder(): Promise<Uri | undefined> {
   })
 
   return pickedFolder?.absolutePath
+}
+
+async function getIgnoreGlobsFromGitignore(location: Uri): Promise<string[]> {
+  const uri = Uri.joinPath(location, '.gitignore')
+  const exists = await uriExists(uri)
+
+  if (!exists) {
+    return []
+  }
+
+  const gitignoreGlobs = gitignoreToGlob(uri.fsPath)
+
+  return gitignoreGlobs.reduce<string[]>((acc, gitignoreGlob) => {
+    if (gitignoreGlob.startsWith('!')) {
+      acc.push(gitignoreGlob.replace(/^!/, ''))
+    }
+
+    return acc
+  }, [])
 }
 
 export class TypedownError extends Error {

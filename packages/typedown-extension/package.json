@@ -11,6 +11,7 @@
     "test": "node ../../dist/tests"
   },
   "dependencies": {
+    "gitignore-to-glob": "0.3.0",
     "glob": "7.1.7",
     "typedoc": "0.21.9"
   },
