@@ -49,9 +49,15 @@ export async function pickWorkspaceFolder(): Promise<Uri | undefined> {
   const folder = getWorkspaceSingleFolder()
 
   const items: WorkspaceFolderQuickPickItem[] = glob('**/', { cwd: folder.uri.fsPath }).map((relativePath) => ({
-    label: relativePath,
     absolutePath: Uri.joinPath(folder.uri, relativePath),
+    label: `/${relativePath.slice(0, -1)}`,
   }))
+
+  items.unshift({
+    absolutePath: folder.uri,
+    description: 'workspace root',
+    label: '/',
+  })
 
   const pickedFolder = await window.showQuickPick(items, {
     ignoreFocusOut: true,
