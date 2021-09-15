@@ -13,6 +13,19 @@
       "presentation": {
         "reveal": "never"
       }
+    },
+    {
+      "label": "build:test",
+      "type": "npm",
+      "script": "pretest",
+      "problemMatcher": "$tsc",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/typedown-extension"
+      },
+      "presentation": {
+        "reveal": "never"
+      }
     }
   ]
 }

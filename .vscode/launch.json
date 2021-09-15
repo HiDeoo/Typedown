@@ -20,7 +20,7 @@
         "--disable-extensions"
       ],
       "outFiles": ["${workspaceFolder}/dist/tests/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}"
+      "preLaunchTask": "build:test"
     }
   ]
 }
