@@ -11,16 +11,17 @@
       "preLaunchTask": "${defaultBuildTask}"
     },
     {
-      "name": "Test Extension",
+      "name": "Test Extension (no-tsconfig)",
       "type": "extensionHost",
       "request": "launch",
       "args": [
+        "${workspaceFolder}/fixtures/no-tsconfig",
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/dist/tests/run",
+        "--extensionTestsPath=${workspaceFolder}/dist/tests/no-tsconfig",
         "--disable-extensions"
       ],
       "outFiles": ["${workspaceFolder}/dist/tests/**/*.js"],
-      "preLaunchTask": "build:test"
+      "preLaunchTask": "npm: pretest"
     }
   ]
 }
