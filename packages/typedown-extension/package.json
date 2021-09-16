@@ -5,9 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "prebuild": "rimraf ../../dist",
+    "clean": "rimraf ../../dist",
+    "prebuild": "yarn clean",
     "build": "node esbuild.config.mjs",
-    "pretest": "tsc -b",
+    "pretest": "yarn clean && tsc -b",
     "test": "node ../../dist/tests"
   },
   "dependencies": {

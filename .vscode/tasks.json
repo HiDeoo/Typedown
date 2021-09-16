@@ -15,7 +15,6 @@
       }
     },
     {
-      "label": "build:test",
       "type": "npm",
       "script": "pretest",
       "problemMatcher": "$tsc",
