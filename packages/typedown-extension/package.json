@@ -5,9 +5,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "prebuild": "rimraf ../../dist",
+    "clean": "rimraf ../../dist",
+    "prebuild": "yarn clean",
     "build": "node esbuild.config.mjs",
-    "pretest": "tsc -b",
+    "pretest": "yarn clean && tsc -b",
     "test": "node ../../dist/tests"
   },
   "dependencies": {
@@ -18,11 +19,13 @@
   "devDependencies": {
     "@types/glob": "7.1.4",
     "@types/mocha": "9.0.0",
+    "@types/sinon": "10.0.2",
     "@types/vscode": "1.60.0",
+    "@vscode/test-electron": "1.6.2",
     "esbuild": "0.12.26",
     "mocha": "9.1.1",
     "rimraf": "3.0.2",
-    "typescript": "4.4.2",
-    "vscode-test": "1.6.1"
+    "sinon": "11.1.2",
+    "typescript": "4.4.2"
   }
 }

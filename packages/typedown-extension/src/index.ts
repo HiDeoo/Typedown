@@ -5,9 +5,14 @@ import { getDefinitions, getFolderTSConfig } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
 
+export const COMMANDS = {
+  fileToMd: 'typedown.fileToMd',
+  folderToMd: 'typedown.folderToMd',
+} as const
+
 export function activate(context: ExtensionContext): void {
-  context.subscriptions.push(commands.registerCommand('typedown.fileToMd', () => tsToMd(context, Mode.File)))
-  context.subscriptions.push(commands.registerCommand('typedown.folderToMd', () => tsToMd(context, Mode.Folder)))
+  context.subscriptions.push(commands.registerCommand(COMMANDS.fileToMd, () => tsToMd(context, Mode.File)))
+  context.subscriptions.push(commands.registerCommand(COMMANDS.folderToMd, () => tsToMd(context, Mode.Folder)))
 }
 
 async function tsToMd(context: ExtensionContext, mode: Mode) {
