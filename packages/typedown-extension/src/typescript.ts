@@ -1,19 +1,19 @@
 import { Uri } from 'vscode'
 import * as TypeDoc from 'typedoc'
 import { Definition, Definitions } from 'typedown-shared'
+import { findConfigFile } from 'typescript'
+import { existsSync } from 'fs'
 
-import { uriExists, TypedownError } from './vscode'
+import { TypedownError } from './vscode'
 
 export async function getFolderTSConfig(uri: Uri): Promise<Uri> {
-  const tsConfigURI = Uri.joinPath(uri, 'tsconfig.json')
+  const tsConfigPath = findConfigFile(uri.fsPath, existsSync)
 
-  const tsConfigExists = await uriExists(tsConfigURI)
-
-  if (!tsConfigExists) {
-    throw new TypedownError('Could not find a TSConfig file in your workspace.')
+  if (!tsConfigPath) {
+    throw new TypedownError('Could not find a TSConfig file for your workspace.')
   }
 
-  return tsConfigURI
+  return Uri.file(tsConfigPath)
 }
 
 export function getDefinitions(tsConfig: Uri, entryPoint: Uri): Definitions {

@@ -8,7 +8,7 @@ let consoleErrorStub: sinon.SinonStub<Parameters<typeof console.error>>
 let windowShowErrorMessageStub: sinon.SinonStub<Parameters<typeof window.showErrorMessage>>
 
 function assertNoTSConfigErrors() {
-  const errorStr = 'Could not find a TSConfig file in your workspace.'
+  const errorStr = 'Could not find a TSConfig file for your workspace.'
 
   assert(consoleErrorStub.calledOnce)
 
@@ -34,14 +34,14 @@ describe('no ts-config', () => {
     windowShowErrorMessageStub.restore()
   })
 
-  it('should error for a file in a workspace without a TSConfig', async () =>
+  it('should error for a file in a workspace without a TSConfig resolved', async () =>
     withFixture('no-tsconfig', async () => {
       await await commands.executeCommand('typedown.fileToMd')
 
       assertNoTSConfigErrors()
     }))
 
-  it('should error for a folder in a workspace without a TSConfig', async () =>
+  it('should error for a folder in a workspace without a TSConfig resolved', async () =>
     withFixture('no-tsconfig', async () => {
       await folderToMd()
 
