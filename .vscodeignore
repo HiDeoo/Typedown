@@ -5,6 +5,7 @@
 .husky
 .prettier*
 .vscode
+fixtures
 packages
 tsconfig.base.json
 
