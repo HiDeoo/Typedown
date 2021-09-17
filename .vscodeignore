@@ -5,6 +5,7 @@
 .husky
 .prettier*
 .vscode
+fixtures
 packages
 tsconfig.base.json
 
@@ -16,7 +17,9 @@ node_modules
 
 !node_modules/onigasm/package.json
 !node_modules/onigasm/lib/*.js
-!node_modules/onigasm/node_modules/lru-cache/package.json
-!node_modules/onigasm/node_modules/lru-cache/*.js
-!node_modules/onigasm/node_modules/yallist/package.json
-!node_modules/onigasm/node_modules/yallist/*.js
+
+!node_modules/lru-cache/package.json
+!node_modules/lru-cache/*.js
+
+!node_modules/yallist/package.json
+!node_modules/yallist/*.js

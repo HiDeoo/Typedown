@@ -15,9 +15,6 @@
     "postbuild": "yarn workspace typedown-webview run build",
     "lint": "prettier --check . && eslint --max-warnings=0 --ext .ts,.svelte packages && yarn workspace typedown-webview run lint",
     "test": "yarn workspace typedown-extension run test",
-    "vsce:ls": "vsce ls --no-yarn",
-    "vsce:package": "vsce package --no-yarn",
-    "vsce:publish": "vsce publish --no-yarn",
     "vscode:prepublish": "yarn build",
     "prepare": "husky install"
   },
