@@ -5,6 +5,8 @@
   import Button from './Button.svelte'
   import { definitions } from '../stores/definitions'
 
+  $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?._exported).length
+
   function onClickExport() {
     vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
   }
@@ -12,9 +14,9 @@
 
 <Section sticky class="header">
   <div>
-    <p>0 definitions selected</p>
+    <p>{exportedCount} definition{exportedCount !== 1 ? 's' : ''} selected</p>
     <div>
-      <Button on:click={onClickExport}>Export</Button>
+      <Button on:click={onClickExport} disabled={exportedCount === 0}>Export</Button>
     </div>
   </div>
 </Section>

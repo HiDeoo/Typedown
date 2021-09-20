@@ -1,4 +1,8 @@
-<button on:click><slot /></button>
+<script lang="ts">
+  export let disabled = false
+</script>
+
+<button on:click {disabled}><slot /></button>
 
 <style>
   button {
@@ -12,7 +16,7 @@
     padding: 2px 14px;
   }
 
-  button:hover {
+  button:hover:enabled {
     background-color: var(--vscode-button-hoverBackground);
   }
 
@@ -21,5 +25,10 @@
     outline-width: 1px;
     outline-style: solid;
     outline-offset: 2px;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
   }
 </style>
