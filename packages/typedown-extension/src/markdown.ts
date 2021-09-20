@@ -4,9 +4,6 @@ import type { Definitions } from 'typedown-shared'
 import { isIntrinsicType } from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
-  // TODO(HiDeoo) Remove
-  console.log('definitions ', definitions)
-
   return definitions
     .reduce<string[]>((acc, definition) => {
       if (definition.children && definition.children.length > 0) {

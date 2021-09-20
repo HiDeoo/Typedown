@@ -42,6 +42,7 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): ReflectionWithChildren {
     excludeInternal: true,
     excludePrivate: true,
     excludeProtected: true,
+    logger: 'none',
     readme: 'none',
     tsconfig: tsConfig.fsPath,
   })
