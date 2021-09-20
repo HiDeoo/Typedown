@@ -1,8 +1,8 @@
 import assert from 'assert'
 import sinon from 'sinon'
-import { commands, window } from 'vscode'
+import { window } from 'vscode'
 
-import { folderToMd, withFixture } from '../utils'
+import { fileToMd, folderToMd, withFixture } from '../utils'
 
 let consoleErrorStub: sinon.SinonStub<Parameters<typeof console.error>>
 let windowShowErrorMessageStub: sinon.SinonStub<Parameters<typeof window.showErrorMessage>>
@@ -36,7 +36,7 @@ describe('no ts-config', () => {
 
   it('should error for a file in a workspace without a TSConfig resolved', async () =>
     withFixture('no-tsconfig/src/index.ts', async () => {
-      await await commands.executeCommand('typedown.fileToMd')
+      await fileToMd()
 
       assertNoTSConfigErrors()
     }))
