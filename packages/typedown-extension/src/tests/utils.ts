@@ -1,13 +1,12 @@
 import path from 'path'
 import Mocha from 'mocha'
 import { sync as glob } from 'glob'
-import { commands, env, ExtensionContext, WebviewPanel, window, workspace } from 'vscode'
+import { commands, env, WebviewPanel, window, workspace } from 'vscode'
 import sinon from 'sinon'
 import { Definitions, isMessage } from 'typedown-shared'
 import assert from 'assert'
 
 import { COMMANDS } from '..'
-import * as webview from '../webview'
 
 export function runSuite(testsRoot: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -48,46 +47,52 @@ export async function withFixture(fixtureFilePath: string, run: Run): Promise<vo
 }
 
 export async function fileToMd(exportedDefinitionNames?: string[]): Promise<void> {
-  let createWebviewPanelStub: sinon.SinonStub<Parameters<typeof webview.createWebviewPanel>> | undefined
+  let windowWreateWebviewPanelStub: sinon.SinonStub<Parameters<typeof window.createWebviewPanel>> | undefined
 
   if (exportedDefinitionNames) {
-    createWebviewPanelStub = sinon
-      .stub(webview, 'createWebviewPanel')
-      .callsFake((_: ExtensionContext, onDidReceiveMessage: (event: unknown) => void) => {
-        return {
-          dispose: () => undefined,
-          reveal: () => undefined,
-          visible: false,
-          webview: {
-            postMessage(message: unknown): Thenable<boolean> {
-              if (!isMessage(message) || message.type !== 'import') {
-                return Promise.reject()
+    const noop: unknown = () => undefined
+    let onDidReceiveMessage: (event: unknown) => unknown
+
+    windowWreateWebviewPanelStub = sinon.stub(window, 'createWebviewPanel').callsFake(() => {
+      return {
+        dispose: noop,
+        onDidDispose: noop,
+        reveal: noop,
+        visible: false,
+        webview: {
+          asWebviewUri: noop,
+          onDidReceiveMessage(listener: (event: unknown) => unknown) {
+            onDidReceiveMessage = listener
+          },
+          postMessage(message: unknown): Thenable<boolean> {
+            if (!isMessage(message) || message.type !== 'import') {
+              return Promise.reject()
+            }
+
+            const definitions = exportedDefinitionNames.reduce<Definitions>((acc, definitionName) => {
+              const definition = message.definitions.find((definition) => definition.name === definitionName)
+
+              if (definition) {
+                acc.push(definition)
               }
 
-              const definitions = exportedDefinitionNames.reduce<Definitions>((acc, definitionName) => {
-                const definition = message.definitions.find((definition) => definition.name === definitionName)
+              return acc
+            }, [])
 
-                if (definition) {
-                  acc.push(definition)
-                }
+            onDidReceiveMessage({ type: 'export', definitions })
 
-                return acc
-              }, [])
+            if (windowWreateWebviewPanelStub) {
+              windowWreateWebviewPanelStub.restore()
+            }
 
-              onDidReceiveMessage({ type: 'export', definitions })
-
-              return Promise.resolve(true)
-            },
+            return Promise.resolve(true)
           },
-        } as WebviewPanel
-      })
+        },
+      } as WebviewPanel
+    })
   }
 
-  await commands.executeCommand(COMMANDS.fileToMd)
-
-  if (createWebviewPanelStub) {
-    createWebviewPanelStub.restore()
-  }
+  return commands.executeCommand(COMMANDS.fileToMd)
 }
 
 export function folderToMd(): Thenable<void> {
