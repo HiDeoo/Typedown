@@ -35,16 +35,15 @@ describe('no ts-config', () => {
   })
 
   it('should error for a file in a workspace without a TSConfig resolved', async () =>
-    withFixture('no-tsconfig', async () => {
+    withFixture('no-tsconfig/src/index.ts', async () => {
       await await commands.executeCommand('typedown.fileToMd')
 
       assertNoTSConfigErrors()
     }))
 
-  it('should error for a folder in a workspace without a TSConfig resolved', async () =>
-    withFixture('no-tsconfig', async () => {
-      await folderToMd()
+  it('should error for a folder in a workspace without a TSConfig resolved', async () => {
+    await folderToMd()
 
-      assertNoTSConfigErrors()
-    }))
+    assertNoTSConfigErrors()
+  })
 })

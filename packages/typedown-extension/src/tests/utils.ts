@@ -30,26 +30,14 @@ export function runSuite(testsRoot: string): Promise<void> {
   })
 }
 
-export async function withFixture(fixture: string, fileNameOrRun: string | Run, run?: Run): Promise<void> {
+export async function withFixture(fixtureFilePath: string, run: Run): Promise<void> {
   await commands.executeCommand('workbench.action.closeAllEditors')
 
-  const withFileName = typeof fileNameOrRun === 'string'
+  const document = await workspace.openTextDocument(path.join(__dirname, '../../fixtures', fixtureFilePath))
 
-  if (withFileName) {
-    const document = await workspace.openTextDocument(path.join(__dirname, '../../fixtures', fixture, fileNameOrRun))
+  await window.showTextDocument(document)
 
-    await window.showTextDocument(document)
-  }
-
-  if (withFileName) {
-    if (!run) {
-      throw new Error(`Missing test run for fixture '${fixture}' and fileName '${fileNameOrRun}'.`)
-    }
-
-    await run()
-  } else {
-    await fileNameOrRun()
-  }
+  await run()
 
   return commands.executeCommand('workbench.action.closeAllEditors')
 }
