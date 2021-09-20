@@ -1,4 +1,4 @@
-import { commands, env, ExtensionContext, StatusBarAlignment, Uri, window } from 'vscode'
+import { commands, env, ExtensionContext, ProgressLocation, StatusBarAlignment, Uri, window } from 'vscode'
 import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
@@ -84,9 +84,14 @@ async function getWorkspaceTSConfig(): Promise<Uri> {
 }
 
 async function exportDefinitions(definitions: Definitions) {
-  const markdown = getDefinitionsMarkdown(definitions)
+  await window.withProgress(
+    { location: ProgressLocation.Notification, title: 'Exporting definitions to Markdown' },
+    async () => {
+      const markdown = getDefinitionsMarkdown(definitions)
 
-  await env.clipboard.writeText(markdown)
+      return env.clipboard.writeText(markdown)
+    }
+  )
 
   return window.showInformationMessage('Markdown definitions copied to your clipboard.')
 }
