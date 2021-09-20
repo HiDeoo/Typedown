@@ -58,6 +58,7 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
           break
         }
         case 'export': {
+          panel.dispose()
           exportDefinitions(event.definitions)
           break
         }
