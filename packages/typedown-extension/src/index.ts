@@ -4,6 +4,7 @@ import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 import { getDefinitions, getFolderTSConfig } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
+import { getDefinitionsMarkdown } from './markdown'
 
 export const COMMANDS = {
   fileToMd: 'typedown.fileToMd',
@@ -57,7 +58,7 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
           break
         }
         case 'export': {
-          console.log('event ', event.definitions)
+          exportDefinitions(event.definitions)
           break
         }
         default: {
@@ -79,6 +80,10 @@ async function getWorkspaceTSConfig(): Promise<Uri> {
   const tsConfig = await getFolderTSConfig(folder.uri)
 
   return tsConfig
+}
+
+function exportDefinitions(definitions: Definitions) {
+  console.log(getDefinitionsMarkdown(definitions))
 }
 
 enum Mode {

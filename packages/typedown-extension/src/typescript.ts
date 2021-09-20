@@ -92,6 +92,10 @@ function isModuleReflectionWithChildren(
   return isReflectionWithChildren(reflection) && reflection.kind === TypeDoc.ReflectionKind.Module
 }
 
+export function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
+  return type.type === 'intrinsic'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
