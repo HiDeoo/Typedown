@@ -1,9 +1,10 @@
-import { commands, ExtensionContext, StatusBarAlignment, Uri, window } from 'vscode'
+import { commands, env, ExtensionContext, ProgressLocation, StatusBarAlignment, Uri, window } from 'vscode'
 import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
 import { createWebviewPanel } from './webview'
+import { getDefinitionsMarkdown } from './markdown'
 
 export const COMMANDS = {
   fileToMd: 'typedown.fileToMd',
@@ -57,7 +58,8 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
           break
         }
         case 'export': {
-          console.log('event ', event.definitions)
+          panel.dispose()
+          exportDefinitions(event.definitions)
           break
         }
         default: {
@@ -79,6 +81,19 @@ async function getWorkspaceTSConfig(): Promise<Uri> {
   const tsConfig = await getFolderTSConfig(folder.uri)
 
   return tsConfig
+}
+
+async function exportDefinitions(definitions: Definitions) {
+  await window.withProgress(
+    { location: ProgressLocation.Notification, title: 'Exporting definitions to Markdown' },
+    async () => {
+      const markdown = getDefinitionsMarkdown(definitions)
+
+      return env.clipboard.writeText(markdown)
+    }
+  )
+
+  return window.showInformationMessage('Markdown definitions copied to your clipboard.')
 }
 
 enum Mode {
