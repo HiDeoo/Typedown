@@ -1,7 +1,7 @@
 import type * as TypeDoc from 'typedoc'
 import type { Definitions } from 'typedown-shared'
 
-import { isArrayType, isIntrinsicType } from './typescript'
+import { isArrayType, isIndexedAccessType, isIntrinsicType, isLiteralType } from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
   return definitions
@@ -31,10 +31,47 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
   if (!type) {
     return ''
   } else if (isIntrinsicType(type)) {
-    return type.name
+    return getIntrinsicTypeMarkdown(type)
   } else if (isArrayType(type)) {
-    return `${getTypeMarkdown(type.elementType)}[]`
+    return getArrayTypeMarkdown(type)
+  } else if (isIndexedAccessType(type)) {
+    return getIndexedAccessMarkdown(type)
+  } else if (isLiteralType(type)) {
+    return getLiteralTypeMarkdown(type)
   }
 
   return 'unknown'
+}
+
+function getIntrinsicTypeMarkdown(type: TypeDoc.JSONOutput.IntrinsicType): string {
+  return type.name
+}
+
+function getArrayTypeMarkdown(type: TypeDoc.JSONOutput.ArrayType): string {
+  return `${getTypeMarkdown(type.elementType)}[]`
+}
+
+function getIndexedAccessMarkdown(type: TypeDoc.JSONOutput.IndexedAccessType): string {
+  return `${getTypeMarkdown(type.objectType)}["${getTypeMarkdown(type.indexType)}"]`
+}
+
+function getLiteralTypeMarkdown(type: TypeDoc.JSONOutput.LiteralType): string {
+  if (!type.value) {
+    return 'null'
+  }
+
+  switch (typeof type.value) {
+    case 'number': {
+      return type.value.toString()
+    }
+    case 'boolean': {
+      return type.value ? 'true' : 'false'
+    }
+    case 'object': {
+      return `${type.value.negative ? '-' : ''}${type.value.value}`
+    }
+    default: {
+      return `"${type.value}"`
+    }
+  }
 }

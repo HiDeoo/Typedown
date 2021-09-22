@@ -101,6 +101,14 @@ export function isArrayType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.
   return type.type === 'array'
 }
 
+export function isIndexedAccessType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IndexedAccessType {
+  return type.type === 'indexedAccess'
+}
+
+export function isLiteralType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.LiteralType {
+  return type.type === 'literal'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }

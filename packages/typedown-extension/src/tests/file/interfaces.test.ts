@@ -32,4 +32,21 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of literal types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithLiteralTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithLiteralTypes',
+          children: [
+            { name: 'a', type: 'null' },
+            { name: 'b', type: '3' },
+            { name: 'c', type: 'true' },
+            { name: 'd', type: '"test"' },
+          ],
+        },
+      ])
+    }))
 })
