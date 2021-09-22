@@ -1,7 +1,7 @@
 import type * as TypeDoc from 'typedoc'
 import type { Definitions } from 'typedown-shared'
 
-import { isIntrinsicType } from './typescript'
+import { isArrayType, isIntrinsicType } from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
   return definitions
@@ -32,6 +32,8 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
     return ''
   } else if (isIntrinsicType(type)) {
     return type.name
+  } else if (isArrayType(type)) {
+    return `${getTypeMarkdown(type.elementType)}[]`
   }
 
   return 'unknown'

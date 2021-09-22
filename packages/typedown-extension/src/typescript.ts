@@ -97,6 +97,10 @@ export function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is Type
   return type.type === 'intrinsic'
 }
 
+export function isArrayType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ArrayType {
+  return type.type === 'array'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
