@@ -1,11 +1,11 @@
-import { assertClipboardDefinitions, fileToMd, withFixture } from '../utils'
+import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 
 describe('interfaces', () => {
-  it('should export an interface of intrinsic types', async () =>
+  it('should export an interface of intrinsic types', () =>
     withFixture('file/src/interfaces.ts', async () => {
-      await fileToMd(['WithIntrinsicTypes'])
+      const markdown = await fileToMd(['WithIntrinsicTypes'])
 
-      return assertClipboardDefinitions([
+      return assertMarkdownDefinitions(markdown, [
         {
           name: 'WithIntrinsicTypes',
           children: [
