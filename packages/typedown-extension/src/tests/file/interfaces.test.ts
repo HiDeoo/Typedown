@@ -49,4 +49,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of intersection types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithIntersectionTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithIntersectionTypes',
+          children: [
+            { name: 'a', type: 'WithIntrinsicTypes & WithArrayTypes' },
+            { name: 'b', type: 'TestInterfaceA & TestInterfaceB' },
+          ],
+        },
+      ])
+    }))
 })

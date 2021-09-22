@@ -16,3 +16,18 @@ export interface WithLiteralTypes {
   c: true
   d: 'test'
 }
+
+export interface WithIntersectionTypes {
+  a: WithIntrinsicTypes & WithArrayTypes
+  b: TestInterfaceA & TestInterfaceB
+}
+
+interface TestInterfaceA {
+  a: string
+  b: number
+}
+
+interface TestInterfaceB {
+  c: boolean
+  d: string
+}

@@ -109,6 +109,14 @@ export function isLiteralType(type: TypeDoc.JSONOutput.SomeType): type is TypeDo
   return type.type === 'literal'
 }
 
+export function isIntersectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntersectionType {
+  return type.type === 'intersection'
+}
+
+export function isReferenceType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReferenceType {
+  return type.type === 'reference'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }

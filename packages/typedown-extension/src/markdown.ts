@@ -1,7 +1,14 @@
 import type * as TypeDoc from 'typedoc'
 import type { Definitions } from 'typedown-shared'
 
-import { isArrayType, isIndexedAccessType, isIntrinsicType, isLiteralType } from './typescript'
+import {
+  isArrayType,
+  isIndexedAccessType,
+  isIntersectionType,
+  isIntrinsicType,
+  isLiteralType,
+  isReferenceType,
+} from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
   return definitions
@@ -38,6 +45,10 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
     return getIndexedAccessMarkdown(type)
   } else if (isLiteralType(type)) {
     return getLiteralTypeMarkdown(type)
+  } else if (isIntersectionType(type)) {
+    return getIntersectionTypeMarkdown(type)
+  } else if (isReferenceType(type)) {
+    return getReferenceTypeMarkdown(type)
   }
 
   return 'unknown'
@@ -74,4 +85,12 @@ function getLiteralTypeMarkdown(type: TypeDoc.JSONOutput.LiteralType): string {
       return `'${type.value}'`
     }
   }
+}
+
+function getIntersectionTypeMarkdown(type: TypeDoc.JSONOutput.IntersectionType): string {
+  return type.types.map(getTypeMarkdown).join(' & ')
+}
+
+function getReferenceTypeMarkdown(type: TypeDoc.JSONOutput.ReferenceType): string {
+  return type.name
 }
