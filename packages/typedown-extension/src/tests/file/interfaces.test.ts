@@ -44,7 +44,7 @@ describe('interfaces', () => {
             { name: 'a', type: 'null' },
             { name: 'b', type: '3' },
             { name: 'c', type: 'true' },
-            { name: 'd', type: '"test"' },
+            { name: 'd', type: "'test'" },
           ],
         },
       ])
