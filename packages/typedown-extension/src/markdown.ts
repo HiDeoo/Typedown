@@ -9,6 +9,7 @@ import {
   isLiteralType,
   isOptionalType,
   isReferenceType,
+  isRestType,
   isTupleType,
 } from './typescript'
 
@@ -55,6 +56,8 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
     return getTupleTypeMarkdown(type)
   } else if (isOptionalType(type)) {
     return getOptionalTypeMarkdown(type)
+  } else if (isRestType(type)) {
+    return getRestTypeMarkdown(type)
   }
 
   return 'unknown'
@@ -111,4 +114,8 @@ function getTupleTypeMarkdown(type: TypeDoc.JSONOutput.TupleType): string {
 
 function getOptionalTypeMarkdown(type: TypeDoc.JSONOutput.OptionalType): string {
   return `${getTypeMarkdown(type.elementType)}?`
+}
+
+function getRestTypeMarkdown(type: TypeDoc.JSONOutput.RestType): string {
+  return `...${getTypeMarkdown(type.elementType)}`
 }

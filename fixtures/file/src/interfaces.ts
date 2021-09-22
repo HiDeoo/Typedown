@@ -25,6 +25,7 @@ export interface WithIntersectionTypes {
 export interface WithTupleTypes {
   a: [number, string]
   b: [string, number?]
+  c: [string, ...boolean[]]
 }
 
 interface TestInterfaceA {

@@ -125,6 +125,10 @@ export function isOptionalType(type: TypeDoc.JSONOutput.SomeType): type is TypeD
   return type.type === 'optional'
 }
 
+export function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.RestType {
+  return type.type === 'rest'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }

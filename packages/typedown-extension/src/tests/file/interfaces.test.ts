@@ -75,6 +75,7 @@ describe('interfaces', () => {
           children: [
             { name: 'a', type: '[number, string]' },
             { name: 'b', type: '[string, number?]' },
+            { name: 'c', type: '[string, ...boolean[]]' },
           ],
         },
       ])
