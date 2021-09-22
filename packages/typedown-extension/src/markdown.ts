@@ -71,7 +71,7 @@ function getLiteralTypeMarkdown(type: TypeDoc.JSONOutput.LiteralType): string {
       return `${type.value.negative ? '-' : ''}${type.value.value}`
     }
     default: {
-      return `"${type.value}"`
+      return `'${type.value}''`
     }
   }
 }
