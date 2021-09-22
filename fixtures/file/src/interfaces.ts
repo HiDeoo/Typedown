@@ -28,6 +28,11 @@ export interface WithTupleTypes {
   c: [string, ...boolean[]]
 }
 
+export interface WithUnionTypes {
+  a: string | boolean
+  b: number | TestInterfaceA
+}
+
 interface TestInterfaceA {
   a: string
   b: number

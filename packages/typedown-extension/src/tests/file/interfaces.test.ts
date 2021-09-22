@@ -80,4 +80,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of union types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithUnionTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithUnionTypes',
+          children: [
+            { name: 'a', type: 'string | boolean' },
+            { name: 'b', type: 'number | TestInterfaceA' },
+          ],
+        },
+      ])
+    }))
 })

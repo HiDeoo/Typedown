@@ -11,6 +11,7 @@ import {
   isReferenceType,
   isRestType,
   isTupleType,
+  isUnionType,
 } from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
@@ -58,6 +59,8 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
     return getOptionalTypeMarkdown(type)
   } else if (isRestType(type)) {
     return getRestTypeMarkdown(type)
+  } else if (isUnionType(type)) {
+    return getUnionTypeMarkdown(type)
   }
 
   return 'unknown'
@@ -118,4 +121,8 @@ function getOptionalTypeMarkdown(type: TypeDoc.JSONOutput.OptionalType): string 
 
 function getRestTypeMarkdown(type: TypeDoc.JSONOutput.RestType): string {
   return `...${getTypeMarkdown(type.elementType)}`
+}
+
+function getUnionTypeMarkdown(type: TypeDoc.JSONOutput.UnionType): string {
+  return type.types.map(getTypeMarkdown).join(' | ')
 }

@@ -129,6 +129,10 @@ export function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.J
   return type.type === 'rest'
 }
 
+export function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.UnionType {
+  return type.type === 'union'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
