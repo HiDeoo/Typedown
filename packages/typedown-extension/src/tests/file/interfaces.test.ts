@@ -64,4 +64,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of tuple types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithTupleTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithTupleTypes',
+          children: [
+            { name: 'a', type: '[number, string]' },
+            { name: 'b', type: '[string, number?]' },
+          ],
+        },
+      ])
+    }))
 })

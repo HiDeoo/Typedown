@@ -22,6 +22,11 @@ export interface WithIntersectionTypes {
   b: TestInterfaceA & TestInterfaceB
 }
 
+export interface WithTupleTypes {
+  a: [number, string]
+  b: [string, number?]
+}
+
 interface TestInterfaceA {
   a: string
   b: number

@@ -7,7 +7,9 @@ import {
   isIntersectionType,
   isIntrinsicType,
   isLiteralType,
+  isOptionalType,
   isReferenceType,
+  isTupleType,
 } from './typescript'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
@@ -49,6 +51,10 @@ function getTypeMarkdown(type?: TypeDoc.JSONOutput.SomeType): string {
     return getIntersectionTypeMarkdown(type)
   } else if (isReferenceType(type)) {
     return getReferenceTypeMarkdown(type)
+  } else if (isTupleType(type)) {
+    return getTupleTypeMarkdown(type)
+  } else if (isOptionalType(type)) {
+    return getOptionalTypeMarkdown(type)
   }
 
   return 'unknown'
@@ -93,4 +99,16 @@ function getIntersectionTypeMarkdown(type: TypeDoc.JSONOutput.IntersectionType):
 
 function getReferenceTypeMarkdown(type: TypeDoc.JSONOutput.ReferenceType): string {
   return type.name
+}
+
+function getTupleTypeMarkdown(type: TypeDoc.JSONOutput.TupleType): string {
+  if (!type.elements) {
+    return '[]'
+  }
+
+  return `[${type.elements.map(getTypeMarkdown).join(', ')}]`
+}
+
+function getOptionalTypeMarkdown(type: TypeDoc.JSONOutput.OptionalType): string {
+  return `${getTypeMarkdown(type.elementType)}?`
 }

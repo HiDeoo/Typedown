@@ -117,6 +117,14 @@ export function isReferenceType(type: TypeDoc.JSONOutput.SomeType): type is Type
   return type.type === 'reference'
 }
 
+export function isTupleType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TupleType {
+  return type.type === 'tuple'
+}
+
+export function isOptionalType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.OptionalType {
+  return type.type === 'optional'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
