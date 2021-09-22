@@ -46,17 +46,31 @@ export async function withFixture(fixtureFilePath: string, run: Run): Promise<vo
   return commands.executeCommand('workbench.action.closeAllEditors')
 }
 
-export async function fileToMd(exportedDefinitionNames?: string[]): Promise<void> {
-  let windowWreateWebviewPanelStub: sinon.SinonStub<Parameters<typeof window.createWebviewPanel>> | undefined
+export async function fileToMd(exportedDefinitionNames?: string[]): Promise<string | undefined> {
+  let clipboardContent: string | undefined
+
+  sinon.replaceGetter(env, 'clipboard', () => ({
+    readText() {
+      return Promise.resolve('')
+    },
+    writeText(val: string) {
+      clipboardContent = val
+
+      return Promise.resolve()
+    },
+  }))
 
   if (exportedDefinitionNames) {
     const noop: unknown = () => undefined
     let onDidReceiveMessage: (event: unknown) => unknown
+    let onDidDisposeListener: () => unknown
 
-    windowWreateWebviewPanelStub = sinon.stub(window, 'createWebviewPanel').callsFake(() => {
+    sinon.stub(window, 'createWebviewPanel').callsFake(() => {
       return {
         dispose: noop,
-        onDidDispose: noop,
+        onDidDispose(listener: () => unknown) {
+          onDidDisposeListener = listener
+        },
         reveal: noop,
         visible: false,
         webview: {
@@ -81,9 +95,7 @@ export async function fileToMd(exportedDefinitionNames?: string[]): Promise<void
 
             onDidReceiveMessage({ type: 'export', definitions })
 
-            if (windowWreateWebviewPanelStub) {
-              windowWreateWebviewPanelStub.restore()
-            }
+            onDidDisposeListener()
 
             return Promise.resolve(true)
           },
@@ -92,15 +104,22 @@ export async function fileToMd(exportedDefinitionNames?: string[]): Promise<void
     })
   }
 
-  return commands.executeCommand(COMMANDS.fileToMd)
+  await commands.executeCommand(COMMANDS.fileToMd)
+
+  sinon.restore()
+
+  return clipboardContent
 }
 
 export function folderToMd(): Thenable<void> {
   return commands.executeCommand(COMMANDS.folderToMd)
 }
 
-export async function assertClipboardDefinitions(assertions: DefinitionAssertion[]): Promise<void> {
-  const markdown = assertions
+export async function assertMarkdownDefinitions(
+  markdown: string | undefined,
+  assertions: DefinitionAssertion[]
+): Promise<void> {
+  const assertionsMarkdown = assertions
     .map((assertion) => {
       return `# ${assertion.name}
 
@@ -110,9 +129,7 @@ ${assertion.children.map((child) => `| ${child.name} | \`${child.type}\` |`).joi
     })
     .join('\n\n')
 
-  const clipboard = await env.clipboard.readText()
-
-  assert.strictEqual(clipboard, markdown)
+  assert.strictEqual(markdown, assertionsMarkdown)
 }
 
 interface DefinitionAssertion {

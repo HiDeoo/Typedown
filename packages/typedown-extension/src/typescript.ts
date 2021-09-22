@@ -97,6 +97,42 @@ export function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is Type
   return type.type === 'intrinsic'
 }
 
+export function isArrayType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ArrayType {
+  return type.type === 'array'
+}
+
+export function isIndexedAccessType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IndexedAccessType {
+  return type.type === 'indexedAccess'
+}
+
+export function isLiteralType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.LiteralType {
+  return type.type === 'literal'
+}
+
+export function isIntersectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntersectionType {
+  return type.type === 'intersection'
+}
+
+export function isReferenceType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReferenceType {
+  return type.type === 'reference'
+}
+
+export function isTupleType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TupleType {
+  return type.type === 'tuple'
+}
+
+export function isOptionalType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.OptionalType {
+  return type.type === 'optional'
+}
+
+export function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.RestType {
+  return type.type === 'rest'
+}
+
+export function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.UnionType {
+  return type.type === 'union'
+}
+
 interface ReflectionWithChildren extends TypeDoc.JSONOutput.ProjectReflection {
   children: Definitions
 }
