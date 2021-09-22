@@ -62,8 +62,15 @@ function showWebviewWithDefinitions(context: ExtensionContext, definitions: Defi
           exportDefinitions(event.definitions)
           break
         }
+        case 'error': {
+          window.showErrorMessage(event.message, { modal: true })
+          break
+        }
         default: {
-          console.error('Unknown message type received from the webview.')
+          const errorStr = `Unknown message type '${event.type}' received from the webview.`
+
+          console.error(errorStr)
+          window.showErrorMessage(errorStr, { modal: true })
           break
         }
       }

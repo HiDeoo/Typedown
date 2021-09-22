@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { isMessage, Message, WebviewMessageInit } from 'typedown-shared'
+  import { isMessage, Message, WebviewMessageError, WebviewMessageInit } from 'typedown-shared'
 
   import Header from './Header.svelte'
   import Definitions from './Definitions.svelte'
@@ -28,7 +28,10 @@
           break
         }
         default: {
-          console.error('Unknown message type received from VS Code.')
+          vscode.postMessage<WebviewMessageError>({
+            type: 'error',
+            message: `Unknown message type '${event.data.type}' received from VS Code.`,
+          })
           break
         }
       }
