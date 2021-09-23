@@ -95,4 +95,51 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of optional types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithOptionalTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithOptionalTypes',
+          children: [
+            { name: 'a', type: 'string', optional: true },
+            { name: 'b', type: 'number[]', optional: true },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with property default values', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithPropertyDefaultValues'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithPropertyDefaultValues',
+          children: [
+            { name: 'a', type: 'string', optional: true, defaultValue: 'production' },
+            { name: 'b', type: 'boolean', optional: true, defaultValue: 'true' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with property descriptions', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithPropertyDescriptions'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithPropertyDescriptions',
+          children: [
+            { name: 'a', type: 'string', description: 'Description A' },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: 'boolean', description: 'Description C multiline.' },
+            { name: 'd', type: 'string[]', description: 'Description D' },
+          ],
+        },
+      ])
+    }))
 })
