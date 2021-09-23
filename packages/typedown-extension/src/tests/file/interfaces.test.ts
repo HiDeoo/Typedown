@@ -95,4 +95,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of optional types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithOptionalTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithOptionalTypes',
+          children: [
+            { name: 'a', type: 'string', optional: true },
+            { name: 'b', type: 'number[]', optional: true },
+          ],
+        },
+      ])
+    }))
 })

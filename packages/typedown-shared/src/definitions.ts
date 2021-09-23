@@ -1,6 +1,6 @@
 export type DefinitionIdentifier = number
 
-export type DefinitionChild = [name: string, type: string]
+export type DefinitionChild = [name: string, type: string, optional: boolean]
 
 export interface Definition {
   id: DefinitionIdentifier

@@ -20,7 +20,7 @@ function getDefinitionChildren(reflections: TypeDoc.JSONOutput.DeclarationReflec
 }
 
 function getDefinitionChild(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild {
-  return [reflection.name, getDefinitionChildType(reflection.type)]
+  return [reflection.name, getDefinitionChildType(reflection.type), reflection.flags.isOptional === true]
 }
 
 function getDefinitionChildType(type?: TypeDoc.JSONOutput.SomeType): string {

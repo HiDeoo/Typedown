@@ -33,6 +33,11 @@ export interface WithUnionTypes {
   b: number | TestInterfaceA
 }
 
+export interface WithOptionalTypes {
+  a?: string
+  b?: number[]
+}
+
 interface TestInterfaceA {
   a: string
   b: number
