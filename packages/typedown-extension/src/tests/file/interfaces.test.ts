@@ -110,4 +110,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with default value types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithDefaultValueTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithDefaultValueTypes',
+          children: [
+            { name: 'a', type: 'string', optional: true, defaultValue: 'production' },
+            { name: 'b', type: 'boolean', optional: true, defaultValue: 'true' },
+          ],
+        },
+      ])
+    }))
 })

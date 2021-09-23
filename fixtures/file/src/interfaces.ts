@@ -38,6 +38,20 @@ export interface WithOptionalTypes {
   b?: number[]
 }
 
+export interface WithDefaultValueTypes {
+  /**
+   * Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+   *
+   * @default production
+   * @see https://github.com/HiDeoo/Typedown/
+   */
+  a?: string
+  /**
+   * @default true
+   */
+  b?: boolean
+}
+
 interface TestInterfaceA {
   a: string
   b: number
