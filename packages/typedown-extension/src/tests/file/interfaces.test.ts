@@ -142,4 +142,22 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface of function types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithFunctionTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithFunctionTypes',
+          children: [
+            { name: 'a', type: '() => string' },
+            { name: 'b', type: '(b1: string, b2?: number) => void' },
+            { name: 'c', type: '(...c1: string[]) => boolean' },
+            { name: 'd', type: '(d1: (d1a: number, d1b?: boolean) => void) => [string, number]' },
+            { name: 'e', type: '(e1: boolean) => [string, number]' },
+          ],
+        },
+      ])
+    }))
 })

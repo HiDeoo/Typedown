@@ -1,7 +1,7 @@
 import * as TypeDoc from 'typedoc'
-import { Definition, DefinitionChild } from 'typedown-shared'
+import type { Definition, DefinitionChild } from 'typedown-shared'
 
-import { DeclarationReflection } from './typescript'
+import type { DeclarationReflection } from './typescript'
 
 export function getDefinitionFromReflection(reflection: DeclarationReflection): Definition | undefined {
   if (!reflection.children || reflection.children.length === 0) {
@@ -23,7 +23,7 @@ function getDefinitionChild(reflection: TypeDoc.JSONOutput.DeclarationReflection
   return [
     reflection.name,
     getDefinitionChildDescription(reflection.comment),
-    getDefinitionChildType(reflection.type),
+    getDefinitionChildType(reflection),
     reflection.flags.isOptional === true,
     getDefinitionChildDefaultValue(reflection.comment),
   ]
@@ -45,15 +45,17 @@ function getDefinitionChildDescription(comment?: TypeDoc.JSONOutput.Comment): st
   return description.replace(/(?:\r\n?|\n)/, ' ')
 }
 
-function getDefinitionChildType(type?: TypeDoc.JSONOutput.SomeType): string {
-  if (!type) {
-    return ''
-  } else if (isIntrinsicType(type)) {
+function getDefinitionChildType(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
+  return reflection.type ? getDefinitionChildDirectType(reflection.type) : getDefinitionChildIndirectType(reflection)
+}
+
+function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string {
+  if (isIntrinsicType(type)) {
     return getIntrinsicTypeMarkdown(type)
   } else if (isArrayType(type)) {
     return getArrayTypeMarkdown(type)
   } else if (isIndexedAccessType(type)) {
-    return getIndexedAccessMarkdown(type)
+    return getIndexedAccessTypeMarkdown(type)
   } else if (isLiteralType(type)) {
     return getLiteralTypeMarkdown(type)
   } else if (isIntersectionType(type)) {
@@ -68,6 +70,16 @@ function getDefinitionChildType(type?: TypeDoc.JSONOutput.SomeType): string {
     return getRestTypeMarkdown(type)
   } else if (isUnionType(type)) {
     return getUnionTypeMarkdown(type)
+  } else if (isReflectionType(type) && type.declaration) {
+    return getDefinitionChildType(type.declaration)
+  }
+
+  return 'unknown'
+}
+
+function getDefinitionChildIndirectType(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
+  if (reflection.signatures) {
+    return reflection.signatures.map(getSignatureTypeMarkdown).join('\n')
   }
 
   return 'unknown'
@@ -78,11 +90,11 @@ function getIntrinsicTypeMarkdown(type: TypeDoc.JSONOutput.IntrinsicType): strin
 }
 
 function getArrayTypeMarkdown(type: TypeDoc.JSONOutput.ArrayType): string {
-  return `${getDefinitionChildType(type.elementType)}[]`
+  return `${getDefinitionChildDirectType(type.elementType)}[]`
 }
 
-function getIndexedAccessMarkdown(type: TypeDoc.JSONOutput.IndexedAccessType): string {
-  return `${getDefinitionChildType(type.objectType)}["${getDefinitionChildType(type.indexType)}"]`
+function getIndexedAccessTypeMarkdown(type: TypeDoc.JSONOutput.IndexedAccessType): string {
+  return `${getDefinitionChildDirectType(type.objectType)}["${getDefinitionChildDirectType(type.indexType)}"]`
 }
 
 function getLiteralTypeMarkdown(type: TypeDoc.JSONOutput.LiteralType): string {
@@ -107,7 +119,7 @@ function getLiteralTypeMarkdown(type: TypeDoc.JSONOutput.LiteralType): string {
 }
 
 function getIntersectionTypeMarkdown(type: TypeDoc.JSONOutput.IntersectionType): string {
-  return type.types.map(getDefinitionChildType).join(' & ')
+  return type.types.map(getDefinitionChildDirectType).join(' & ')
 }
 
 function getReferenceTypeMarkdown(type: TypeDoc.JSONOutput.ReferenceType): string {
@@ -119,19 +131,48 @@ function getTupleTypeMarkdown(type: TypeDoc.JSONOutput.TupleType): string {
     return '[]'
   }
 
-  return `[${type.elements.map(getDefinitionChildType).join(', ')}]`
+  return `[${type.elements.map(getDefinitionChildDirectType).join(', ')}]`
 }
 
 function getOptionalTypeMarkdown(type: TypeDoc.JSONOutput.OptionalType): string {
-  return `${getDefinitionChildType(type.elementType)}?`
+  return `${getDefinitionChildDirectType(type.elementType)}?`
 }
 
 function getRestTypeMarkdown(type: TypeDoc.JSONOutput.RestType): string {
-  return `...${getDefinitionChildType(type.elementType)}`
+  return `...${getDefinitionChildDirectType(type.elementType)}`
 }
 
 function getUnionTypeMarkdown(type: TypeDoc.JSONOutput.UnionType): string {
-  return type.types.map(getDefinitionChildType).join(' | ')
+  return type.types.map(getDefinitionChildDirectType).join(' | ')
+}
+
+function getSignatureTypeMarkdown(signature: TypeDoc.JSONOutput.SignatureReflection): string {
+  const parameters = signature.parameters?.map(getParameterTypeMarkdown) ?? []
+  const returnType = signature.type ? getDefinitionChildDirectType(signature.type) : ''
+
+  return `(${parameters.join(', ')}) => ${returnType}`
+}
+
+function getParameterTypeMarkdown(parameter: TypeDoc.JSONOutput.ParameterReflection): string {
+  const parameterComponents: string[] = []
+
+  if (parameter.flags.isRest) {
+    parameterComponents.push('...')
+  }
+
+  parameterComponents.push(parameter.name)
+
+  if (parameter.flags.isOptional) {
+    parameterComponents.push('?')
+  }
+
+  parameterComponents.push(': ')
+
+  parameterComponents.push(
+    parameter.type ? getDefinitionChildDirectType(parameter.type) : getDefinitionChildIndirectType(parameter)
+  )
+
+  return parameterComponents.join('')
 }
 
 function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
@@ -172,4 +213,8 @@ function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutp
 
 function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.UnionType {
   return type.type === 'union'
+}
+
+function isReflectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReflectionType {
+  return type.type === 'reflection'
 }

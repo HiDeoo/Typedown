@@ -71,6 +71,14 @@ export interface WithPropertyDescriptions {
   d: string[]
 }
 
+export interface WithFunctionTypes {
+  a: () => string
+  b: (b1: string, b2?: number) => void
+  c: (...c1: string[]) => boolean
+  d(d1: (d1a: number, d1b?: boolean) => void): [string, number]
+  e(e1: boolean): [string, number]
+}
+
 interface TestInterfaceA {
   a: string
   b: number
