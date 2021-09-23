@@ -40,8 +40,7 @@ export interface WithOptionalTypes {
 
 export interface WithDefaultValueTypes {
   /**
-   * Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-   *
+   * @deprecated
    * @default production
    * @see https://github.com/HiDeoo/Typedown/
    */
