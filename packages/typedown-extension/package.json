@@ -14,12 +14,14 @@
   "dependencies": {
     "gitignore-to-glob": "https://github.com/patbenatar/gitignore-to-glob",
     "glob": "7.1.7",
+    "prettier": "2.3.2",
     "typedoc": "0.21.9",
     "typescript": "4.4.2"
   },
   "devDependencies": {
     "@types/glob": "7.1.4",
     "@types/mocha": "9.0.0",
+    "@types/prettier": "2.3.2",
     "@types/sinon": "10.0.2",
     "@types/vscode": "1.60.0",
     "@vscode/test-electron": "1.6.2",

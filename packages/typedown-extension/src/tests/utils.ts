@@ -7,6 +7,7 @@ import { Definitions, isMessage } from 'typedown-shared'
 import assert from 'assert'
 
 import { COMMANDS } from '..'
+import { formatMarkdown } from '../markdown'
 
 export function runSuite(testsRoot: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -136,7 +137,7 @@ ${assertion.children
     })
     .join('\n\n')
 
-  assert.strictEqual(markdown, assertionsMarkdown)
+  assert.strictEqual(markdown, formatMarkdown(assertionsMarkdown))
 }
 
 interface DefinitionAssertion {
