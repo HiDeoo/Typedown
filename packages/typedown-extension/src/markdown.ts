@@ -11,11 +11,11 @@ ${getDefinitionChildrenMarkdown(definition.children)}`
 }
 
 function getDefinitionChildrenMarkdown(children: DefinitionChild[]): string {
-  return `| Name | Type | Optional | Default value |
-| --- | --- | --- | --- |
+  return `| Name | Type | Optional | Default value | Description |
+| --- | --- | --- | --- | --- |
 ${children.map(getDefinitionChildMarkdown).join('\n')}`
 }
 
 function getDefinitionChildMarkdown(child: DefinitionChild): string {
-  return `| ${child[0]} | \`${child[1]}\` | ${child[2] ? '✓' : ''} | ${child[3]} |`
+  return `| ${child[0]} | \`${child[1]}\` | ${child[2] ? '✓' : ''} | ${child[3]} | ${child[4]} |`
 }

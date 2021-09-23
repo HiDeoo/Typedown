@@ -25,6 +25,7 @@ function getDefinitionChild(reflection: TypeDoc.JSONOutput.DeclarationReflection
     getDefinitionChildType(reflection.type),
     reflection.flags.isOptional === true,
     getDefinitionChildDefaultValue(reflection.comment),
+    getDefinitionChildDescription(reflection.comment),
   ]
 }
 
@@ -36,6 +37,12 @@ function getDefinitionChildDefaultValue(comment?: TypeDoc.JSONOutput.Comment): s
   }
 
   return defaultTag.text.replace(/(?:\r\n?|\n)+$/, '')
+}
+
+function getDefinitionChildDescription(comment?: TypeDoc.JSONOutput.Comment): string {
+  const description = comment?.shortText ?? ''
+
+  return description.replace(/(?:\r\n?|\n)/, ' ')
 }
 
 function getDefinitionChildType(type?: TypeDoc.JSONOutput.SomeType): string {

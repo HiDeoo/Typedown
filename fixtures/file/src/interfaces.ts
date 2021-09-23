@@ -38,7 +38,7 @@ export interface WithOptionalTypes {
   b?: number[]
 }
 
-export interface WithDefaultValueTypes {
+export interface WithPropertyDefaultValues {
   /**
    * @deprecated
    * @default production
@@ -49,6 +49,26 @@ export interface WithDefaultValueTypes {
    * @default true
    */
   b?: boolean
+}
+
+export interface WithPropertyDescriptions {
+  /**
+   * Description A
+   */
+  a: string
+  // Description B
+  b: number
+  /**
+   * Description C
+   * multiline.
+   */
+  c: boolean
+  /**
+   * Description D
+   *
+   * Multiline
+   */
+  d: string[]
 }
 
 interface TestInterfaceA {

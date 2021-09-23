@@ -123,12 +123,14 @@ export async function assertMarkdownDefinitions(
     .map((assertion) => {
       return `# ${assertion.name}
 
-| Name | Type | Optional | Default value |
-| --- | --- | --- | --- |
+| Name | Type | Optional | Default value | Description |
+| --- | --- | --- | --- | --- |
 ${assertion.children
   .map(
     (child) =>
-      `| ${child.name} | \`${child.type}\` | ${child.optional === true ? '✓' : ''} | ${child.defaultValue ?? ''} |`
+      `| ${child.name} | \`${child.type}\` | ${child.optional === true ? '✓' : ''} | ${child.defaultValue ?? ''} | ${
+        child.description ?? ''
+      } |`
   )
   .join('\n')}`
     })
@@ -141,6 +143,7 @@ interface DefinitionAssertion {
   name: string
   children: {
     defaultValue?: string
+    description?: string
     name: string
     optional?: boolean
     type: string
