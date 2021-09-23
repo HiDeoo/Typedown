@@ -22,10 +22,10 @@ function getDefinitionChildren(reflections: TypeDoc.JSONOutput.DeclarationReflec
 function getDefinitionChild(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild {
   return [
     reflection.name,
+    getDefinitionChildDescription(reflection.comment),
     getDefinitionChildType(reflection.type),
     reflection.flags.isOptional === true,
     getDefinitionChildDefaultValue(reflection.comment),
-    getDefinitionChildDescription(reflection.comment),
   ]
 }
 
