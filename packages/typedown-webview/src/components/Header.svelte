@@ -5,7 +5,7 @@
   import Button from './Button.svelte'
   import { definitions } from '../stores/definitions'
 
-  $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?._exported).length
+  $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
 
   function onClickExport() {
     vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })

@@ -11,7 +11,6 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "typedoc": "0.21.9",
     "typescript": "4.4.2"
   }
 }
