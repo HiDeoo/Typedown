@@ -28,7 +28,7 @@ function createDefinitions() {
         const definition = currentValue.byId[identifier]
 
         if (definition) {
-          definition._exported = definition._exported ? false : true
+          definition.exported = definition.exported ? false : true
         }
 
         return currentValue
@@ -40,7 +40,7 @@ function createDefinitions() {
       const exported = definitions.allIds.reduce<Definitions>((acc, identifier) => {
         const definition = definitions.byId[identifier]
 
-        if (definition && definition._exported) {
+        if (definition && definition.exported) {
           acc.push(definition)
         }
 
@@ -56,5 +56,5 @@ export const definitions = createDefinitions()
 
 interface DefinitionsStore {
   allIds: DefinitionIdentifier[]
-  byId: Record<DefinitionIdentifier, Definition & { _exported?: boolean }>
+  byId: Record<DefinitionIdentifier, Definition>
 }

@@ -1,9 +1,12 @@
-import type * as TypeDoc from 'typedoc'
-
 export type DefinitionIdentifier = number
 
-export interface Definition extends TypeDoc.JSONOutput.DeclarationReflection {
+export type DefinitionChild = [name: string, type: string]
+
+export interface Definition {
   id: DefinitionIdentifier
+  children: DefinitionChild[]
+  exported?: boolean
+  name: string
 }
 
 export type Definitions = Definition[]

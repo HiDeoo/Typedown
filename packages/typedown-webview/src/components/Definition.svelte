@@ -7,7 +7,7 @@
   export let identifier: DefinitionIdentifier
 
   $: definition = $definitions.byId[identifier]
-  $: exported = definition?._exported === true
+  $: exported = definition?.exported === true
 
   function onChangeExported() {
     definitions.toggle(identifier)
