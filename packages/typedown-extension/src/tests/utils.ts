@@ -7,7 +7,7 @@ import { Definitions, isMessage } from 'typedown-shared'
 import assert from 'assert'
 
 import { COMMANDS } from '..'
-import { formatMarkdown } from '../markdown'
+import { escapeMarkdown, formatMarkdown } from '../markdown'
 
 export function runSuite(testsRoot: string): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -127,12 +127,17 @@ export async function assertMarkdownDefinitions(
 | Name | Description | Type | Optional | Default value |
 | --- | --- | --- | --- | --- |
 ${assertion.children
-  .map(
-    (child) =>
-      `| ${child.name} | ${child.description ?? ''} | \`${child.type}\` | ${child.optional === true ? '✓' : ''} | ${
-        child.defaultValue ?? ''
-      } |`
-  )
+  .map((child) => {
+    const components = [
+      child.name,
+      escapeMarkdown(child.description ?? ''),
+      `\`${escapeMarkdown(child.type)}\``,
+      child.optional === true ? '✓' : '',
+      escapeMarkdown(child.defaultValue ?? ''),
+    ]
+
+    return `| ${components.join(' | ')} |`
+  })
   .join('\n')}`
     })
     .join('\n\n')

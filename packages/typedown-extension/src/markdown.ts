@@ -14,6 +14,10 @@ ${getDefinitionChildrenMarkdown(definition.children)}`
   return formatMarkdown(markdown)
 }
 
+export function escapeMarkdown(markdown: string): string {
+  return markdown.replace(/\|/, '\\|')
+}
+
 export function formatMarkdown(markdown: string): string {
   return prettier.format(markdown, { parser: 'markdown', plugins: [parserMarkdown] })
 }
@@ -25,5 +29,13 @@ ${children.map(getDefinitionChildMarkdown).join('\n')}`
 }
 
 function getDefinitionChildMarkdown(child: DefinitionChild): string {
-  return `| ${child[0]} | ${child[1]} | \`${child[2]}\` | ${child[3] ? '✓' : ''} | ${child[4]} |`
+  const components = [
+    child[0],
+    escapeMarkdown(child[1]),
+    `\`${escapeMarkdown(child[2])}\``,
+    child[3] ? '✓' : '',
+    escapeMarkdown(child[4]),
+  ]
+
+  return `| ${components.join(' | ')} |`
 }

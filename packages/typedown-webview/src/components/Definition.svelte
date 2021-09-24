@@ -21,7 +21,9 @@
       <div class="definitionIndicator" />
     {/if}
     <strong>{definition.name}</strong>
-    <Checkbox checked={exported} on:change={onChangeExported}>{JSON.stringify(definition)}</Checkbox>
+    <Checkbox checked={exported} on:change={onChangeExported}
+      ><div style="white-space: pre;">{JSON.stringify(definition, null, '\t')}</div></Checkbox
+    >
   </div>
 {/if}
 

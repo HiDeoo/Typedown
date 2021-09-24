@@ -96,6 +96,21 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface of union array types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithUnionArrayTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithUnionArrayTypes',
+          children: [
+            { name: 'a', type: '(string | boolean)[]' },
+            { name: 'b', type: 'number | boolean[]' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface of optional types', () =>
     withFixture('file/src/interfaces.ts', async () => {
       const markdown = await fileToMd(['WithOptionalTypes'])
@@ -106,6 +121,7 @@ describe('interfaces', () => {
           children: [
             { name: 'a', type: 'string', optional: true },
             { name: 'b', type: 'number[]', optional: true },
+            { name: 'c', type: 'boolean' },
           ],
         },
       ])
@@ -138,6 +154,198 @@ describe('interfaces', () => {
             { name: 'b', type: 'number' },
             { name: 'c', type: 'boolean', description: 'Description C multiline.' },
             { name: 'd', type: 'string[]', description: 'Description D' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface of function types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithFunctionTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithFunctionTypes',
+          children: [
+            { name: 'a', type: '() => string' },
+            { name: 'b', type: '(b1: string, b2?: number) => void' },
+            { name: 'c', type: '(...c1: string[]) => boolean' },
+            { name: 'd', type: '(d1: (d1a: number, d1b?: boolean) => void) => [string, number]' },
+            { name: 'e', type: '(e1: boolean) => [string, number]' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with a string index signature', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithStringIndexSignature'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithStringIndexSignature',
+          children: [
+            { name: 'a', type: 'boolean' },
+            { name: '[keyB: string]', type: 'boolean' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with a number index signature', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithNumberIndexSignature'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithNumberIndexSignature',
+          children: [
+            { name: 'a', type: 'number' },
+            { name: '[keyB: number]', type: 'string' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface without the readonly property keyword', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReadOnlyTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReadOnlyTypes',
+          children: [
+            { name: 'a', type: 'string' },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: '() => string' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with the readonly keyword for array and tuple types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReadonlyTupleAndArrayTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReadonlyTupleAndArrayTypes',
+          children: [
+            { name: 'a', type: 'readonly [string, number]' },
+            { name: 'b', type: 'readonly boolean[]' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface extending other ones', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithExtends'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithExtends',
+          children: [
+            { name: 'a', type: 'string' },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: 'boolean' },
+            { name: 'd', type: 'string' },
+            { name: 'e', type: 'string | number' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface extending other ones with reference type arguments', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypeArgumentsExtends'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypeArgumentsExtends',
+          children: [
+            { name: 'b', type: 'number' },
+            { name: 'c', type: 'boolean', optional: true },
+            { name: 'd', type: 'string', optional: true },
+            { name: 'e', type: 'number' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with generics', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithGenerics<T, U>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithGenerics<T, U>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: '(...b1: U[]) => T' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with generic constraints', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithGenericConstraints<T extends string, U extends keyof TestInterfaceA>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithGenericConstraints<T extends string, U extends keyof TestInterfaceA>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: '(b1: U) => [T]' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with type operator types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithTypeOperatorTypes<T extends keyof TestInterfaceA>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithTypeOperatorTypes<T extends keyof TestInterfaceA>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: 'keyof TestInterfaceB' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with reference type arguments', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypeArguments'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypeArguments',
+          children: [
+            { name: 'a', type: "Omit<TestInterfaceA, 'a' | 'b'>" },
+            { name: 'b', type: "Partial<Omit<TestInterfaceA, 'a' | 'b'>>" },
+            { name: 'c', type: 'Record<string, boolean>' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with reference types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypes',
+          children: [
+            { name: 'a', type: 'TestInterfaceA' },
+            { name: 'b', type: 'TestInterfaceB', optional: true },
+            { name: 'c', type: 'string' },
+            { name: 'd', type: 'TestInterfaceD' },
           ],
         },
       ])

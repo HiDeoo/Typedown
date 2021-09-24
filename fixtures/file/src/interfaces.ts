@@ -33,9 +33,15 @@ export interface WithUnionTypes {
   b: number | TestInterfaceA
 }
 
+export interface WithUnionArrayTypes {
+  a: (string | boolean)[]
+  b: number | boolean[]
+}
+
 export interface WithOptionalTypes {
   a?: string
   b?: number[]
+  c: boolean
 }
 
 export interface WithPropertyDefaultValues {
@@ -71,6 +77,71 @@ export interface WithPropertyDescriptions {
   d: string[]
 }
 
+export interface WithFunctionTypes {
+  a: () => string
+  b: (b1: string, b2?: number) => void
+  c: (...c1: string[]) => boolean
+  d(d1: (d1a: number, d1b?: boolean) => void): [string, number]
+  e(e1: boolean): [string, number]
+}
+
+export interface WithStringIndexSignature {
+  a: true | false
+  [keyB: string]: boolean
+}
+
+export interface WithNumberIndexSignature {
+  a: number
+  [keyB: number]: string
+}
+
+export interface WithReadOnlyTypes {
+  readonly a: string
+  b: number
+  readonly c: () => string
+}
+
+export interface WithReadonlyTupleAndArrayTypes {
+  a: readonly [string, number]
+  b: readonly boolean[]
+}
+
+export interface WithExtends extends TestInterfaceA, TestInterfaceB {
+  e: string | number
+}
+
+export interface WithReferenceTypeArgumentsExtends extends Omit<TestInterfaceA, 'a'>, Partial<TestInterfaceB> {
+  e: number
+}
+
+export interface WithGenerics<T, U> {
+  a: T
+  b: (...b1: U[]) => T
+}
+
+export interface WithGenericConstraints<T extends string, U extends keyof TestInterfaceA> {
+  a: T
+  b: (b1: U) => [T]
+}
+
+export interface WithTypeOperatorTypes<T extends keyof TestInterfaceA> {
+  a: T
+  b: keyof TestInterfaceB
+}
+
+export interface WithReferenceTypeArguments {
+  a: Omit<TestInterfaceA, 'a' | 'b'>
+  b: Partial<Omit<TestInterfaceA, 'a' | 'b'>>
+  c: Record<string, boolean>
+}
+
+export interface WithReferenceTypes {
+  a: TestInterfaceA
+  b?: TestInterfaceB
+  c: TestInterfaceC
+  d: TestInterfaceD
+}
+
 interface TestInterfaceA {
   a: string
   b: number
@@ -80,3 +151,7 @@ interface TestInterfaceB {
   c: boolean
   d: string
 }
+
+type TestInterfaceC = string
+
+type TestInterfaceD = string & { da: boolean }
