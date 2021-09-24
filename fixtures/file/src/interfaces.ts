@@ -79,6 +79,11 @@ export interface WithFunctionTypes {
   e(e1: boolean): [string, number]
 }
 
+export interface WithIndexSignature {
+  [keyA: string]: boolean
+  b: true | false
+}
+
 interface TestInterfaceA {
   a: string
   b: number

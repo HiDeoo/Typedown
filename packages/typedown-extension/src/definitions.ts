@@ -4,29 +4,53 @@ import type { Definition, DefinitionChild } from 'typedown-shared'
 import type { DeclarationReflection } from './typescript'
 
 export function getDefinitionFromReflection(reflection: DeclarationReflection): Definition | undefined {
-  if (!reflection.children || reflection.children.length === 0) {
+  const children = getDefinitionChildren(reflection)
+
+  if (children.length === 0) {
     return
   }
 
   return {
-    children: getDefinitionChildren(reflection.children),
+    children,
     id: reflection.id,
     name: reflection.name,
   }
 }
 
-function getDefinitionChildren(reflections: TypeDoc.JSONOutput.DeclarationReflection[]): DefinitionChild[] {
-  return reflections.map(getDefinitionChild)
+function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
+  const children: DefinitionChild[] = []
+
+  if (!reflection.children || reflection.children.length === 0) {
+    return children
+  }
+
+  children.push(...reflection.children.map(getDefinitionChild))
+
+  if (reflection.indexSignature) {
+    children.push(getDefinitionChild(reflection.indexSignature))
+  }
+
+  return children
 }
 
-function getDefinitionChild(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild {
+function getDefinitionChild(reflection: DeclarationOrSignatureReflection): DefinitionChild {
   return [
-    reflection.name,
+    getDefinitionChildName(reflection),
     getDefinitionChildDescription(reflection.comment),
     getDefinitionChildType(reflection),
-    reflection.flags.isOptional === true,
+    isReflectionOptional(reflection),
     getDefinitionChildDefaultValue(reflection.comment),
   ]
+}
+
+function getDefinitionChildName(reflection: DeclarationOrSignatureReflection): string {
+  if (isSignatureReflection(reflection) && reflection.parameters?.[0]) {
+    const parameter = reflection.parameters?.[0]
+
+    return `[${parameter.name}: ${getDefinitionChildType(parameter)}]`
+  }
+
+  return reflection.name
 }
 
 function getDefinitionChildDefaultValue(comment?: TypeDoc.JSONOutput.Comment): string {
@@ -175,6 +199,16 @@ function getParameterType(parameter: TypeDoc.JSONOutput.ParameterReflection): st
   return parameterComponents.join('')
 }
 
+function isReflectionOptional(reflection: TypeDoc.JSONOutput.DeclarationReflection): boolean {
+  return reflection.flags.isOptional === true
+}
+
+function isSignatureReflection(
+  reflection: DeclarationOrSignatureReflection
+): reflection is TypeDoc.JSONOutput.SignatureReflection {
+  return reflection.kind === TypeDoc.ReflectionKind.IndexSignature
+}
+
 function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
   return type.type === 'intrinsic'
 }
@@ -218,3 +252,7 @@ function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOut
 function isReflectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReflectionType {
   return type.type === 'reflection'
 }
+
+type DeclarationOrSignatureReflection =
+  | TypeDoc.JSONOutput.DeclarationReflection
+  | TypeDoc.JSONOutput.SignatureReflection
