@@ -159,7 +159,15 @@ function getIntersectionType(type: TypeDoc.JSONOutput.IntersectionType): string 
 }
 
 function getReferenceType(type: TypeDoc.JSONOutput.ReferenceType): string {
-  return type.name
+  let reference = type.name
+
+  if (type.typeArguments) {
+    const args = type.typeArguments.map(getDefinitionChildDirectType)
+
+    reference = `${reference}<${args.join(', ')}>`
+  }
+
+  return reference
 }
 
 function getTupleType(type: TypeDoc.JSONOutput.TupleType): string {

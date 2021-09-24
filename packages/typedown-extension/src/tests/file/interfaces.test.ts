@@ -254,4 +254,20 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with reference type arguments', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypeArguments'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypeArguments',
+          children: [
+            { name: 'a', type: "Omit<TestInterfaceA, 'a' | 'b'>" },
+            { name: 'b', type: "Partial<Omit<TestInterfaceA, 'a' | 'b'>>" },
+            { name: 'c', type: 'Record<string, boolean>' },
+          ],
+        },
+      ])
+    }))
 })

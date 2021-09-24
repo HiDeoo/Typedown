@@ -109,6 +109,12 @@ export interface WithTypeOperatorTypes<T extends keyof TestInterfaceA> {
   b: keyof TestInterfaceB
 }
 
+export interface WithReferenceTypeArguments {
+  a: Omit<TestInterfaceA, 'a' | 'b'>
+  b: Partial<Omit<TestInterfaceA, 'a' | 'b'>>
+  c: Record<string, boolean>
+}
+
 interface TestInterfaceA {
   a: string
   b: number
