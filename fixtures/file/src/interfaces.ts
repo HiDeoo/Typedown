@@ -104,6 +104,11 @@ export interface WithGenericConstraints<T extends string, U extends keyof TestIn
   b: (b1: U) => [T]
 }
 
+export interface WithTypeOperatorTypes<T extends keyof TestInterfaceA> {
+  a: T
+  b: keyof TestInterfaceB
+}
+
 interface TestInterfaceA {
   a: string
   b: number

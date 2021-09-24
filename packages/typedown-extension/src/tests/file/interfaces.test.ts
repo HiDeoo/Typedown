@@ -239,4 +239,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with type operator types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithTypeOperatorTypes<T extends keyof TestInterfaceA>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithTypeOperatorTypes<T extends keyof TestInterfaceA>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: 'keyof TestInterfaceB' },
+          ],
+        },
+      ])
+    }))
 })
