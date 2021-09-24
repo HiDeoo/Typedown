@@ -191,7 +191,7 @@ describe('interfaces', () => {
       ])
     }))
 
-  it('should ignore the readonly keyword in an interface', () =>
+  it('should export an interface without the readonly property keyword', () =>
     withFixture('file/src/interfaces.ts', async () => {
       const markdown = await fileToMd(['WithReadOnlyTypes'])
 
@@ -202,6 +202,21 @@ describe('interfaces', () => {
             { name: 'a', type: 'string' },
             { name: 'b', type: 'number' },
             { name: 'c', type: '() => string' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with the readonly keyword for array and tuple types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReadonlyTupleAndArrayTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReadonlyTupleAndArrayTypes',
+          children: [
+            { name: 'a', type: 'readonly [string, number]' },
+            { name: 'b', type: 'readonly boolean[]' },
           ],
         },
       ])

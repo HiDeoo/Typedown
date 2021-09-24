@@ -95,6 +95,11 @@ export interface WithReadOnlyTypes {
   readonly c: () => string
 }
 
+export interface WithReadonlyTupleAndArrayTypes {
+  a: readonly [string, number]
+  b: readonly boolean[]
+}
+
 export interface WithExtends extends TestInterfaceA, TestInterfaceB {
   e: string | number
 }
