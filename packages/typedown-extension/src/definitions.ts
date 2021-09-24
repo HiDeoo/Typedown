@@ -12,6 +12,7 @@ export function getDefinitionFromReflection(reflection: DeclarationReflection): 
 
   return {
     children,
+    description: getCommentDescription(reflection.comment),
     id: reflection.id,
     name: getDefinitionName(reflection),
   }
@@ -25,6 +26,12 @@ function getDefinitionName(reflection: TypeDoc.JSONOutput.DeclarationReflection)
   }
 
   return name
+}
+
+function getCommentDescription(comment?: TypeDoc.JSONOutput.Comment): string {
+  const description = comment?.shortText ?? ''
+
+  return description.replace(/(?:\r\n?|\n)/, ' ')
 }
 
 function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
@@ -46,7 +53,7 @@ function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflect
 function getDefinitionChild(reflection: DeclarationOrSignatureReflection): DefinitionChild {
   return [
     getDefinitionChildName(reflection),
-    getDefinitionChildDescription(reflection.comment),
+    getCommentDescription(reflection.comment),
     getDefinitionChildType(reflection),
     isReflectionOptional(reflection),
     getDefinitionChildDefaultValue(reflection.comment),
@@ -71,12 +78,6 @@ function getDefinitionChildDefaultValue(comment?: TypeDoc.JSONOutput.Comment): s
   }
 
   return defaultTag.text.replace(/(?:\r\n?|\n)+$/, '')
-}
-
-function getDefinitionChildDescription(comment?: TypeDoc.JSONOutput.Comment): string {
-  const description = comment?.shortText ?? ''
-
-  return description.replace(/(?:\r\n?|\n)/, ' ')
 }
 
 function getDefinitionChildType(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {

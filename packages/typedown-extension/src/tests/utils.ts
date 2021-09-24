@@ -123,7 +123,7 @@ export async function assertMarkdownDefinitions(
   const assertionsMarkdown = assertions
     .map((assertion) => {
       return `# ${assertion.name}
-
+${assertion.description ? `${assertion.description}\n` : ''}
 | Name | Description | Type | Optional | Default value |
 | --- | --- | --- | --- | --- |
 ${assertion.children
@@ -147,6 +147,7 @@ ${assertion.children
 
 interface DefinitionAssertion {
   name: string
+  description?: string
   children: {
     defaultValue?: string
     description?: string
