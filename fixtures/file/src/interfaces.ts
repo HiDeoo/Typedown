@@ -80,8 +80,14 @@ export interface WithFunctionTypes {
 }
 
 export interface WithIndexSignature {
-  [keyA: string]: boolean
-  b: true | false
+  a: true | false
+  [keyB: string]: boolean
+}
+
+export interface WithReadOnlyTypes {
+  readonly a: string
+  b: number
+  readonly c: () => string
 }
 
 interface TestInterfaceA {

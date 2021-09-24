@@ -169,8 +169,24 @@ describe('interfaces', () => {
         {
           name: 'WithIndexSignature',
           children: [
-            { name: 'b', type: 'boolean' },
-            { name: '[keyA: string]', type: 'boolean' },
+            { name: 'a', type: 'boolean' },
+            { name: '[keyB: string]', type: 'boolean' },
+          ],
+        },
+      ])
+    }))
+
+  it('should ignore the readonly keyword in an interface', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReadOnlyTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReadOnlyTypes',
+          children: [
+            { name: 'a', type: 'string' },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: '() => string' },
           ],
         },
       ])
