@@ -99,6 +99,11 @@ export interface WithGenerics<T, U> {
   b: (...b1: U[]) => T
 }
 
+export interface WithGenericConstraints<T extends string, U extends keyof TestInterfaceA> {
+  a: T
+  b: (b1: U) => [T]
+}
+
 interface TestInterfaceA {
   a: string
   b: number

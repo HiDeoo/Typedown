@@ -224,4 +224,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with generic constraints', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithGenericConstraints<T extends string, U extends keyof TestInterfaceA>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithGenericConstraints<T extends string, U extends keyof TestInterfaceA>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: '(b1: U) => [T]' },
+          ],
+        },
+      ])
+    }))
 })

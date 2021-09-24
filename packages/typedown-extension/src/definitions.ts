@@ -106,6 +106,8 @@ function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string
     return getUnionType(type)
   } else if (isReflectionType(type) && type.declaration) {
     return getDefinitionChildType(type.declaration)
+  } else if (isTypeOperatorType(type)) {
+    return getTypeOperatorType(type)
   }
 
   return 'unknown'
@@ -180,6 +182,10 @@ function getUnionType(type: TypeDoc.JSONOutput.UnionType): string {
   return type.types.map(getDefinitionChildDirectType).join(' | ')
 }
 
+function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
+  return `${type.operator} ${getDefinitionChildDirectType(type.target)}`
+}
+
 function getSignatureType(signature: TypeDoc.JSONOutput.SignatureReflection): string {
   const parameters = signature.parameters?.map(getParameterType) ?? []
   const returnType = signature.type ? getDefinitionChildDirectType(signature.type) : ''
@@ -210,7 +216,13 @@ function getParameterType(parameter: TypeDoc.JSONOutput.ParameterReflection): st
 }
 
 function getTypeParemeterType(typeParameter: TypeDoc.JSONOutput.TypeParameterReflection): string {
-  return typeParameter.name
+  let type = typeParameter.name
+
+  if (typeParameter.type) {
+    type = `${type} extends ${getDefinitionChildType(typeParameter)}`
+  }
+
+  return type
 }
 
 function isReflectionOptional(reflection: TypeDoc.JSONOutput.DeclarationReflection): boolean {
@@ -265,6 +277,10 @@ function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOut
 
 function isReflectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReflectionType {
   return type.type === 'reflection'
+}
+
+function isTypeOperatorType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TypeOperatorType {
+  return type.type === 'typeOperator'
 }
 
 type DeclarationOrSignatureReflection =
