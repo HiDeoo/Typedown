@@ -105,6 +105,10 @@ export interface WithExtends extends TestInterfaceA, TestInterfaceB {
   e: string | number
 }
 
+export interface WithReferenceTypeArgumentsExtends extends Omit<TestInterfaceA, 'a'>, Partial<TestInterfaceB> {
+  e: number
+}
+
 export interface WithGenerics<T, U> {
   a: T
   b: (...b1: U[]) => T

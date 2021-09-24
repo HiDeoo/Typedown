@@ -241,6 +241,23 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface extending other ones with reference type arguments', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypeArgumentsExtends'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypeArgumentsExtends',
+          children: [
+            { name: 'b', type: 'number' },
+            { name: 'c', type: 'boolean', optional: true },
+            { name: 'd', type: 'string', optional: true },
+            { name: 'e', type: 'number' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface with generics', () =>
     withFixture('file/src/interfaces.ts', async () => {
       const markdown = await fileToMd(['WithGenerics<T, U>'])
