@@ -121,6 +121,7 @@ describe('interfaces', () => {
           children: [
             { name: 'a', type: 'string', optional: true },
             { name: 'b', type: 'number[]', optional: true },
+            { name: 'c', type: 'boolean' },
           ],
         },
       ])

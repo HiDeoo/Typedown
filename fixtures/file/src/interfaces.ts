@@ -41,6 +41,7 @@ export interface WithUnionArrayTypes {
 export interface WithOptionalTypes {
   a?: string
   b?: number[]
+  c: boolean
 }
 
 export interface WithPropertyDefaultValues {
