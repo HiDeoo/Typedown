@@ -126,7 +126,13 @@ function getIntrinsicType(type: TypeDoc.JSONOutput.IntrinsicType): string {
 }
 
 function getArrayType(type: TypeDoc.JSONOutput.ArrayType): string {
-  return `${getDefinitionChildDirectType(type.elementType)}[]`
+  let elementType = getDefinitionChildDirectType(type.elementType)
+
+  if (isUnionType(type.elementType)) {
+    elementType = `(${elementType})`
+  }
+
+  return `${elementType}[]`
 }
 
 function getIndexedAccessType(type: TypeDoc.JSONOutput.IndexedAccessType): string {

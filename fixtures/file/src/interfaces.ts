@@ -33,6 +33,11 @@ export interface WithUnionTypes {
   b: number | TestInterfaceA
 }
 
+export interface WithUnionArrayTypes {
+  a: (string | boolean)[]
+  b: number | boolean[]
+}
+
 export interface WithOptionalTypes {
   a?: string
   b?: number[]

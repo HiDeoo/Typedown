@@ -96,6 +96,21 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface of union array types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithUnionArrayTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithUnionArrayTypes',
+          children: [
+            { name: 'a', type: '(string | boolean)[]' },
+            { name: 'b', type: 'number | boolean[]' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface of optional types', () =>
     withFixture('file/src/interfaces.ts', async () => {
       const markdown = await fileToMd(['WithOptionalTypes'])
