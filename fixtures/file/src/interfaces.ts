@@ -94,6 +94,11 @@ export interface WithExtends extends TestInterfaceA, TestInterfaceB {
   e: string | number
 }
 
+export interface WithGenerics<T, U> {
+  a: T
+  b: (...b1: U[]) => T
+}
+
 interface TestInterfaceA {
   a: string
   b: number

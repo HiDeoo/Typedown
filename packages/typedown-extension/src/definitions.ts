@@ -13,8 +13,18 @@ export function getDefinitionFromReflection(reflection: DeclarationReflection): 
   return {
     children,
     id: reflection.id,
-    name: reflection.name,
+    name: getDefinitionName(reflection),
   }
+}
+
+function getDefinitionName(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
+  let name = reflection.name
+
+  if (reflection.typeParameter) {
+    name = `${name}<${reflection.typeParameter.map(getTypeParemeterType).join(', ')}>`
+  }
+
+  return name
 }
 
 function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
@@ -197,6 +207,10 @@ function getParameterType(parameter: TypeDoc.JSONOutput.ParameterReflection): st
   )
 
   return parameterComponents.join('')
+}
+
+function getTypeParemeterType(typeParameter: TypeDoc.JSONOutput.TypeParameterReflection): string {
+  return typeParameter.name
 }
 
 function isReflectionOptional(reflection: TypeDoc.JSONOutput.DeclarationReflection): boolean {

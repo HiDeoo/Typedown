@@ -209,4 +209,19 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with generics', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithGenerics<T, U>'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithGenerics<T, U>',
+          children: [
+            { name: 'a', type: 'T' },
+            { name: 'b', type: '(...b1: U[]) => T' },
+          ],
+        },
+      ])
+    }))
 })
