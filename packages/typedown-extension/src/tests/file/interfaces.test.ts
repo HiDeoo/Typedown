@@ -301,4 +301,21 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with reference types', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithReferenceTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithReferenceTypes',
+          children: [
+            { name: 'a', type: 'TestInterfaceA' },
+            { name: 'b', type: 'TestInterfaceB', optional: true },
+            { name: 'c', type: 'string' },
+            { name: 'd', type: 'TestInterfaceD' },
+          ],
+        },
+      ])
+    }))
 })

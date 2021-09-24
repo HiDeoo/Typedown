@@ -126,6 +126,13 @@ export interface WithReferenceTypeArguments {
   c: Record<string, boolean>
 }
 
+export interface WithReferenceTypes {
+  a: TestInterfaceA
+  b?: TestInterfaceB
+  c: TestInterfaceC
+  d: TestInterfaceD
+}
+
 interface TestInterfaceA {
   a: string
   b: number
@@ -135,3 +142,7 @@ interface TestInterfaceB {
   c: boolean
   d: string
 }
+
+type TestInterfaceC = string
+
+type TestInterfaceD = string & { da: boolean }
