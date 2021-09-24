@@ -177,16 +177,31 @@ describe('interfaces', () => {
       ])
     }))
 
-  it('should export an interface with an index signature', () =>
+  it('should export an interface with a string index signature', () =>
     withFixture('file/src/interfaces.ts', async () => {
-      const markdown = await fileToMd(['WithIndexSignature'])
+      const markdown = await fileToMd(['WithStringIndexSignature'])
 
       return assertMarkdownDefinitions(markdown, [
         {
-          name: 'WithIndexSignature',
+          name: 'WithStringIndexSignature',
           children: [
             { name: 'a', type: 'boolean' },
             { name: '[keyB: string]', type: 'boolean' },
+          ],
+        },
+      ])
+    }))
+
+  it('should export an interface with a number index signature', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithNumberIndexSignature'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithNumberIndexSignature',
+          children: [
+            { name: 'a', type: 'number' },
+            { name: '[keyB: number]', type: 'string' },
           ],
         },
       ])
