@@ -5,6 +5,7 @@ export type DefinitionChild = [name: string, description: string, type: string, 
 export interface Definition {
   id: DefinitionIdentifier
   children: DefinitionChild[]
+  description: string
   exported?: boolean
   name: string
 }

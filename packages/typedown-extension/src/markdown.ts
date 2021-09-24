@@ -7,6 +7,7 @@ export function getDefinitionsMarkdown(definitions: Definitions): string {
     .map(
       (definition) => `# ${definition.name}
 
+${definition.description ? `${definition.description}\n` : ''}
 ${getDefinitionChildrenMarkdown(definition.children)}`
     )
     .join('\n\n')

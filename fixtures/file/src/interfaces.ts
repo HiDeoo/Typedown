@@ -142,6 +142,18 @@ export interface WithReferenceTypes {
   d: TestInterfaceD
 }
 
+/**
+ * Description
+ */
+export interface WithDescriptions {
+  a: string
+  /**
+   * Description B
+   */
+  b: number
+  c: boolean
+}
+
 interface TestInterfaceA {
   a: string
   b: number

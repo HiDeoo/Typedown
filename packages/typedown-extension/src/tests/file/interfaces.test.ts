@@ -350,4 +350,21 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface with a description', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithDescriptions'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithDescriptions',
+          description: 'Description',
+          children: [
+            { name: 'a', type: 'string' },
+            { name: 'b', type: 'number', description: 'Description B' },
+            { name: 'c', type: 'boolean' },
+          ],
+        },
+      ])
+    }))
 })
