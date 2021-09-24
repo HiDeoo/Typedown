@@ -90,6 +90,10 @@ export interface WithReadOnlyTypes {
   readonly c: () => string
 }
 
+export interface WithExtends extends TestInterfaceA, TestInterfaceB {
+  e: string | number
+}
+
 interface TestInterfaceA {
   a: string
   b: number

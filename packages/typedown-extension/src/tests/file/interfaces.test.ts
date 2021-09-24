@@ -191,4 +191,22 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should export an interface extending other ones', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['WithExtends'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithExtends',
+          children: [
+            { name: 'a', type: 'string' },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: 'boolean' },
+            { name: 'd', type: 'string' },
+            { name: 'e', type: 'string | number' },
+          ],
+        },
+      ])
+    }))
 })
