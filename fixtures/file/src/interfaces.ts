@@ -154,6 +154,9 @@ export interface WithDescriptions {
   c: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface EmptyInterface {}
+
 interface TestInterfaceA {
   a: string
   b: number
