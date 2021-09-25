@@ -367,4 +367,11 @@ describe('interfaces', () => {
         },
       ])
     }))
+
+  it('should not export an empty interface', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['EmptyInterface'])
+
+      return assertMarkdownDefinitions(markdown, [])
+    }))
 })

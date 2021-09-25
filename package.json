@@ -13,7 +13,7 @@
   "scripts": {
     "build": "yarn workspace typedown-extension run build",
     "postbuild": "yarn workspace typedown-webview run build",
-    "lint": "prettier --check . && eslint --max-warnings=0 --ext .ts,.svelte packages && yarn workspace typedown-webview run lint",
+    "lint": "prettier --check . && eslint --max-warnings=0 --ext .ts,.svelte fixtures packages && yarn workspace typedown-webview run lint",
     "test": "yarn workspace typedown-extension run test",
     "vscode:prepublish": "yarn build",
     "prepare": "husky install"
