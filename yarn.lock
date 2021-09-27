@@ -269,6 +269,11 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
+"@vscode/codicons@0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@vscode/codicons/-/codicons-0.0.22.tgz#33417524996737b3de469336171b38829f683bc6"
+  integrity sha512-Cl3s2vgRhoJJ5nY2qC3JXCF0uoSw4zaMi0ZJIIcyOQTeeQCXIirE522cIRlcIo8cJDspQY9PMgALGvD0afZ5Mg==
+
 "@vscode/test-electron@1.6.2":
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-1.6.2.tgz#f639cab19a0013949015079dcfd2ff0c1aa88a1b"

@@ -26,6 +26,7 @@ export function createWebviewPanel(
 
   const jsURI = getWebviewPanelAssetURI(panel, 'index.js', context)
   const cssURI = getWebviewPanelAssetURI(panel, 'index.css', context)
+  const codiconsURI = getWebviewPanelNodeModulesAssetURI(panel, '@vscode/codicons/dist/codicon.css', context)
 
   panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
@@ -35,6 +36,7 @@ export function createWebviewPanel(
     <title>Typedown</title>
     <script type="module" crossorigin src="${jsURI}"></script>
     <link rel="stylesheet" href="${cssURI}">
+    <link rel="stylesheet" href="${codiconsURI}">
   </head>
   <body>
     <div id="app"></div>
@@ -49,4 +51,8 @@ export function createWebviewPanel(
 
 function getWebviewPanelAssetURI(panel: WebviewPanel, name: string, context: ExtensionContext): Uri {
   return panel.webview.asWebviewUri(Uri.joinPath(context.extensionUri, 'dist/webview/assets', name))
+}
+
+function getWebviewPanelNodeModulesAssetURI(panel: WebviewPanel, path: string, context: ExtensionContext): Uri {
+  return panel.webview.asWebviewUri(Uri.joinPath(context.extensionUri, 'node_modules', path))
 }
