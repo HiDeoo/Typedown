@@ -246,11 +246,11 @@ describe('interfaces', () => {
         {
           name: 'WithExtends',
           children: [
+            { name: 'e', type: 'string | number' },
             { name: 'a', type: 'string' },
             { name: 'b', type: 'number' },
             { name: 'c', type: 'boolean' },
             { name: 'd', type: 'string' },
-            { name: 'e', type: 'string | number' },
           ],
         },
       ])
@@ -264,10 +264,10 @@ describe('interfaces', () => {
         {
           name: 'WithReferenceTypeArgumentsExtends',
           children: [
+            { name: 'e', type: 'number' },
             { name: 'b', type: 'number' },
             { name: 'c', type: 'boolean', optional: true },
             { name: 'd', type: 'string', optional: true },
-            { name: 'e', type: 'number' },
           ],
         },
       ])

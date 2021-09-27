@@ -45,6 +45,7 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): Schema {
     excludeProtected: true,
     logger: 'none',
     readme: 'none',
+    sort: ['source-order'],
     tsconfig: tsConfig.fsPath,
   })
 
