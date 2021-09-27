@@ -1,6 +1,13 @@
 import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 
 describe('interfaces', () => {
+  it('should not export an empty interface', () =>
+    withFixture('file/src/interfaces.ts', async () => {
+      const markdown = await fileToMd(['EmptyInterface'])
+
+      return assertMarkdownDefinitions(markdown, [])
+    }))
+
   it('should export an interface of intrinsic types', () =>
     withFixture('file/src/interfaces.ts', async () => {
       const markdown = await fileToMd(['WithIntrinsicTypes'])
@@ -366,12 +373,5 @@ describe('interfaces', () => {
           ],
         },
       ])
-    }))
-
-  it('should not export an empty interface', () =>
-    withFixture('file/src/interfaces.ts', async () => {
-      const markdown = await fileToMd(['EmptyInterface'])
-
-      return assertMarkdownDefinitions(markdown, [])
     }))
 })
