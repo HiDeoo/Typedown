@@ -252,7 +252,12 @@ function getTypeParemeterType(typeParameter: TypeDoc.JSONOutput.TypeParameterRef
 }
 
 function isReflectionOptional(reflection: TypeDoc.JSONOutput.DeclarationReflection): boolean {
-  return reflection.flags.isOptional === true
+  return (
+    reflection.flags.isOptional === true ||
+    (typeof reflection.type !== 'undefined' &&
+      isMappedType(reflection.type) &&
+      reflection.type.optionalModifier === '+')
+  )
 }
 
 function isSignatureReflection(

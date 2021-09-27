@@ -140,6 +140,14 @@ export type WithMappedType<T> = {
   [key in keyof T]: number | boolean
 }
 
+export type WithMappedTypeOptionalModifier<T> = {
+  [key in keyof T]+?: boolean
+}
+
+export type WithMappedTypeReadonlyModifier<T> = {
+  +readonly [key in keyof T]: number[]
+}
+
 export type TypeAlias = string
 
 type TestTypeA = {

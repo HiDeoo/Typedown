@@ -326,5 +326,29 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a mapped type adding the optional modifier', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithMappedTypeOptionalModifier<T>'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithMappedTypeOptionalModifier<T>',
+            children: [{ name: '[key in keyof T]', type: 'boolean', optional: true }],
+          },
+        ])
+      }))
+
+    it('should export a mapped type without the readonly modifier', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithMappedTypeReadonlyModifier<T>'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithMappedTypeReadonlyModifier<T>',
+            children: [{ name: '[key in keyof T]', type: 'number[]' }],
+          },
+        ])
+      }))
   })
 })
