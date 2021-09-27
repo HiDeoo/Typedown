@@ -136,6 +136,10 @@ export type WithDescriptions = {
   c: number[]
 }
 
+export type WithMappedType<T> = {
+  [key in keyof T]: number | boolean
+}
+
 export type TypeAlias = string
 
 type TestTypeA = {

@@ -35,8 +35,11 @@ function getCommentDescription(comment?: TypeDoc.JSONOutput.Comment): string {
 }
 
 function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
+  // Aliased object type literal.
   if (reflection.type && isReflectionType(reflection.type) && reflection.type.declaration) {
     return getDefinitionChildren(reflection.type.declaration)
+  } else if (reflection.type && isMappedType(reflection.type)) {
+    return [getDefinitionChild(reflection)]
   }
 
   const children: DefinitionChild[] = []
@@ -69,6 +72,8 @@ function getDefinitionChildName(reflection: DeclarationOrSignatureReflection): s
     const parameter = reflection.parameters?.[0]
 
     return `[${parameter.name}: ${getDefinitionChildType(parameter)}]`
+  } else if (reflection.type && isMappedType(reflection.type)) {
+    return `[${reflection.type.parameter} in ${getDefinitionChildDirectType(reflection.type.parameterType)}]`
   }
 
   return reflection.name
@@ -88,7 +93,7 @@ function getDefinitionChildType(reflection: TypeDoc.JSONOutput.DeclarationReflec
   return reflection.type ? getDefinitionChildDirectType(reflection.type) : getDefinitionChildIndirectType(reflection)
 }
 
-function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string {
+function getDefinitionChildDirectType(type: SomeType): string {
   if (isIntrinsicType(type)) {
     return getIntrinsicType(type)
   } else if (isArrayType(type)) {
@@ -113,6 +118,8 @@ function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string
     return getDefinitionChildType(type.declaration)
   } else if (isTypeOperatorType(type)) {
     return getTypeOperatorType(type)
+  } else if (isMappedType(type)) {
+    return getDefinitionChildDirectType(type.templateType)
   }
 
   return 'unknown'
@@ -254,53 +261,59 @@ function isSignatureReflection(
   return reflection.kind === TypeDoc.ReflectionKind.IndexSignature
 }
 
-function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
+function isIntrinsicType(type: SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
   return type.type === 'intrinsic'
 }
 
-function isArrayType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ArrayType {
+function isArrayType(type: SomeType): type is TypeDoc.JSONOutput.ArrayType {
   return type.type === 'array'
 }
 
-function isIndexedAccessType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IndexedAccessType {
+function isIndexedAccessType(type: SomeType): type is TypeDoc.JSONOutput.IndexedAccessType {
   return type.type === 'indexedAccess'
 }
 
-function isLiteralType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.LiteralType {
+function isLiteralType(type: SomeType): type is TypeDoc.JSONOutput.LiteralType {
   return type.type === 'literal'
 }
 
-function isIntersectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntersectionType {
+function isIntersectionType(type: SomeType): type is TypeDoc.JSONOutput.IntersectionType {
   return type.type === 'intersection'
 }
 
-function isReferenceType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReferenceType {
+function isReferenceType(type: SomeType): type is TypeDoc.JSONOutput.ReferenceType {
   return type.type === 'reference'
 }
 
-function isTupleType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TupleType {
+function isTupleType(type: SomeType): type is TypeDoc.JSONOutput.TupleType {
   return type.type === 'tuple'
 }
 
-function isOptionalType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.OptionalType {
+function isOptionalType(type: SomeType): type is TypeDoc.JSONOutput.OptionalType {
   return type.type === 'optional'
 }
 
-function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.RestType {
+function isRestType(type: SomeType): type is TypeDoc.JSONOutput.RestType {
   return type.type === 'rest'
 }
 
-function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.UnionType {
+function isUnionType(type: SomeType): type is TypeDoc.JSONOutput.UnionType {
   return type.type === 'union'
 }
 
-function isReflectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReflectionType {
+function isReflectionType(type: SomeType): type is TypeDoc.JSONOutput.ReflectionType {
   return type.type === 'reflection'
 }
 
-function isTypeOperatorType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TypeOperatorType {
+function isTypeOperatorType(type: SomeType): type is TypeDoc.JSONOutput.TypeOperatorType {
   return type.type === 'typeOperator'
 }
+
+function isMappedType(type: SomeType): type is TypeDoc.JSONOutput.MappedType {
+  return type.type === 'mapped'
+}
+
+type SomeType = TypeDoc.JSONOutput.SomeType | TypeDoc.JSONOutput.MappedType
 
 type DeclarationOrSignatureReflection =
   | TypeDoc.JSONOutput.DeclarationReflection
