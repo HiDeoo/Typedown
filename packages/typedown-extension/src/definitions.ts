@@ -141,7 +141,7 @@ function getIndexedAccessType(type: TypeDoc.JSONOutput.IndexedAccessType): strin
 }
 
 function getLiteralType(type: TypeDoc.JSONOutput.LiteralType): string {
-  if (!type.value) {
+  if (type.value == null) {
     return 'null'
   }
 
