@@ -88,7 +88,7 @@ function isSchema(reflection: TypeDoc.JSONOutput.ProjectReflection): reflection 
 }
 
 function isValidDeclarationReflection(reflection: DeclarationReflection): boolean {
-  return reflection.kind === TypeDoc.ReflectionKind.Interface
+  return reflection.kind === TypeDoc.ReflectionKind.Interface || reflection.kind === TypeDoc.ReflectionKind.TypeAlias
 }
 
 function isValidModuleReflection(reflection: TypeDoc.JSONOutput.ProjectReflection): reflection is Schema {

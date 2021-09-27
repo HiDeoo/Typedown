@@ -35,6 +35,10 @@ function getCommentDescription(comment?: TypeDoc.JSONOutput.Comment): string {
 }
 
 function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
+  if (reflection.type && isReflectionType(reflection.type) && reflection.type.declaration) {
+    return getDefinitionChildren(reflection.type.declaration)
+  }
+
   const children: DefinitionChild[] = []
 
   if (!reflection.children || reflection.children.length === 0) {
