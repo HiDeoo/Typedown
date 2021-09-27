@@ -27,6 +27,10 @@
           definitions.set(event.data.definitions)
           break
         }
+        case 'reset': {
+          definitions.reset()
+          break
+        }
         default: {
           vscode.postMessage<WebviewMessageError>({
             type: 'error',

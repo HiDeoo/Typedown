@@ -5,9 +5,11 @@ let panel: WebviewPanel | undefined
 export function createWebviewPanel(
   context: ExtensionContext,
   onDidReceiveMessage: (event: unknown) => void
-): WebviewPanel {
+): [webviewPanel: WebviewPanel, restored: boolean] {
   if (panel) {
-    return panel
+    panel.webview.postMessage({ type: 'reset' })
+
+    return [panel, true]
   }
 
   panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, { enableScripts: true })
@@ -42,7 +44,7 @@ export function createWebviewPanel(
   </body>
 </html>`
 
-  return panel
+  return [panel, false]
 }
 
 function getWebviewPanelAssetURI(panel: WebviewPanel, name: string, context: ExtensionContext): Uri {

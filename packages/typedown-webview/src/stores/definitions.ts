@@ -3,8 +3,10 @@ import type { Definition, DefinitionIdentifier, Definitions } from 'typedown-sha
 
 import { persistentWritable } from '../lib/persistentWritable'
 
+const initialState: DefinitionsStore = { allIds: [], byId: {} }
+
 function createDefinitions() {
-  const store = persistentWritable<DefinitionsStore>('definitions', { allIds: [], byId: {} })
+  const store = persistentWritable<DefinitionsStore>('definitions', initialState)
 
   return {
     persist: store.persist,
@@ -22,6 +24,9 @@ function createDefinitions() {
         allIds,
         byId,
       })
+    },
+    reset() {
+      store.set(initialState)
     },
     toggle(identifier: DefinitionIdentifier) {
       store.update((currentValue) => {

@@ -66,7 +66,7 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
 
 function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
   return new Promise((resolve) => {
-    const panel = createWebviewPanel(context, (event) => {
+    const [panel, restored] = createWebviewPanel(context, (event) => {
       if (isMessage(event)) {
         switch (event.type) {
           case 'init': {
@@ -93,9 +93,10 @@ function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
       }
     })
 
-    if (!panel.visible) {
-      panel.webview.postMessage({ type: 'reset' })
-      panel.reveal()
+    panel.reveal()
+
+    if (restored) {
+      resolve(panel)
     }
   })
 }
