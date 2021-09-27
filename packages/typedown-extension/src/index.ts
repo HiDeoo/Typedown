@@ -94,7 +94,7 @@ function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
     })
 
     if (!panel.visible) {
-      panel.webview.postMessage({ type: 'reload' })
+      panel.webview.postMessage({ type: 'reset' })
       panel.reveal()
     }
   })
