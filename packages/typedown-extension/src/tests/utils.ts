@@ -72,7 +72,9 @@ export async function fileToMd(exportedDefinitionNames?: string[]): Promise<stri
         onDidDispose(listener: () => unknown) {
           onDidDisposeListener = listener
         },
-        reveal: noop,
+        reveal() {
+          onDidReceiveMessage({ type: 'init' })
+        },
         visible: false,
         webview: {
           asWebviewUri: noop,
