@@ -1,15 +1,17 @@
 import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 
+const fixture = 'file/src/interfaces.ts'
+
 describe('interfaces', () => {
   it('should not export an empty interface', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['EmptyInterface'])
 
       return assertMarkdownDefinitions(markdown, [])
     }))
 
   it('should export an interface of intrinsic types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithIntrinsicTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -25,7 +27,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of array types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithArrayTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -41,7 +43,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of literal types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithLiteralTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -58,7 +60,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of intersection types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithIntersectionTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -73,7 +75,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of tuple types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithTupleTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -89,7 +91,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of union types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithUnionTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -104,7 +106,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of union array types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithUnionArrayTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -119,7 +121,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of optional types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithOptionalTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -135,7 +137,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with property default values', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithPropertyDefaultValues'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -150,7 +152,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with property descriptions', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithPropertyDescriptions'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -167,7 +169,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface of function types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithFunctionTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -185,7 +187,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with a string index signature', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithStringIndexSignature'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -200,7 +202,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with a number index signature', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithNumberIndexSignature'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -215,7 +217,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface without the readonly property keyword', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithReadOnlyTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -231,7 +233,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with the readonly keyword for array and tuple types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithReadonlyTupleAndArrayTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -246,7 +248,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface extending other ones', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithExtends'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -264,7 +266,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface extending other ones with reference type arguments', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithReferenceTypeArgumentsExtends'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -281,7 +283,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with generics', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithGenerics<T, U>'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -296,7 +298,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with generic constraints', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithGenericConstraints<T extends string, U extends keyof TestInterfaceA>'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -311,7 +313,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with type operator types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithTypeOperatorTypes<T extends keyof TestInterfaceA>'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -326,7 +328,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with reference type arguments', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithReferenceTypeArguments'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -342,7 +344,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with reference types', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithReferenceTypes'])
 
       return assertMarkdownDefinitions(markdown, [
@@ -359,7 +361,7 @@ describe('interfaces', () => {
     }))
 
   it('should export an interface with a description', () =>
-    withFixture('file/src/interfaces.ts', async () => {
+    withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithDescriptions'])
 
       return assertMarkdownDefinitions(markdown, [
