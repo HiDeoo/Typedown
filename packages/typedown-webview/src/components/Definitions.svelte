@@ -2,12 +2,15 @@
   import { definitions } from '../stores/definitions'
   import Section from './Section.svelte'
   import Definition from './Definition.svelte'
+  import Loader from './Loader.svelte'
 </script>
 
-{#if $definitions.allIds.length > 0}
-  <Section>
+<Section>
+  {#if $definitions.allIds.length > 0}
     {#each $definitions.allIds as identifier}
       <Definition {identifier} />
     {/each}
-  </Section>
-{/if}
+  {:else}
+    <Loader />
+  {/if}
+</Section>

@@ -5,9 +5,11 @@ let panel: WebviewPanel | undefined
 export function createWebviewPanel(
   context: ExtensionContext,
   onDidReceiveMessage: (event: unknown) => void
-): WebviewPanel {
+): [webviewPanel: WebviewPanel, restored: boolean] {
   if (panel) {
-    return panel
+    panel.webview.postMessage({ type: 'reset' })
+
+    return [panel, true]
   }
 
   panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, { enableScripts: true })
@@ -24,6 +26,7 @@ export function createWebviewPanel(
 
   const jsURI = getWebviewPanelAssetURI(panel, 'index.js', context)
   const cssURI = getWebviewPanelAssetURI(panel, 'index.css', context)
+  const codiconsURI = getWebviewPanelNodeModulesAssetURI(panel, '@vscode/codicons/dist/codicon.css', context)
 
   panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
@@ -33,6 +36,7 @@ export function createWebviewPanel(
     <title>Typedown</title>
     <script type="module" crossorigin src="${jsURI}"></script>
     <link rel="stylesheet" href="${cssURI}">
+    <link rel="stylesheet" href="${codiconsURI}">
   </head>
   <body>
     <div id="app"></div>
@@ -42,9 +46,13 @@ export function createWebviewPanel(
   </body>
 </html>`
 
-  return panel
+  return [panel, false]
 }
 
 function getWebviewPanelAssetURI(panel: WebviewPanel, name: string, context: ExtensionContext): Uri {
   return panel.webview.asWebviewUri(Uri.joinPath(context.extensionUri, 'dist/webview/assets', name))
+}
+
+function getWebviewPanelNodeModulesAssetURI(panel: WebviewPanel, path: string, context: ExtensionContext): Uri {
+  return panel.webview.asWebviewUri(Uri.joinPath(context.extensionUri, 'node_modules', path))
 }

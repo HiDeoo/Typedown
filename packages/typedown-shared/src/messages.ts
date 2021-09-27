@@ -5,7 +5,7 @@ export function isMessage(message: unknown): message is WebviewMessages | VSCode
 }
 
 type WebviewMessages = WebviewMessageInit | WebviewMessageExport | WebviewMessageError
-type VSCodeMessages = VSCodeMessageImport
+type VSCodeMessages = VSCodeMessageImport | VSCodeMessageReset
 
 export interface WebviewMessageInit extends Message {
   type: 'init'
@@ -24,6 +24,10 @@ export interface WebviewMessageError extends Message {
 export interface VSCodeMessageImport extends Message {
   type: 'import'
   definitions: Definitions
+}
+
+export interface VSCodeMessageReset extends Message {
+  type: 'reset'
 }
 
 export interface Message {

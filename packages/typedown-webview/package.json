@@ -11,6 +11,9 @@
     "postbuild": "rimraf ../../dist/webview/index.html",
     "lint": "svelte-check --tsconfig tsconfig.json --fail-on-warnings --fail-on-hints"
   },
+  "dependencies": {
+    "@vscode/codicons": "0.0.22"
+  },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "1.0.0-next.22",
     "eslint-plugin-svelte3": "3.2.0",

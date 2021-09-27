@@ -1,5 +1,14 @@
-import { commands, env, ExtensionContext, ProgressLocation, StatusBarAlignment, Uri, window } from 'vscode'
-import { Definitions, isMessage, VSCodeMessageImport } from 'typedown-shared'
+import {
+  commands,
+  env,
+  ExtensionContext,
+  ProgressLocation,
+  StatusBarAlignment,
+  Uri,
+  WebviewPanel,
+  window,
+} from 'vscode'
+import { Definitions, isMessage } from 'typedown-shared'
 
 import { getDefinitions, getFolderTSConfig } from './typescript'
 import { getActiveTextEditorDiskURI, getWorkspaceSingleFolder, pickWorkspaceFolder, TypedownError } from './vscode'
@@ -22,6 +31,8 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
   statusBarItem.text = '$(sync~spin) Generating definitions'
   statusBarItem.show()
 
+  let webviewPanel: WebviewPanel | undefined
+
   try {
     const tsConfig = await getWorkspaceTSConfig()
     const entryPoint = await (mode === Mode.File ? getActiveTextEditorDiskURI : pickWorkspaceFolder)()
@@ -30,11 +41,17 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
       return
     }
 
+    webviewPanel = await showWebview(context)
+
     const definitions = getDefinitions(tsConfig, entryPoint)
 
-    showWebviewWithDefinitions(context, definitions)
+    webviewPanel.webview.postMessage({ type: 'import', definitions })
   } catch (error) {
     console.error(error)
+
+    if (webviewPanel) {
+      webviewPanel.dispose()
+    }
 
     // Refactor when control flow analysis of aliased conditions works with `useUnknownInCatchVariables`
     // @see https://github.com/microsoft/TypeScript/issues/44880
@@ -47,40 +64,41 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
   }
 }
 
-function showWebviewWithDefinitions(context: ExtensionContext, definitions: Definitions) {
-  const message: VSCodeMessageImport = { type: 'import', definitions }
+function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
+  return new Promise((resolve) => {
+    const [panel, restored] = createWebviewPanel(context, (event) => {
+      if (isMessage(event)) {
+        switch (event.type) {
+          case 'init': {
+            resolve(panel)
+            break
+          }
+          case 'export': {
+            panel.dispose()
+            exportDefinitions(event.definitions)
+            break
+          }
+          case 'error': {
+            window.showErrorMessage(event.message, { modal: true })
+            break
+          }
+          default: {
+            const errorStr = `Unknown message type '${event.type}' received from the webview.`
 
-  const panel = createWebviewPanel(context, (event) => {
-    if (isMessage(event)) {
-      switch (event.type) {
-        case 'init': {
-          panel.webview.postMessage(message)
-          break
-        }
-        case 'export': {
-          panel.dispose()
-          exportDefinitions(event.definitions)
-          break
-        }
-        case 'error': {
-          window.showErrorMessage(event.message, { modal: true })
-          break
-        }
-        default: {
-          const errorStr = `Unknown message type '${event.type}' received from the webview.`
-
-          console.error(errorStr)
-          window.showErrorMessage(errorStr, { modal: true })
-          break
+            console.error(errorStr)
+            window.showErrorMessage(errorStr, { modal: true })
+            break
+          }
         }
       }
+    })
+
+    panel.reveal()
+
+    if (restored) {
+      resolve(panel)
     }
   })
-
-  if (!panel.visible) {
-    panel.webview.postMessage(message)
-    panel.reveal()
-  }
 }
 
 async function getWorkspaceTSConfig(): Promise<Uri> {
