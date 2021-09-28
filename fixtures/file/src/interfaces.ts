@@ -142,6 +142,11 @@ export interface WithReferenceTypes {
   d: TestInterfaceD
 }
 
+export interface WithPredicateTypes {
+  a: (a1: TestInterfaceA | TestInterfaceB) => a1 is TestInterfaceA
+  b(b1: boolean | string[]): asserts b1 is boolean
+}
+
 /**
  * Description
  */

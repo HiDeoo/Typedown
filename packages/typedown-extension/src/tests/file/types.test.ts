@@ -60,7 +60,7 @@ describe('types', () => {
         return assertMarkdownDefinitions(markdown, [
           {
             name: 'FunctionType',
-            type: '(d1: (d1a: string, d1b?: number) => boolean) => [boolean, string]',
+            type: '(a: (a1: string, a2?: number) => boolean) => [boolean, string]',
           },
         ])
       }))
@@ -83,7 +83,7 @@ describe('types', () => {
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['GenericType<T, U>'])
 
-        return assertMarkdownDefinitions(markdown, [{ name: 'GenericType<T, U>', type: '(...b1: U[]) => U | [T]' }])
+        return assertMarkdownDefinitions(markdown, [{ name: 'GenericType<T, U>', type: '(...a: U[]) => U | [T]' }])
       }))
 
     it('should export a type alias with generic constraints', () =>
@@ -93,7 +93,7 @@ describe('types', () => {
         return assertMarkdownDefinitions(markdown, [
           {
             name: 'GenericConstraintsType<T extends string, U extends keyof TestTypeB>',
-            type: '(b1: T) => U[]',
+            type: '(a: T) => U[]',
           },
         ])
       }))
@@ -150,6 +150,30 @@ describe('types', () => {
           {
             name: 'ConditionalType<T>',
             type: 'T extends PromiseLike<infer U> ? ConditionalType<U> : T',
+          },
+        ])
+      }))
+
+    it('should export a type alias with a predicate type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['PredicateType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'PredicateType',
+            type: '(a: string | number) => a is string',
+          },
+        ])
+      }))
+
+    it('should export a type alias with an asserts predicate type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['AssertsPredicateType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'AssertsPredicateType',
+            type: '(a: string | number) => asserts a is string',
           },
         ])
       }))
@@ -436,6 +460,21 @@ describe('types', () => {
               { name: 'b', type: 'TestTypeB' },
               { name: 'c', type: 'TestTypeC' },
               { name: 'd', type: 'TestTypeD', optional: true },
+            ],
+          },
+        ])
+      }))
+
+    it('should export an object type alias with predicate types', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithPredicateTypes'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithPredicateTypes',
+            children: [
+              { name: 'a', type: '(a1: string | number) => a1 is string' },
+              { name: 'b', type: '(b1: number[] | boolean[]) => asserts b1 is number[]' },
             ],
           },
         ])

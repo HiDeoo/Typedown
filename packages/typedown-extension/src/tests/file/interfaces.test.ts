@@ -360,6 +360,21 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface with predicate types', () =>
+    withFixture(fixture, async () => {
+      const markdown = await fileToMd(['WithPredicateTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithPredicateTypes',
+          children: [
+            { name: 'a', type: '(a1: TestInterfaceA | TestInterfaceB) => a1 is TestInterfaceA' },
+            { name: 'b', type: '(b1: boolean | string[]) => asserts b1 is boolean' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface with a description', () =>
     withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithDescriptions'])

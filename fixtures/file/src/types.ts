@@ -5,15 +5,17 @@ export type IntersectionType = IntrinsicType & LiteralType
 export type TupleType = [boolean, ...number[]]
 export type UnionType = string | TestTypeA
 export type UnionArrayType = (number | string)[]
-export type FunctionType = (d1: (d1a: string, d1b?: number) => boolean) => [boolean, string]
+export type FunctionType = (a: (a1: string, a2?: number) => boolean) => [boolean, string]
 export type ReadonlyArrayType = readonly string[]
 export type ReadonlyTupleType = readonly [boolean, string]
-export type GenericType<T, U> = (...b1: U[]) => U | [T]
-export type GenericConstraintsType<T extends string, U extends keyof TestTypeB> = (b1: T) => U[]
+export type GenericType<T, U> = (...a: U[]) => U | [T]
+export type GenericConstraintsType<T extends string, U extends keyof TestTypeB> = (a: T) => U[]
 export type TypeOperatorType<T extends keyof TestTypeA> = [T] & keyof TestTypeA
 export type ReferenceTypeArgumentType = Partial<Omit<TestTypeA, 'a' | 'b'>>
 export type ReferenceType = TestTypeA
 export type ConditionalType<T> = T extends PromiseLike<infer U> ? ConditionalType<U> : T
+export type PredicateType = (a: string | number) => a is string
+export type AssertsPredicateType = (a: string | number) => asserts a is string
 
 /**
  * Description
@@ -144,6 +146,11 @@ export type WithReferenceTypes = {
   b: TestTypeB
   c: TestTypeC
   d?: TestTypeD
+}
+
+export type WithPredicateTypes = {
+  a: (a1: string | number) => a1 is string
+  b(b1: number[] | boolean[]): asserts b1 is number[]
 }
 
 /**

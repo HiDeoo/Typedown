@@ -145,6 +145,8 @@ function getDirectType(type: SomeType): string {
     return getConditionalType(type)
   } else if (isInferredType(type)) {
     return getInferredType(type)
+  } else if (isPredicateType(type)) {
+    return getPredicateType(type)
   }
 
   return 'unknown'
@@ -241,6 +243,14 @@ function getConditionalType(type: TypeDoc.JSONOutput.ConditionalType): string {
 
 function getInferredType(type: TypeDoc.JSONOutput.InferredType): string {
   return `infer ${type.name}`
+}
+
+function getPredicateType(type: TypeDoc.JSONOutput.PredicateType): string {
+  if (!type.targetType) {
+    return 'unknown'
+  }
+
+  return `${type.asserts ? 'asserts ' : ''}${type.name} is ${getDirectType(type.targetType)}`
 }
 
 function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
@@ -356,6 +366,10 @@ function isConditionalType(someType: SomeType): someType is TypeDoc.JSONOutput.C
 
 function isInferredType(someType: SomeType): someType is TypeDoc.JSONOutput.InferredType {
   return someType.type === 'inferred'
+}
+
+function isPredicateType(someType: SomeType): someType is TypeDoc.JSONOutput.PredicateType {
+  return someType.type === 'predicate'
 }
 
 function isInterface(reflection: DeclarationReflection): boolean {
