@@ -124,23 +124,33 @@ export async function assertMarkdownDefinitions(
 ): Promise<void> {
   const assertionsMarkdown = assertions
     .map((assertion) => {
-      return `# ${assertion.name}
-${assertion.description ? `${assertion.description}\n` : ''}
-| Name | Description | Type | Optional | Default value |
-| --- | --- | --- | --- | --- |
-${assertion.children
-  .map((child) => {
-    const components = [
-      child.name,
-      escapeMarkdown(child.description ?? ''),
-      `\`${escapeMarkdown(child.type)}\``,
-      child.optional === true ? '✓' : '',
-      escapeMarkdown(child.defaultValue ?? ''),
-    ]
+      const components = [`# ${assertion.name}`, assertion.description ? `${assertion.description}\n` : '']
 
-    return `| ${components.join(' | ')} |`
-  })
-  .join('\n')}`
+      if (assertion.children) {
+        components.push(
+          '| Name | Description | Type | Optional | Default value |',
+          '| --- | --- | --- | --- | --- |',
+          ...assertion.children.map((child) => {
+            const childComponents = [
+              child.name,
+              escapeMarkdown(child.description ?? ''),
+              `\`${escapeMarkdown(child.type)}\``,
+              child.optional === true ? '✓' : '',
+              escapeMarkdown(child.defaultValue ?? ''),
+            ]
+
+            return `| ${childComponents.join(' | ')} |`
+          })
+        )
+      } else if (assertion.type) {
+        components.push(
+          '| Description | Type |',
+          '| --- | --- |',
+          `| ${assertion.description ?? ''} | ${assertion.type} |`
+        )
+      }
+
+      return components.join('\n')
     })
     .join('\n\n')
 
@@ -150,13 +160,14 @@ ${assertion.children
 interface DefinitionAssertion {
   name: string
   description?: string
-  children: {
+  children?: {
     defaultValue?: string
     description?: string
     name: string
     optional?: boolean
     type: string
   }[]
+  type?: string
 }
 
 type Run = () => Promise<void>

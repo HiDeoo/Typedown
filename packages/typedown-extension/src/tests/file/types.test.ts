@@ -3,14 +3,16 @@ import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 const fixture = 'file/src/types.ts'
 
 describe('types', () => {
-  describe('aliased object type literals', () => {
-    it('should not export a type not aliasing an object type literal', () =>
+  describe('aliased types', () => {
+    it('should export a type alias of intrinsic type', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['TypeAlias'])
 
-        return assertMarkdownDefinitions(markdown, [])
+        return assertMarkdownDefinitions(markdown, [{ name: 'TypeAlias', type: 'string' }])
       }))
+  })
 
+  describe('aliased object type literals', () => {
     it('should export an aliased object type literal of intrinsic types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithIntrinsicTypes'])

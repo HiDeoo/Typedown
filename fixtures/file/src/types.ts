@@ -1,3 +1,5 @@
+export type TypeAlias = string
+
 export type WithIntrinsicTypes = {
   a: boolean
   b: string
@@ -147,8 +149,6 @@ export type WithMappedTypeOptionalModifier<T> = {
 export type WithMappedTypeReadonlyModifier<T> = {
   +readonly [key in keyof T]: number[]
 }
-
-export type TypeAlias = string
 
 type TestTypeA = {
   a: boolean
