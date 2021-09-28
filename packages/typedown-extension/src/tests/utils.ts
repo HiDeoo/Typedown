@@ -124,7 +124,10 @@ export async function assertMarkdownDefinitions(
 ): Promise<void> {
   const assertionsMarkdown = assertions
     .map((assertion) => {
-      const components = [`# ${assertion.name}`, assertion.description ? `${assertion.description}\n` : '']
+      const components = [
+        `# ${assertion.name}`,
+        assertion.description && typeof assertion.type === 'undefined' ? `${assertion.description}\n` : '',
+      ]
 
       if (assertion.children) {
         components.push(

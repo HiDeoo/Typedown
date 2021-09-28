@@ -6,9 +6,140 @@ describe('types', () => {
   describe('type aliases', () => {
     it('should export a type alias of intrinsic type', () =>
       withFixture(fixture, async () => {
-        const markdown = await fileToMd(['TypeAlias'])
+        const markdown = await fileToMd(['IntrinsicType'])
 
-        return assertMarkdownDefinitions(markdown, [{ name: 'TypeAlias', type: 'string' }])
+        return assertMarkdownDefinitions(markdown, [{ name: 'IntrinsicType', type: 'string' }])
+      }))
+
+    it('should export a type alias of array type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ArrayType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'ArrayType', type: 'number[]' }])
+      }))
+
+    it('should export a type alias of literal type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['LiteralType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'LiteralType', type: "'test'" }])
+      }))
+
+    it('should export a type alias of intersection type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['IntersectionType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'IntersectionType', type: 'IntrinsicType & LiteralType' }])
+      }))
+
+    it('should export a type alias of tuple type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['TupleType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'TupleType', type: '[boolean, ...number[]]' }])
+      }))
+
+    it('should export a type alias of union type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['UnionType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'UnionType', type: 'string | TestTypeA' }])
+      }))
+
+    it('should export a type alias of union array type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['UnionArrayType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'UnionArrayType', type: '(number | string)[]' }])
+      }))
+
+    it('should export a type alias of function type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['FunctionType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'FunctionType',
+            type: '(d1: (d1a: string, d1b?: number) => boolean) => [boolean, string]',
+          },
+        ])
+      }))
+
+    it('should export a type alias with the readonly keyword for array type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ReadonlyArrayType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'ReadonlyArrayType', type: 'readonly string[]' }])
+      }))
+
+    it('should export a type alias with the readonly keyword for tuple type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ReadonlyTupleType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'ReadonlyTupleType', type: 'readonly [boolean, string]' }])
+      }))
+
+    it('should export a type alias with generics', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['GenericType<T, U>'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'GenericType<T, U>', type: '(...b1: U[]) => U | [T]' }])
+      }))
+
+    it('should export a type alias with generic constraints', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['GenericConstraintsType<T extends string, U extends keyof TestTypeB>'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'GenericConstraintsType<T extends string, U extends keyof TestTypeB>',
+            type: '(b1: T) => U[]',
+          },
+        ])
+      }))
+
+    it('should export a type alias with a type operator type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['TypeOperatorType<T extends keyof TestTypeA>'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'TypeOperatorType<T extends keyof TestTypeA>',
+            type: '[T] & keyof TestTypeA',
+          },
+        ])
+      }))
+
+    it('should export a type alias with a reference type argument', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ReferenceTypeArgumentType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ReferenceTypeArgumentType',
+            type: "Partial<Omit<TestTypeA, 'a' | 'b'>>",
+          },
+        ])
+      }))
+
+    it('should export a type alias with a reference type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ReferenceType'])
+
+        return assertMarkdownDefinitions(markdown, [{ name: 'ReferenceType', type: 'TestTypeA' }])
+      }))
+
+    it('should export a type alias with a description', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['DescriptionType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'DescriptionType',
+            description: 'Description',
+            type: 'number[]',
+          },
+        ])
       }))
   })
 

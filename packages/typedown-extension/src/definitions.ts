@@ -346,7 +346,9 @@ function isTypeAlias(reflection: DeclarationReflection): boolean {
 
 function isObjectTypeAlias(reflection: DeclarationReflection): reflection is ObjectTypeAlias {
   return (
-    (reflection.kind === TypeDoc.ReflectionKind.TypeAlias && isReflectionType(reflection.type)) ||
+    (reflection.kind === TypeDoc.ReflectionKind.TypeAlias &&
+      isReflectionType(reflection.type) &&
+      typeof reflection.type.declaration.children !== 'undefined') ||
     isMappedType(reflection.type)
   )
 }

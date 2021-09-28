@@ -1,4 +1,23 @@
-export type TypeAlias = string
+export type IntrinsicType = string
+export type ArrayType = number[]
+export type LiteralType = 'test'
+export type IntersectionType = IntrinsicType & LiteralType
+export type TupleType = [boolean, ...number[]]
+export type UnionType = string | TestTypeA
+export type UnionArrayType = (number | string)[]
+export type FunctionType = (d1: (d1a: string, d1b?: number) => boolean) => [boolean, string]
+export type ReadonlyArrayType = readonly string[]
+export type ReadonlyTupleType = readonly [boolean, string]
+export type GenericType<T, U> = (...b1: U[]) => U | [T]
+export type GenericConstraintsType<T extends string, U extends keyof TestTypeB> = (b1: T) => U[]
+export type TypeOperatorType<T extends keyof TestTypeA> = [T] & keyof TestTypeA
+export type ReferenceTypeArgumentType = Partial<Omit<TestTypeA, 'a' | 'b'>>
+export type ReferenceType = TestTypeA
+
+/**
+ * Description
+ */
+export type DescriptionType = number[]
 
 export type WithIntrinsicTypes = {
   a: boolean
