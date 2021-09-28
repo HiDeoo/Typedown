@@ -142,6 +142,16 @@ export interface WithReferenceTypes {
   d: TestInterfaceD
 }
 
+export interface WithPredicateTypes {
+  a: (a1: TestInterfaceA | TestInterfaceB) => a1 is TestInterfaceA
+  b(b1: boolean | string[]): asserts b1 is boolean
+}
+
+export interface WithQueryTypes {
+  a: (a1: string) => typeof testConstA
+  b: typeof testConstA
+}
+
 /**
  * Description
  */
@@ -170,3 +180,6 @@ interface TestInterfaceB {
 type TestInterfaceC = string
 
 type TestInterfaceD = string & { da: boolean }
+
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+const testConstA: number = 1

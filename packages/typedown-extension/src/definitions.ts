@@ -1,10 +1,20 @@
 import * as TypeDoc from 'typedoc'
-import type { Definition, DefinitionChild } from 'typedown-shared'
+import { Definition, DefinitionChild, DefinitionKind } from 'typedown-shared'
 
 import type { DeclarationReflection } from './typescript'
 
 export function getDefinitionFromReflection(reflection: DeclarationReflection): Definition | undefined {
-  const children = getDefinitionChildren(reflection)
+  if (isInterface(reflection) || isObjectTypeAlias(reflection)) {
+    return getInterfaceOrObjectTypeAliasDefinition(reflection)
+  } else if (isTypeAlias(reflection)) {
+    return getTypeAliasDefinition(reflection)
+  }
+
+  return
+}
+
+function getInterfaceOrObjectTypeAliasDefinition(reflection: DeclarationReflection): Definition | undefined {
+  const children = getChildren(reflection)
 
   if (children.length === 0) {
     return
@@ -12,13 +22,25 @@ export function getDefinitionFromReflection(reflection: DeclarationReflection): 
 
   return {
     children,
-    description: getCommentDescription(reflection.comment),
+    description: getDescription(reflection),
     id: reflection.id,
-    name: getDefinitionName(reflection),
+    kind:
+      reflection.kind === TypeDoc.ReflectionKind.Interface ? DefinitionKind.Interface : DefinitionKind.ObjectTypeAlias,
+    name: getName(reflection),
   }
 }
 
-function getDefinitionName(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
+function getTypeAliasDefinition(reflection: DeclarationReflection): Definition {
+  return {
+    description: getDescription(reflection),
+    id: reflection.id,
+    kind: DefinitionKind.TypeAlias,
+    name: getName(reflection),
+    type: getType(reflection),
+  }
+}
+
+function getName(reflection: DeclarationReflection): string {
   let name = reflection.name
 
   if (reflection.typeParameter) {
@@ -28,50 +50,58 @@ function getDefinitionName(reflection: TypeDoc.JSONOutput.DeclarationReflection)
   return name
 }
 
-function getCommentDescription(comment?: TypeDoc.JSONOutput.Comment): string {
-  const description = comment?.shortText ?? ''
+function getDescription(reflection: DeclarationReflection): string {
+  const description = reflection.comment?.shortText ?? ''
 
   return description.replace(/(?:\r\n?|\n)/, ' ')
 }
 
-function getDefinitionChildren(reflection: TypeDoc.JSONOutput.DeclarationReflection): DefinitionChild[] {
+function getChildren(reflection: DeclarationReflection): DefinitionChild[] {
+  if (isMappedType(reflection.type)) {
+    return [getChild(reflection)]
+  } else if (isObjectTypeAlias(reflection)) {
+    return getChildren(reflection.type.declaration)
+  }
+
   const children: DefinitionChild[] = []
 
   if (!reflection.children || reflection.children.length === 0) {
     return children
   }
 
-  children.push(...reflection.children.map(getDefinitionChild))
+  children.push(...reflection.children.map(getChild))
 
   if (reflection.indexSignature) {
-    children.push(getDefinitionChild(reflection.indexSignature))
+    children.push(getChild(reflection.indexSignature))
   }
 
   return children
 }
 
-function getDefinitionChild(reflection: DeclarationOrSignatureReflection): DefinitionChild {
+function getChild(reflection: DeclarationReflection): DefinitionChild {
   return [
-    getDefinitionChildName(reflection),
-    getCommentDescription(reflection.comment),
-    getDefinitionChildType(reflection),
-    isReflectionOptional(reflection),
-    getDefinitionChildDefaultValue(reflection.comment),
+    getChildName(reflection),
+    getDescription(reflection),
+    getType(reflection),
+    isOptional(reflection),
+    getChildDefaultValue(reflection),
   ]
 }
 
-function getDefinitionChildName(reflection: DeclarationOrSignatureReflection): string {
+function getChildName(reflection: DeclarationOrSignatureReflection): string {
   if (isSignatureReflection(reflection) && reflection.parameters?.[0]) {
     const parameter = reflection.parameters?.[0]
 
-    return `[${parameter.name}: ${getDefinitionChildType(parameter)}]`
+    return `[${parameter.name}: ${getType(parameter)}]`
+  } else if (isMappedType(reflection.type)) {
+    return `[${reflection.type.parameter} in ${getDirectType(reflection.type.parameterType)}]`
   }
 
   return reflection.name
 }
 
-function getDefinitionChildDefaultValue(comment?: TypeDoc.JSONOutput.Comment): string {
-  const defaultTag = comment?.tags?.find(({ tag }) => tag === 'default')
+function getChildDefaultValue(reflection: DeclarationReflection): string {
+  const defaultTag = reflection.comment?.tags?.find(({ tag }) => tag === 'default')
 
   if (!defaultTag) {
     return ''
@@ -80,11 +110,11 @@ function getDefinitionChildDefaultValue(comment?: TypeDoc.JSONOutput.Comment): s
   return defaultTag.text.replace(/(?:\r\n?|\n)+$/, '')
 }
 
-function getDefinitionChildType(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
-  return reflection.type ? getDefinitionChildDirectType(reflection.type) : getDefinitionChildIndirectType(reflection)
+function getType(reflection: DeclarationReflection): string {
+  return reflection.type ? getDirectType(reflection.type) : getIndirectType(reflection)
 }
 
-function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string {
+function getDirectType(type: SomeType): string {
   if (isIntrinsicType(type)) {
     return getIntrinsicType(type)
   } else if (isArrayType(type)) {
@@ -105,16 +135,26 @@ function getDefinitionChildDirectType(type: TypeDoc.JSONOutput.SomeType): string
     return getRestType(type)
   } else if (isUnionType(type)) {
     return getUnionType(type)
-  } else if (isReflectionType(type) && type.declaration) {
-    return getDefinitionChildType(type.declaration)
+  } else if (isReflectionType(type)) {
+    return getType(type.declaration)
   } else if (isTypeOperatorType(type)) {
     return getTypeOperatorType(type)
+  } else if (isMappedType(type)) {
+    return getDirectType(type.templateType)
+  } else if (isConditionalType(type)) {
+    return getConditionalType(type)
+  } else if (isInferredType(type)) {
+    return getInferredType(type)
+  } else if (isPredicateType(type)) {
+    return getPredicateType(type)
+  } else if (isQueryType(type)) {
+    return getQueryType(type)
   }
 
   return 'unknown'
 }
 
-function getDefinitionChildIndirectType(reflection: TypeDoc.JSONOutput.DeclarationReflection): string {
+function getIndirectType(reflection: DeclarationReflection): string {
   if (reflection.signatures) {
     return reflection.signatures.map(getSignatureType).join('\n')
   }
@@ -127,7 +167,7 @@ function getIntrinsicType(type: TypeDoc.JSONOutput.IntrinsicType): string {
 }
 
 function getArrayType(type: TypeDoc.JSONOutput.ArrayType): string {
-  let elementType = getDefinitionChildDirectType(type.elementType)
+  let elementType = getDirectType(type.elementType)
 
   if (isUnionType(type.elementType)) {
     elementType = `(${elementType})`
@@ -137,11 +177,11 @@ function getArrayType(type: TypeDoc.JSONOutput.ArrayType): string {
 }
 
 function getIndexedAccessType(type: TypeDoc.JSONOutput.IndexedAccessType): string {
-  return `${getDefinitionChildDirectType(type.objectType)}["${getDefinitionChildDirectType(type.indexType)}"]`
+  return `${getDirectType(type.objectType)}["${getDirectType(type.indexType)}"]`
 }
 
 function getLiteralType(type: TypeDoc.JSONOutput.LiteralType): string {
-  if (!type.value) {
+  if (type.value == null) {
     return 'null'
   }
 
@@ -162,14 +202,14 @@ function getLiteralType(type: TypeDoc.JSONOutput.LiteralType): string {
 }
 
 function getIntersectionType(type: TypeDoc.JSONOutput.IntersectionType): string {
-  return type.types.map(getDefinitionChildDirectType).join(' & ')
+  return type.types.map(getDirectType).join(' & ')
 }
 
 function getReferenceType(type: TypeDoc.JSONOutput.ReferenceType): string {
   let reference = type.name
 
   if (type.typeArguments) {
-    const args = type.typeArguments.map(getDefinitionChildDirectType)
+    const args = type.typeArguments.map(getDirectType)
 
     reference = `${reference}<${args.join(', ')}>`
   }
@@ -182,28 +222,50 @@ function getTupleType(type: TypeDoc.JSONOutput.TupleType): string {
     return '[]'
   }
 
-  return `[${type.elements.map(getDefinitionChildDirectType).join(', ')}]`
+  return `[${type.elements.map(getDirectType).join(', ')}]`
 }
 
 function getOptionalType(type: TypeDoc.JSONOutput.OptionalType): string {
-  return `${getDefinitionChildDirectType(type.elementType)}?`
+  return `${getDirectType(type.elementType)}?`
 }
 
 function getRestType(type: TypeDoc.JSONOutput.RestType): string {
-  return `...${getDefinitionChildDirectType(type.elementType)}`
+  return `...${getDirectType(type.elementType)}`
 }
 
 function getUnionType(type: TypeDoc.JSONOutput.UnionType): string {
-  return type.types.map(getDefinitionChildDirectType).join(' | ')
+  return type.types.map(getDirectType).join(' | ')
+}
+
+function getConditionalType(type: TypeDoc.JSONOutput.ConditionalType): string {
+  return `${getDirectType(type.checkType)} extends ${getDirectType(type.extendsType)} ? ${getDirectType(
+    type.trueType
+  )} : ${getDirectType(type.falseType)}`
+}
+
+function getInferredType(type: TypeDoc.JSONOutput.InferredType): string {
+  return `infer ${type.name}`
+}
+
+function getPredicateType(type: TypeDoc.JSONOutput.PredicateType): string {
+  if (!type.targetType) {
+    return 'unknown'
+  }
+
+  return `${type.asserts ? 'asserts ' : ''}${type.name} is ${getDirectType(type.targetType)}`
+}
+
+function getQueryType(type: TypeDoc.JSONOutput.QueryType): string {
+  return `typeof ${getDirectType(type.queryType)}`
 }
 
 function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
-  return `${type.operator} ${getDefinitionChildDirectType(type.target)}`
+  return `${type.operator} ${getDirectType(type.target)}`
 }
 
 function getSignatureType(signature: TypeDoc.JSONOutput.SignatureReflection): string {
   const parameters = signature.parameters?.map(getParameterType) ?? []
-  const returnType = signature.type ? getDefinitionChildDirectType(signature.type) : ''
+  const returnType = signature.type ? getDirectType(signature.type) : ''
 
   return `(${parameters.join(', ')}) => ${returnType}`
 }
@@ -223,9 +285,7 @@ function getParameterType(parameter: TypeDoc.JSONOutput.ParameterReflection): st
 
   parameterComponents.push(': ')
 
-  parameterComponents.push(
-    parameter.type ? getDefinitionChildDirectType(parameter.type) : getDefinitionChildIndirectType(parameter)
-  )
+  parameterComponents.push(parameter.type ? getDirectType(parameter.type) : getIndirectType(parameter))
 
   return parameterComponents.join('')
 }
@@ -234,14 +294,16 @@ function getTypeParemeterType(typeParameter: TypeDoc.JSONOutput.TypeParameterRef
   let type = typeParameter.name
 
   if (typeParameter.type) {
-    type = `${type} extends ${getDefinitionChildType(typeParameter)}`
+    type = `${type} extends ${getType(typeParameter)}`
   }
 
   return type
 }
 
-function isReflectionOptional(reflection: TypeDoc.JSONOutput.DeclarationReflection): boolean {
-  return reflection.flags.isOptional === true
+function isOptional(reflection: DeclarationReflection): boolean {
+  return (
+    reflection.flags.isOptional === true || (isMappedType(reflection.type) && reflection.type.optionalModifier === '+')
+  )
 }
 
 function isSignatureReflection(
@@ -250,54 +312,103 @@ function isSignatureReflection(
   return reflection.kind === TypeDoc.ReflectionKind.IndexSignature
 }
 
-function isIntrinsicType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntrinsicType {
-  return type.type === 'intrinsic'
+function isIntrinsicType(someType: SomeType): someType is TypeDoc.JSONOutput.IntrinsicType {
+  return someType.type === 'intrinsic'
 }
 
-function isArrayType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ArrayType {
-  return type.type === 'array'
+function isArrayType(someType: SomeType): someType is TypeDoc.JSONOutput.ArrayType {
+  return someType.type === 'array'
 }
 
-function isIndexedAccessType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IndexedAccessType {
-  return type.type === 'indexedAccess'
+function isIndexedAccessType(someType: SomeType): someType is TypeDoc.JSONOutput.IndexedAccessType {
+  return someType.type === 'indexedAccess'
 }
 
-function isLiteralType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.LiteralType {
-  return type.type === 'literal'
+function isLiteralType(someType: SomeType): someType is TypeDoc.JSONOutput.LiteralType {
+  return someType.type === 'literal'
 }
 
-function isIntersectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.IntersectionType {
-  return type.type === 'intersection'
+function isIntersectionType(someType: SomeType): someType is TypeDoc.JSONOutput.IntersectionType {
+  return someType.type === 'intersection'
 }
 
-function isReferenceType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReferenceType {
-  return type.type === 'reference'
+function isReferenceType(someType: SomeType): someType is TypeDoc.JSONOutput.ReferenceType {
+  return someType.type === 'reference'
 }
 
-function isTupleType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TupleType {
-  return type.type === 'tuple'
+function isTupleType(someType: SomeType): someType is TypeDoc.JSONOutput.TupleType {
+  return someType.type === 'tuple'
 }
 
-function isOptionalType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.OptionalType {
-  return type.type === 'optional'
+function isOptionalType(someType: SomeType): someType is TypeDoc.JSONOutput.OptionalType {
+  return someType.type === 'optional'
 }
 
-function isRestType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.RestType {
-  return type.type === 'rest'
+function isRestType(someType: SomeType): someType is TypeDoc.JSONOutput.RestType {
+  return someType.type === 'rest'
 }
 
-function isUnionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.UnionType {
-  return type.type === 'union'
+function isUnionType(someType: SomeType): someType is TypeDoc.JSONOutput.UnionType {
+  return someType.type === 'union'
 }
 
-function isReflectionType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.ReflectionType {
-  return type.type === 'reflection'
+function isReflectionType(someType?: SomeType): someType is ReflectionTypeWithDeclaration {
+  return (
+    someType?.type === 'reflection' && typeof (someType as ReflectionTypeWithDeclaration).declaration !== 'undefined'
+  )
 }
 
-function isTypeOperatorType(type: TypeDoc.JSONOutput.SomeType): type is TypeDoc.JSONOutput.TypeOperatorType {
-  return type.type === 'typeOperator'
+function isTypeOperatorType(someType: SomeType): someType is TypeDoc.JSONOutput.TypeOperatorType {
+  return someType.type === 'typeOperator'
 }
 
-type DeclarationOrSignatureReflection =
-  | TypeDoc.JSONOutput.DeclarationReflection
-  | TypeDoc.JSONOutput.SignatureReflection
+function isMappedType(someType?: SomeType): someType is TypeDoc.JSONOutput.MappedType {
+  return typeof someType !== 'undefined' && someType.type === 'mapped'
+}
+
+function isConditionalType(someType: SomeType): someType is TypeDoc.JSONOutput.ConditionalType {
+  return someType.type === 'conditional'
+}
+
+function isInferredType(someType: SomeType): someType is TypeDoc.JSONOutput.InferredType {
+  return someType.type === 'inferred'
+}
+
+function isPredicateType(someType: SomeType): someType is TypeDoc.JSONOutput.PredicateType {
+  return someType.type === 'predicate'
+}
+
+function isQueryType(someType: SomeType): someType is TypeDoc.JSONOutput.QueryType {
+  return someType.type === 'query'
+}
+
+function isInterface(reflection: DeclarationReflection): boolean {
+  return reflection.kind === TypeDoc.ReflectionKind.Interface
+}
+
+function isTypeAlias(reflection: DeclarationReflection): boolean {
+  return reflection.kind === TypeDoc.ReflectionKind.TypeAlias
+}
+
+function isObjectTypeAlias(reflection: DeclarationReflection): reflection is ObjectTypeAlias {
+  return (
+    (reflection.kind === TypeDoc.ReflectionKind.TypeAlias &&
+      isReflectionType(reflection.type) &&
+      typeof reflection.type.declaration.children !== 'undefined') ||
+    isMappedType(reflection.type)
+  )
+}
+
+type SomeType = TypeDoc.JSONOutput.SomeType | TypeDoc.JSONOutput.MappedType
+
+type DeclarationOrSignatureReflection = DeclarationReflection | TypeDoc.JSONOutput.SignatureReflection
+
+interface ReflectionTypeWithDeclaration extends TypeDoc.JSONOutput.ReflectionType {
+  declaration: NonNullable<TypeDoc.JSONOutput.ReflectionType['declaration']>
+  type: TypeDoc.JSONOutput.ReflectionType['type']
+}
+
+interface ObjectTypeAlias extends DeclarationReflection {
+  kind: TypeDoc.ReflectionKind.TypeAlias
+  type: ReflectionTypeWithDeclaration
+}

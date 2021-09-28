@@ -1,14 +1,19 @@
-import type { DefinitionChild, Definitions } from 'typedown-shared'
+import {
+  Definition,
+  DefinitionChild,
+  Definitions,
+  isInterfaceDefinition,
+  isTypeAliasDefinition,
+  isObjectTypeAliasDefinition,
+  TypeAliasDefinition,
+} from 'typedown-shared'
 import prettier from 'prettier/standalone'
 import parserMarkdown from 'prettier/parser-markdown'
 
 export function getDefinitionsMarkdown(definitions: Definitions): string {
   const markdown = definitions
-    .map(
-      (definition) => `# ${definition.name}
-
-${definition.description ? `${definition.description}\n` : ''}
-${getDefinitionChildrenMarkdown(definition.children)}`
+    .map((definition) =>
+      [`# ${definition.name}`, '\n', getDefinitionDescription(definition), getDefinitionContent(definition)].join('\n')
     )
     .join('\n\n')
 
@@ -23,20 +28,49 @@ export function formatMarkdown(markdown: string): string {
   return prettier.format(markdown, { parser: 'markdown', plugins: [parserMarkdown] })
 }
 
-function getDefinitionChildrenMarkdown(children: DefinitionChild[]): string {
-  return `| Name | Description | Type | Optional | Default value |
-| --- | --- | --- | --- | --- |
-${children.map(getDefinitionChildMarkdown).join('\n')}`
+function getDefinitionContent(definition: Definition): string {
+  if (isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)) {
+    return getDefinitionChildren(definition.children)
+  } else if (isTypeAliasDefinition(definition)) {
+    return getDefinitionTypeAlias(definition)
+  }
+
+  return ''
 }
 
-function getDefinitionChildMarkdown(child: DefinitionChild): string {
-  const components = [
+function getDefinitionDescription(definition: Definition): string {
+  return definition.description && !isTypeAliasDefinition(definition) ? `${definition.description}\n` : ''
+}
+
+function getDefinitionChildren(children: DefinitionChild[]): string {
+  return getTable([
+    ...getTableHeader(['Name', 'Description', 'Type', 'Optional', 'Default value']),
+    ...children.map(getDefinitionChild),
+  ])
+}
+
+function getDefinitionChild(child: DefinitionChild): string {
+  return getTableRow([
     child[0],
     escapeMarkdown(child[1]),
     `\`${escapeMarkdown(child[2])}\``,
     child[3] ? '✓' : '',
     escapeMarkdown(child[4]),
-  ]
+  ])
+}
 
-  return `| ${components.join(' | ')} |`
+function getDefinitionTypeAlias(definition: TypeAliasDefinition): string {
+  return getTable([...getTableHeader(['Description', 'Type']), getTableRow([definition.description, definition.type])])
+}
+
+function getTable(rows: string[]): string {
+  return rows.join('\n')
+}
+
+function getTableHeader(headers: string[]): string[] {
+  return [getTableRow(headers), getTableRow(new Array(headers.length).fill('---'))]
+}
+
+function getTableRow(columns: string[]): string {
+  return `| ${columns.join('|')} |`
 }
