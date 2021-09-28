@@ -4,7 +4,7 @@ import {
   Definitions,
   isInterfaceDefinition,
   isTypeAliasDefinition,
-  isTypeAliasObjectTypeLiteralDefinition,
+  isObjectTypeAliasDefinition,
   TypeAliasDefinition,
 } from 'typedown-shared'
 import prettier from 'prettier/standalone'
@@ -29,7 +29,7 @@ export function formatMarkdown(markdown: string): string {
 }
 
 function getDefinitionContent(definition: Definition): string {
-  if (isInterfaceDefinition(definition) || isTypeAliasObjectTypeLiteralDefinition(definition)) {
+  if (isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)) {
     return getDefinitionChildren(definition.children)
   } else if (isTypeAliasDefinition(definition)) {
     return getDefinitionTypeAlias(definition)

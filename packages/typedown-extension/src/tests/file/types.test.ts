@@ -3,7 +3,7 @@ import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 const fixture = 'file/src/types.ts'
 
 describe('types', () => {
-  describe('aliased types', () => {
+  describe('type aliases', () => {
     it('should export a type alias of intrinsic type', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['TypeAlias'])
@@ -12,8 +12,8 @@ describe('types', () => {
       }))
   })
 
-  describe('aliased object type literals', () => {
-    it('should export an aliased object type literal of intrinsic types', () =>
+  describe('object type aliases', () => {
+    it('should export an object type alias of intrinsic types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithIntrinsicTypes'])
 
@@ -29,7 +29,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of array types', () =>
+    it('should export an object type alias of array types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithArrayTypes'])
 
@@ -45,7 +45,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of literal types', () =>
+    it('should export an object type alias of literal types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithLiteralTypes'])
 
@@ -62,7 +62,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of intersection types', () =>
+    it('should export an object type alias of intersection types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithIntersectionTypes'])
 
@@ -77,7 +77,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of tuple types', () =>
+    it('should export an object type alias of tuple types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithTupleTypes'])
 
@@ -93,7 +93,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of union types', () =>
+    it('should export an object type alias of union types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithUnionTypes'])
 
@@ -108,7 +108,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of union array types', () =>
+    it('should export an object type alias of union array types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithUnionArrayTypes'])
 
@@ -123,7 +123,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of optional types', () =>
+    it('should export an object type alias of optional types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithOptionalTypes'])
 
@@ -139,7 +139,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with property default values', () =>
+    it('should export an object type alias with property default values', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithPropertyDefaultValues'])
 
@@ -154,7 +154,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with property descriptions', () =>
+    it('should export an object type alias with property descriptions', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithPropertyDescriptions'])
 
@@ -171,7 +171,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal of function types', () =>
+    it('should export an object type alias of function types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithFunctionTypes'])
 
@@ -189,7 +189,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal without the readonly property keyword', () =>
+    it('should export an object type alias without the readonly property keyword', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithReadOnlyTypes'])
 
@@ -205,7 +205,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with the readonly keyword for array and tuple types', () =>
+    it('should export an object type alias with the readonly keyword for array and tuple types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithReadonlyTupleAndArrayTypes'])
 
@@ -220,7 +220,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with generics', () =>
+    it('should export an object type alias with generics', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithGenerics<T, U>'])
 
@@ -235,7 +235,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with generic constraints', () =>
+    it('should export an object type alias with generic constraints', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithGenericConstraints<T extends string, U extends keyof TestTypeB>'])
 
@@ -250,7 +250,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with type operator types', () =>
+    it('should export an object type alias with type operator types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithTypeOperatorTypes<T extends keyof TestTypeA>'])
 
@@ -265,7 +265,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with reference type arguments', () =>
+    it('should export an object type alias with reference type arguments', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithReferenceTypeArguments'])
 
@@ -281,7 +281,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with reference types', () =>
+    it('should export an object type alias with reference types', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithReferenceTypes'])
 
@@ -298,7 +298,7 @@ describe('types', () => {
         ])
       }))
 
-    it('should export an aliased object type literal with a description', () =>
+    it('should export an object type alias with a description', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithDescriptions'])
 

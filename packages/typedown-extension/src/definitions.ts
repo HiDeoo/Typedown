@@ -4,8 +4,8 @@ import { Definition, DefinitionChild, DefinitionKind } from 'typedown-shared'
 import type { DeclarationReflection } from './typescript'
 
 export function getDefinitionFromReflection(reflection: DeclarationReflection): Definition | undefined {
-  if (isInterface(reflection) || isTypeAliasObjectTypeLiteral(reflection)) {
-    return getInterfaceOrTypeAliasObjectTypeLiteralDefinition(reflection)
+  if (isInterface(reflection) || isObjectTypeAlias(reflection)) {
+    return getInterfaceOrObjectTypeAliasDefinition(reflection)
   } else if (isTypeAlias(reflection)) {
     return getTypeAliasDefinition(reflection)
   }
@@ -13,7 +13,7 @@ export function getDefinitionFromReflection(reflection: DeclarationReflection): 
   return
 }
 
-function getInterfaceOrTypeAliasObjectTypeLiteralDefinition(reflection: DeclarationReflection): Definition | undefined {
+function getInterfaceOrObjectTypeAliasDefinition(reflection: DeclarationReflection): Definition | undefined {
   const children = getChildren(reflection)
 
   if (children.length === 0) {
@@ -25,9 +25,7 @@ function getInterfaceOrTypeAliasObjectTypeLiteralDefinition(reflection: Declarat
     description: getDescription(reflection),
     id: reflection.id,
     kind:
-      reflection.kind === TypeDoc.ReflectionKind.Interface
-        ? DefinitionKind.Interface
-        : DefinitionKind.TypeAliasObjectTypeLiteral,
+      reflection.kind === TypeDoc.ReflectionKind.Interface ? DefinitionKind.Interface : DefinitionKind.ObjectTypeAlias,
     name: getName(reflection),
   }
 }
@@ -61,7 +59,7 @@ function getDescription(reflection: DeclarationReflection): string {
 function getChildren(reflection: DeclarationReflection): DefinitionChild[] {
   if (isMappedType(reflection.type)) {
     return [getChild(reflection)]
-  } else if (isTypeAliasObjectTypeLiteral(reflection)) {
+  } else if (isObjectTypeAlias(reflection)) {
     return getChildren(reflection.type.declaration)
   }
 
@@ -346,7 +344,7 @@ function isTypeAlias(reflection: DeclarationReflection): boolean {
   return reflection.kind === TypeDoc.ReflectionKind.TypeAlias
 }
 
-function isTypeAliasObjectTypeLiteral(reflection: DeclarationReflection): reflection is TypeAliasObjectTypeLiteral {
+function isObjectTypeAlias(reflection: DeclarationReflection): reflection is ObjectTypeAlias {
   return (
     (reflection.kind === TypeDoc.ReflectionKind.TypeAlias && isReflectionType(reflection.type)) ||
     isMappedType(reflection.type)
@@ -362,7 +360,7 @@ interface ReflectionTypeWithDeclaration extends TypeDoc.JSONOutput.ReflectionTyp
   type: TypeDoc.JSONOutput.ReflectionType['type']
 }
 
-interface TypeAliasObjectTypeLiteral extends DeclarationReflection {
+interface ObjectTypeAlias extends DeclarationReflection {
   kind: TypeDoc.ReflectionKind.TypeAlias
   type: ReflectionTypeWithDeclaration
 }

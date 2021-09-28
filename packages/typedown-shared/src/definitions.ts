@@ -1,7 +1,7 @@
 export enum DefinitionKind {
   Interface,
   TypeAlias,
-  TypeAliasObjectTypeLiteral,
+  ObjectTypeAlias,
 }
 
 export type DefinitionIdentifier = number
@@ -26,12 +26,12 @@ export interface TypeAliasDefinition extends BaseDefinition {
   type: string
 }
 
-export interface TypeAliasObjectTypeLiteralDefinition extends BaseDefinition {
+export interface ObjectTypeAliasDefinition extends BaseDefinition {
   children: DefinitionChild[]
-  kind: DefinitionKind.TypeAliasObjectTypeLiteral
+  kind: DefinitionKind.ObjectTypeAlias
 }
 
-export type Definition = InterfaceDefinition | TypeAliasDefinition | TypeAliasObjectTypeLiteralDefinition
+export type Definition = InterfaceDefinition | TypeAliasDefinition | ObjectTypeAliasDefinition
 export type Definitions = Definition[]
 
 export function isInterfaceDefinition(definition: Definition): definition is InterfaceDefinition {
@@ -42,8 +42,6 @@ export function isTypeAliasDefinition(definition: Definition): definition is Typ
   return definition.kind === DefinitionKind.TypeAlias
 }
 
-export function isTypeAliasObjectTypeLiteralDefinition(
-  definition: Definition
-): definition is TypeAliasObjectTypeLiteralDefinition {
-  return definition.kind === DefinitionKind.TypeAliasObjectTypeLiteral
+export function isObjectTypeAliasDefinition(definition: Definition): definition is ObjectTypeAliasDefinition {
+  return definition.kind === DefinitionKind.ObjectTypeAlias
 }
