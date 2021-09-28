@@ -141,6 +141,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias with a conditional type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ConditionalType<T>'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ConditionalType<T>',
+            type: 'T extends PromiseLike<infer U> ? ConditionalType<U> : T',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {

@@ -13,6 +13,7 @@ export type GenericConstraintsType<T extends string, U extends keyof TestTypeB> 
 export type TypeOperatorType<T extends keyof TestTypeA> = [T] & keyof TestTypeA
 export type ReferenceTypeArgumentType = Partial<Omit<TestTypeA, 'a' | 'b'>>
 export type ReferenceType = TestTypeA
+export type ConditionalType<T> = T extends PromiseLike<infer U> ? ConditionalType<U> : T
 
 /**
  * Description

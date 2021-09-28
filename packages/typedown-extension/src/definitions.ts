@@ -141,6 +141,10 @@ function getDirectType(type: SomeType): string {
     return getTypeOperatorType(type)
   } else if (isMappedType(type)) {
     return getDirectType(type.templateType)
+  } else if (isConditionalType(type)) {
+    return getConditionalType(type)
+  } else if (isInferredType(type)) {
+    return getInferredType(type)
   }
 
   return 'unknown'
@@ -227,6 +231,16 @@ function getRestType(type: TypeDoc.JSONOutput.RestType): string {
 
 function getUnionType(type: TypeDoc.JSONOutput.UnionType): string {
   return type.types.map(getDirectType).join(' | ')
+}
+
+function getConditionalType(type: TypeDoc.JSONOutput.ConditionalType): string {
+  return `${getDirectType(type.checkType)} extends ${getDirectType(type.extendsType)} ? ${getDirectType(
+    type.trueType
+  )} : ${getDirectType(type.falseType)}`
+}
+
+function getInferredType(type: TypeDoc.JSONOutput.InferredType): string {
+  return `infer ${type.name}`
 }
 
 function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
@@ -334,6 +348,14 @@ function isTypeOperatorType(someType: SomeType): someType is TypeDoc.JSONOutput.
 
 function isMappedType(someType?: SomeType): someType is TypeDoc.JSONOutput.MappedType {
   return typeof someType !== 'undefined' && someType.type === 'mapped'
+}
+
+function isConditionalType(someType: SomeType): someType is TypeDoc.JSONOutput.ConditionalType {
+  return someType.type === 'conditional'
+}
+
+function isInferredType(someType: SomeType): someType is TypeDoc.JSONOutput.InferredType {
+  return someType.type === 'inferred'
 }
 
 function isInterface(reflection: DeclarationReflection): boolean {
