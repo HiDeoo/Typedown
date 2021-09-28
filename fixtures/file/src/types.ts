@@ -16,6 +16,7 @@ export type ReferenceType = TestTypeA
 export type ConditionalType<T> = T extends PromiseLike<infer U> ? ConditionalType<U> : T
 export type PredicateType = (a: string | number) => a is string
 export type AssertsPredicateType = (a: string | number) => asserts a is string
+export type QueryType = typeof testConstA
 
 /**
  * Description
@@ -153,6 +154,11 @@ export type WithPredicateTypes = {
   b(b1: number[] | boolean[]): asserts b1 is number[]
 }
 
+export type WithQueryTypes = {
+  a: (a1: string) => typeof testConstA
+  b: typeof testConstA
+}
+
 /**
  * Description
  */
@@ -190,3 +196,6 @@ type TestTypeB = {
 type TestTypeC = number
 
 type TestTypeD = string & { da: boolean[] }
+
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+const testConstA: number = 1

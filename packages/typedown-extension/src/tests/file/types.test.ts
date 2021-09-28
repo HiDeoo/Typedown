@@ -177,6 +177,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias with a query type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['QueryType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'QueryType',
+            type: 'typeof testConstA',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -475,6 +487,21 @@ describe('types', () => {
             children: [
               { name: 'a', type: '(a1: string | number) => a1 is string' },
               { name: 'b', type: '(b1: number[] | boolean[]) => asserts b1 is number[]' },
+            ],
+          },
+        ])
+      }))
+
+    it('should export an object type alias with query types', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithQueryTypes'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithQueryTypes',
+            children: [
+              { name: 'a', type: '(a1: string) => number' },
+              { name: 'b', type: 'typeof testConstA' },
             ],
           },
         ])

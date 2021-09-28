@@ -375,6 +375,21 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface with query types', () =>
+    withFixture(fixture, async () => {
+      const markdown = await fileToMd(['WithQueryTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithQueryTypes',
+          children: [
+            { name: 'a', type: '(a1: string) => number' },
+            { name: 'b', type: 'number' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface with a description', () =>
     withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithDescriptions'])

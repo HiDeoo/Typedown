@@ -147,6 +147,8 @@ function getDirectType(type: SomeType): string {
     return getInferredType(type)
   } else if (isPredicateType(type)) {
     return getPredicateType(type)
+  } else if (isQueryType(type)) {
+    return getQueryType(type)
   }
 
   return 'unknown'
@@ -251,6 +253,10 @@ function getPredicateType(type: TypeDoc.JSONOutput.PredicateType): string {
   }
 
   return `${type.asserts ? 'asserts ' : ''}${type.name} is ${getDirectType(type.targetType)}`
+}
+
+function getQueryType(type: TypeDoc.JSONOutput.QueryType): string {
+  return `typeof ${getDirectType(type.queryType)}`
 }
 
 function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
@@ -370,6 +376,10 @@ function isInferredType(someType: SomeType): someType is TypeDoc.JSONOutput.Infe
 
 function isPredicateType(someType: SomeType): someType is TypeDoc.JSONOutput.PredicateType {
   return someType.type === 'predicate'
+}
+
+function isQueryType(someType: SomeType): someType is TypeDoc.JSONOutput.QueryType {
+  return someType.type === 'query'
 }
 
 function isInterface(reflection: DeclarationReflection): boolean {
