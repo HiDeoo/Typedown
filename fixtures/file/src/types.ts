@@ -18,6 +18,7 @@ export type PredicateType = (a: string | number) => a is string
 export type AssertsPredicateType = (a: string | number) => asserts a is string
 export type QueryType = typeof testConstA
 export type ObjectLiteralIntersection = { a1: string; a2?: number } & { b1: boolean }
+export type ObjectLiteralUnion = { a1: string; a2?: number } | { b1: boolean }
 
 /**
  * Description
@@ -58,6 +59,7 @@ export type WithTupleTypes = {
 export type WithUnionTypes = {
   a: string | number
   b: string | TestTypeA
+  c: { a: string; b?: boolean } | TestTypeB
 }
 
 export type WithUnionArrayTypes = {

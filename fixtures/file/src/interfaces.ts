@@ -32,6 +32,7 @@ export interface WithTupleTypes {
 export interface WithUnionTypes {
   a: string | boolean
   b: number | TestInterfaceA
+  c: TestInterfaceB | { a?: boolean; b: string }
 }
 
 export interface WithUnionArrayTypes {

@@ -101,6 +101,7 @@ describe('interfaces', () => {
           children: [
             { name: 'a', type: 'string | boolean' },
             { name: 'b', type: 'number | TestInterfaceA' },
+            { name: 'c', type: 'TestInterfaceB | { a?: boolean; b: string }' },
           ],
         },
       ])

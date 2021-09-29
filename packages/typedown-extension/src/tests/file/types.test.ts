@@ -201,6 +201,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias of union type with object literals', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ObjectLiteralUnion'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ObjectLiteralUnion',
+            type: '{ a1: string; a2?: number } | { b1: boolean }',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -295,6 +307,7 @@ describe('types', () => {
             children: [
               { name: 'a', type: 'string | number' },
               { name: 'b', type: 'string | TestTypeA' },
+              { name: 'c', type: '{ a: string; b?: boolean } | TestTypeB' },
             ],
           },
         ])
