@@ -69,6 +69,7 @@ describe('interfaces', () => {
           children: [
             { name: 'a', type: 'WithIntrinsicTypes & WithArrayTypes' },
             { name: 'b', type: 'TestInterfaceA & TestInterfaceB' },
+            { name: 'c', type: 'TestInterfaceB & { a?: boolean; b: string }' },
           ],
         },
       ])

@@ -189,6 +189,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias of intersection type with object literals', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ObjectLiteralIntersection'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ObjectLiteralIntersection',
+            type: '{ a1: string; a2?: number } & { b1: boolean }',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -251,6 +263,7 @@ describe('types', () => {
             children: [
               { name: 'a', type: 'WithIntrinsicTypes & WithArrayTypes' },
               { name: 'b', type: 'TestTypeA & TestTypeB' },
+              { name: 'c', type: '{ a: string; b?: boolean } & TestTypeB' },
             ],
           },
         ])

@@ -20,6 +20,7 @@ export interface WithLiteralTypes {
 export interface WithIntersectionTypes {
   a: WithIntrinsicTypes & WithArrayTypes
   b: TestInterfaceA & TestInterfaceB
+  c: TestInterfaceB & { a?: boolean; b: string }
 }
 
 export interface WithTupleTypes {

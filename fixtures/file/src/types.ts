@@ -17,6 +17,7 @@ export type ConditionalType<T> = T extends PromiseLike<infer U> ? ConditionalTyp
 export type PredicateType = (a: string | number) => a is string
 export type AssertsPredicateType = (a: string | number) => asserts a is string
 export type QueryType = typeof testConstA
+export type ObjectLiteralIntersection = { a1: string; a2?: number } & { b1: boolean }
 
 /**
  * Description
@@ -45,6 +46,7 @@ export type WithLiteralTypes = {
 export type WithIntersectionTypes = {
   a: WithIntrinsicTypes & WithArrayTypes
   b: TestTypeA & TestTypeB
+  c: { a: string; b?: boolean } & TestTypeB
 }
 
 export type WithTupleTypes = {
