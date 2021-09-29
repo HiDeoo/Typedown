@@ -189,6 +189,30 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias of intersection type with object literals', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ObjectLiteralIntersection'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ObjectLiteralIntersection',
+            type: '{ a1: string; a2?: number } & { b1: boolean }',
+          },
+        ])
+      }))
+
+    it('should export a type alias of union type with object literals', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['ObjectLiteralUnion'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'ObjectLiteralUnion',
+            type: '{ a1: string; a2?: number } | { b1: boolean }',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -251,6 +275,7 @@ describe('types', () => {
             children: [
               { name: 'a', type: 'WithIntrinsicTypes & WithArrayTypes' },
               { name: 'b', type: 'TestTypeA & TestTypeB' },
+              { name: 'c', type: '{ a: string; b?: boolean } & TestTypeB' },
             ],
           },
         ])
@@ -282,6 +307,7 @@ describe('types', () => {
             children: [
               { name: 'a', type: 'string | number' },
               { name: 'b', type: 'string | TestTypeA' },
+              { name: 'c', type: '{ a: string; b?: boolean } | TestTypeB' },
             ],
           },
         ])
@@ -502,6 +528,22 @@ describe('types', () => {
             children: [
               { name: 'a', type: '(a1: string) => number' },
               { name: 'b', type: 'typeof testConstA' },
+            ],
+          },
+        ])
+      }))
+
+    it('should export an object type alias with nested object literal types', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithNestedObjectLiteralTypes'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithNestedObjectLiteralTypes',
+            children: [
+              { name: 'a', type: 'string' },
+              { name: 'b', type: '{ b1: boolean; b2: () => number }', optional: true },
+              { name: 'c', type: '{ c1: { c1a: boolean; c1b: number[] }; c2: number }' },
             ],
           },
         ])

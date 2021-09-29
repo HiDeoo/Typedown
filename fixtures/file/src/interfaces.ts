@@ -20,6 +20,7 @@ export interface WithLiteralTypes {
 export interface WithIntersectionTypes {
   a: WithIntrinsicTypes & WithArrayTypes
   b: TestInterfaceA & TestInterfaceB
+  c: TestInterfaceB & { a?: boolean; b: string }
 }
 
 export interface WithTupleTypes {
@@ -31,6 +32,7 @@ export interface WithTupleTypes {
 export interface WithUnionTypes {
   a: string | boolean
   b: number | TestInterfaceA
+  c: TestInterfaceB | { a?: boolean; b: string }
 }
 
 export interface WithUnionArrayTypes {
@@ -150,6 +152,12 @@ export interface WithPredicateTypes {
 export interface WithQueryTypes {
   a: (a1: string) => typeof testConstA
   b: typeof testConstA
+}
+
+export interface WithNestedObjectLiteralTypes {
+  a?: { a1: number[]; a2: string | number }
+  b: number
+  c: { c1: { c1a: number; c1b: string[] }; c2: boolean }
 }
 
 /**
