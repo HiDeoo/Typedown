@@ -392,6 +392,22 @@ describe('interfaces', () => {
       ])
     }))
 
+  it('should export an interface with nested object literal types', () =>
+    withFixture(fixture, async () => {
+      const markdown = await fileToMd(['WithNestedObjectLiteralTypes'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithNestedObjectLiteralTypes',
+          children: [
+            { name: 'a', type: '{ a1: number[]; a2: string | number }', optional: true },
+            { name: 'b', type: 'number' },
+            { name: 'c', type: '{ c1: { c1a: number; c1b: string[] }; c2: boolean }' },
+          ],
+        },
+      ])
+    }))
+
   it('should export an interface with a description', () =>
     withFixture(fixture, async () => {
       const markdown = await fileToMd(['WithDescriptions'])

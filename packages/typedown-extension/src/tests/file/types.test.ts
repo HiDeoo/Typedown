@@ -533,6 +533,22 @@ describe('types', () => {
         ])
       }))
 
+    it('should export an object type alias with nested object literal types', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithNestedObjectLiteralTypes'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithNestedObjectLiteralTypes',
+            children: [
+              { name: 'a', type: 'string' },
+              { name: 'b', type: '{ b1: boolean; b2: () => number }', optional: true },
+              { name: 'c', type: '{ c1: { c1a: boolean; c1b: number[] }; c2: number }' },
+            ],
+          },
+        ])
+      }))
+
     it('should export an object type alias with a description', () =>
       withFixture(fixture, async () => {
         const markdown = await fileToMd(['WithDescriptions'])

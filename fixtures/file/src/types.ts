@@ -163,6 +163,12 @@ export type WithQueryTypes = {
   b: typeof testConstA
 }
 
+export type WithNestedObjectLiteralTypes = {
+  a: string
+  b?: { b1: boolean; b2: () => number }
+  c: { c1: { c1a: boolean; c1b: number[] }; c2: number }
+}
+
 /**
  * Description
  */

@@ -154,6 +154,12 @@ export interface WithQueryTypes {
   b: typeof testConstA
 }
 
+export interface WithNestedObjectLiteralTypes {
+  a?: { a1: number[]; a2: string | number }
+  b: number
+  c: { c1: { c1a: number; c1b: string[] }; c2: boolean }
+}
+
 /**
  * Description
  */
