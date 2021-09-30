@@ -60,7 +60,10 @@ function getDefinitionChild(child: DefinitionChild): string {
 }
 
 function getDefinitionTypeAlias(definition: TypeAliasDefinition): string {
-  return getTable([...getTableHeader(['Description', 'Type']), getTableRow([definition.description, definition.type])])
+  return getTable([
+    ...getTableHeader(['Description', 'Type']),
+    getTableRow([escapeMarkdown(definition.description), escapeMarkdown(definition.type)]),
+  ])
 }
 
 function getTable(rows: string[]): string {
