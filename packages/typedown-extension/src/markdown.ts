@@ -21,7 +21,7 @@ export function getDefinitionsMarkdown(definitions: Definitions): string {
 }
 
 export function escapeMarkdown(markdown: string): string {
-  return markdown.replace(/\|/, '\\|')
+  return markdown.replace(/\|/g, '\\|')
 }
 
 export function formatMarkdown(markdown: string): string {
