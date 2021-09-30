@@ -213,6 +213,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias of template literal type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['TemplateLiteralType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'TemplateLiteralType',
+            type: '`Hello ${LiteralType}`',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -544,6 +556,21 @@ describe('types', () => {
               { name: 'a', type: 'string' },
               { name: 'b', type: '{ b1: boolean; b2: () => number }', optional: true },
               { name: 'c', type: '{ c1: { c1a: boolean; c1b: number[] }; c2: number }' },
+            ],
+          },
+        ])
+      }))
+
+    it('should export an object type alias with template literal types types', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['WithTemplateLiteralTypes'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'WithTemplateLiteralTypes',
+            children: [
+              { name: 'a', type: '`${LiteralType} 1, ${LiteralType} 2`' },
+              { name: 'b', type: 'string' },
             ],
           },
         ])

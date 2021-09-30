@@ -2,7 +2,7 @@ import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
 
 const fixture = 'file/src/imports.ts'
 
-describe.only('imports', () => {
+describe('imports', () => {
   it('should export a type alias of imported type', () =>
     withFixture(fixture, async () => {
       const markdown = await fileToMd(['ImportedType'])
@@ -36,6 +36,7 @@ describe.only('imports', () => {
           children: [
             { name: 'd', type: 'WithLiteralTypes', optional: true },
             { name: 'e', type: 'WithGenerics<string, number[]>' },
+            { name: 'f', type: "'Hello test'" },
             { name: 'a', type: 'string[]' },
             { name: 'b', type: 'number[]' },
             { name: 'c', type: 'boolean[]' },
