@@ -53,7 +53,7 @@ function getDefinitionChild(child: DefinitionChild): string {
   return getTableRow([
     child[0],
     escapeMarkdown(child[1]),
-    `\`${escapeMarkdown(child[2])}\``,
+    getType(child[2]),
     child[3] ? '✓' : '',
     escapeMarkdown(child[4]),
   ])
@@ -62,8 +62,12 @@ function getDefinitionChild(child: DefinitionChild): string {
 function getDefinitionTypeAlias(definition: TypeAliasDefinition): string {
   return getTable([
     ...getTableHeader(['Description', 'Type']),
-    getTableRow([escapeMarkdown(definition.description), escapeMarkdown(definition.type)]),
+    getTableRow([escapeMarkdown(definition.description), getType(definition.type)]),
   ])
+}
+
+function getType(type: string): string {
+  return `\`${escapeMarkdown(type)}\``
 }
 
 function getTable(rows: string[]): string {

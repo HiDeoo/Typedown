@@ -149,7 +149,7 @@ export async function assertMarkdownDefinitions(
         components.push(
           '| Description | Type |',
           '| --- | --- |',
-          `| ${escapeMarkdown(assertion.description ?? '')} | ${escapeMarkdown(assertion.type)} |`
+          `| ${escapeMarkdown(assertion.description ?? '')} | \`${escapeMarkdown(assertion.type)}\` |`
         )
       }
 
