@@ -268,10 +268,8 @@ function getTemplateLiteralType(type: TypeDoc.JSONOutput.TemplateLiteralType): s
 
   components.push(
     ...type.tail.reduce<string[]>((acc, [tailType, tailString]) => {
-      const maybeReferenceType = tailType as SomeType
-
-      if (isReferenceType(maybeReferenceType)) {
-        acc.push(`$\{${maybeReferenceType.name}}${tailString}`)
+      if (isSomeType(tailType)) {
+        acc.push(`$\{${getType(tailType)}}${tailString}`)
       }
 
       return acc
@@ -449,6 +447,10 @@ function isObjectLiteralReflection(
   return (
     isDeclarationReflection(declarationReflectionOrType) && typeof declarationReflectionOrType.children !== 'undefined'
   )
+}
+
+function isSomeType(type: TypeDoc.JSONOutput.Type): type is SomeType {
+  return typeof (type as SomeType).type !== 'undefined'
 }
 
 type SomeType = TypeDoc.JSONOutput.SomeType | TypeDoc.JSONOutput.MappedType | TypeDoc.JSONOutput.TemplateLiteralType

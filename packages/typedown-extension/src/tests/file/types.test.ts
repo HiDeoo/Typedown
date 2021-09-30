@@ -225,6 +225,18 @@ describe('types', () => {
           },
         ])
       }))
+
+    it('should export a type alias of template literal union type', () =>
+      withFixture(fixture, async () => {
+        const markdown = await fileToMd(['TemplateLiteralUnionType'])
+
+        return assertMarkdownDefinitions(markdown, [
+          {
+            name: 'TemplateLiteralUnionType',
+            type: '`Test${TemplateLiteralHeads | TemplateLiteralTails}`',
+          },
+        ])
+      }))
   })
 
   describe('object type aliases', () => {
@@ -570,7 +582,7 @@ describe('types', () => {
             name: 'WithTemplateLiteralTypes',
             children: [
               { name: 'a', type: '`${LiteralType} 1, ${LiteralType} 2`' },
-              { name: 'b', type: 'string' },
+              { name: 'b', type: '`${TemplateLiteralHeads | TemplateLiteralTails}_test`' },
             ],
           },
         ])

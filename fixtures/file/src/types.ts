@@ -20,6 +20,7 @@ export type QueryType = typeof testConstA
 export type ObjectLiteralIntersection = { a1: string; a2?: number } & { b1: boolean }
 export type ObjectLiteralUnion = { a1: string; a2?: number } | { b1: boolean }
 export type TemplateLiteralType = `Hello ${LiteralType}`
+export type TemplateLiteralUnionType = `Test${TemplateLiteralHeads | TemplateLiteralTails}`
 
 /**
  * Description
@@ -172,7 +173,7 @@ export type WithNestedObjectLiteralTypes = {
 
 export type WithTemplateLiteralTypes = {
   a: `${LiteralType} 1, ${LiteralType} 2`
-  b: string
+  b: `${TemplateLiteralHeads | TemplateLiteralTails}_test`
 }
 
 /**
@@ -212,6 +213,9 @@ type TestTypeB = {
 type TestTypeC = number
 
 type TestTypeD = string & { da: boolean[] }
+
+type TemplateLiteralHeads = 'headA' | 'headB'
+type TemplateLiteralTails = 'tailA' | 'tailB'
 
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
 const testConstA: number = 1
