@@ -88,13 +88,17 @@ export interface WithFunctionTypes {
 }
 
 export interface WithStringIndexSignature {
-  a: true | false
-  [keyB: string]: boolean
+  [keyA: string]: boolean
+  b: true | false
 }
 
 export interface WithNumberIndexSignature {
-  a: number
-  [keyB: number]: string
+  [keyA: number]: string
+  b: number
+}
+
+export interface WithOnlyIndexSignature {
+  [key: string]: number[]
 }
 
 export interface WithReadOnlyTypes {

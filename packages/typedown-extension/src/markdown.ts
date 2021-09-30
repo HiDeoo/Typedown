@@ -21,7 +21,7 @@ export function getDefinitionsMarkdown(definitions: Definitions): string {
 }
 
 export function escapeMarkdown(markdown: string): string {
-  return markdown.replace(/\|/, '\\|')
+  return markdown.replace(/\|/g, '\\|')
 }
 
 export function formatMarkdown(markdown: string): string {
@@ -53,14 +53,21 @@ function getDefinitionChild(child: DefinitionChild): string {
   return getTableRow([
     child[0],
     escapeMarkdown(child[1]),
-    `\`${escapeMarkdown(child[2])}\``,
+    getType(child[2]),
     child[3] ? '✓' : '',
     escapeMarkdown(child[4]),
   ])
 }
 
 function getDefinitionTypeAlias(definition: TypeAliasDefinition): string {
-  return getTable([...getTableHeader(['Description', 'Type']), getTableRow([definition.description, definition.type])])
+  return getTable([
+    ...getTableHeader(['Description', 'Type']),
+    getTableRow([escapeMarkdown(definition.description), getType(definition.type)]),
+  ])
+}
+
+function getType(type: string): string {
+  return `\`${escapeMarkdown(type)}\``
 }
 
 function getTable(rows: string[]): string {

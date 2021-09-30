@@ -65,15 +65,15 @@ function getChildren(reflection: DeclarationReflection): DefinitionChild[] {
 
   const children: DefinitionChild[] = []
 
+  if (reflection.indexSignature) {
+    children.push(getChild(reflection.indexSignature))
+  }
+
   if (!reflection.children || reflection.children.length === 0) {
     return children
   }
 
   children.push(...reflection.children.map(getChild))
-
-  if (reflection.indexSignature) {
-    children.push(getChild(reflection.indexSignature))
-  }
 
   return children
 }

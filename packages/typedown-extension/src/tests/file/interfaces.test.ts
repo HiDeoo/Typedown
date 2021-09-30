@@ -196,8 +196,8 @@ describe('interfaces', () => {
         {
           name: 'WithStringIndexSignature',
           children: [
-            { name: 'a', type: 'boolean' },
-            { name: '[keyB: string]', type: 'boolean' },
+            { name: '[keyA: string]', type: 'boolean' },
+            { name: 'b', type: 'boolean' },
           ],
         },
       ])
@@ -211,9 +211,21 @@ describe('interfaces', () => {
         {
           name: 'WithNumberIndexSignature',
           children: [
-            { name: 'a', type: 'number' },
-            { name: '[keyB: number]', type: 'string' },
+            { name: '[keyA: number]', type: 'string' },
+            { name: 'b', type: 'number' },
           ],
+        },
+      ])
+    }))
+
+  it('should export an interface with only an index signature', () =>
+    withFixture(fixture, async () => {
+      const markdown = await fileToMd(['WithOnlyIndexSignature'])
+
+      return assertMarkdownDefinitions(markdown, [
+        {
+          name: 'WithOnlyIndexSignature',
+          children: [{ name: '[key: string]', type: 'number[]' }],
         },
       ])
     }))
