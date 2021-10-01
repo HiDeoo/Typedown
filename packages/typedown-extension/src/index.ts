@@ -108,7 +108,7 @@ async function getWorkspaceTSConfig(): Promise<Uri> {
   return tsConfig
 }
 
-async function exportDefinitions(definitions: Definitions) {
+export async function exportDefinitions(definitions: Definitions): Promise<string | undefined> {
   await window.withProgress(
     { location: ProgressLocation.Notification, title: 'Exporting definitions to Markdown' },
     async () => {
