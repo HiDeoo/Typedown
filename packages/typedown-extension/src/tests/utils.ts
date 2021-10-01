@@ -1,12 +1,12 @@
 import path from 'path'
 import Mocha from 'mocha'
 import { sync as glob } from 'glob'
-import { commands, env, WebviewPanel, window, workspace } from 'vscode'
+import { CancellationTokenSource, commands, env, WebviewPanel, window, workspace } from 'vscode'
 import sinon from 'sinon'
 import { Definitions, isMessage } from 'typedown-shared'
 import assert from 'assert'
 
-import { COMMANDS } from '..'
+import { COMMANDS, exportDefinitions } from '..'
 import { escapeMarkdown, formatMarkdown } from '../markdown'
 
 export function runSuite(testsRoot: string): Promise<void> {
@@ -35,83 +35,61 @@ export function runSuite(testsRoot: string): Promise<void> {
   })
 }
 
-export async function withFixture(fixtureFilePath: string, run: Run): Promise<void> {
+export async function getDefinitionsFromFixture(
+  fixtureFilePath: string,
+  getDefinitions: () => Promise<Definitions>
+): Promise<Definitions> {
   await commands.executeCommand('workbench.action.closeAllEditors')
 
   const document = await workspace.openTextDocument(path.join(__dirname, '../../fixtures', fixtureFilePath))
 
   await window.showTextDocument(document)
 
-  await run()
-
-  return commands.executeCommand('workbench.action.closeAllEditors')
+  return getDefinitions()
 }
 
-export async function fileToMd(exportedDefinitionNames?: string[]): Promise<string | undefined> {
-  let clipboardContent: string | undefined
+export async function fileToMd(): Promise<Definitions> {
+  let definitions: Definitions = []
 
-  sinon.replaceGetter(env, 'clipboard', () => ({
-    readText() {
-      return Promise.resolve('')
-    },
-    writeText(val: string) {
-      clipboardContent = val
+  const noop: unknown = () => undefined
+  let onDidReceiveMessage: (event: unknown) => unknown
+  let onDidDisposeListener: () => unknown
 
-      return Promise.resolve()
-    },
-  }))
-
-  if (exportedDefinitionNames) {
-    const noop: unknown = () => undefined
-    let onDidReceiveMessage: (event: unknown) => unknown
-    let onDidDisposeListener: () => unknown
-
-    sinon.stub(window, 'createWebviewPanel').callsFake(() => {
-      return {
-        dispose: noop,
-        onDidDispose(listener: () => unknown) {
-          onDidDisposeListener = listener
+  sinon.stub(window, 'createWebviewPanel').callsFake(() => {
+    return {
+      dispose: noop,
+      onDidDispose(listener: () => unknown) {
+        onDidDisposeListener = listener
+      },
+      reveal() {
+        onDidReceiveMessage({ type: 'init' })
+      },
+      visible: false,
+      webview: {
+        asWebviewUri: noop,
+        onDidReceiveMessage(listener: (event: unknown) => unknown) {
+          onDidReceiveMessage = listener
         },
-        reveal() {
-          onDidReceiveMessage({ type: 'init' })
+        postMessage(message: unknown): Thenable<boolean> {
+          if (!isMessage(message) || message.type !== 'import') {
+            return Promise.reject()
+          }
+
+          definitions = message.definitions
+
+          onDidDisposeListener()
+
+          return Promise.resolve(true)
         },
-        visible: false,
-        webview: {
-          asWebviewUri: noop,
-          onDidReceiveMessage(listener: (event: unknown) => unknown) {
-            onDidReceiveMessage = listener
-          },
-          postMessage(message: unknown): Thenable<boolean> {
-            if (!isMessage(message) || message.type !== 'import') {
-              return Promise.reject()
-            }
-
-            const definitions = exportedDefinitionNames.reduce<Definitions>((acc, definitionName) => {
-              const definition = message.definitions.find((definition) => definition.name === definitionName)
-
-              if (definition) {
-                acc.push(definition)
-              }
-
-              return acc
-            }, [])
-
-            onDidReceiveMessage({ type: 'export', definitions })
-
-            onDidDisposeListener()
-
-            return Promise.resolve(true)
-          },
-        },
-      } as WebviewPanel
-    })
-  }
+      },
+    } as WebviewPanel
+  })
 
   await commands.executeCommand(COMMANDS.fileToMd)
 
   sinon.restore()
 
-  return clipboardContent
+  return definitions
 }
 
 export function folderToMd(): Thenable<void> {
@@ -119,9 +97,46 @@ export function folderToMd(): Thenable<void> {
 }
 
 export async function assertMarkdownDefinitions(
-  markdown: string | undefined,
+  definitions: Definitions,
   assertions: DefinitionAssertion[]
 ): Promise<void> {
+  let markdown: string | undefined
+
+  sinon.stub(window, 'showInformationMessage')
+
+  sinon
+    .stub(window, 'withProgress')
+    .callsFake(
+      (_options: Parameters<typeof window.withProgress>[0], task: Parameters<typeof window.withProgress>[1]) => {
+        return task({ report: () => undefined }, new CancellationTokenSource().token)
+      }
+    )
+
+  sinon.replaceGetter(env, 'clipboard', () => ({
+    readText() {
+      return Promise.resolve('')
+    },
+    writeText(val: string) {
+      markdown = val
+
+      return Promise.resolve()
+    },
+  }))
+
+  const markdownDefinitions = assertions.reduce<Definitions>((acc, assertion) => {
+    const definition = definitions.find((definition) => definition.name === assertion.name)
+
+    if (definition) {
+      acc.push(definition)
+    }
+
+    return acc
+  }, [])
+
+  await exportDefinitions(markdownDefinitions)
+
+  sinon.restore()
+
   const assertionsMarkdown = assertions
     .map((assertion) => {
       const components = [
@@ -172,5 +187,3 @@ interface DefinitionAssertion {
   }[]
   type?: string
 }
-
-type Run = () => Promise<void>

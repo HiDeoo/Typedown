@@ -15,4 +15,5 @@ export type WithImportedTypes = {
 export interface WithImportedInterfaces extends WithArrayTypes {
   d?: WithLiteralTypes
   e: WithGenerics<string, number[]>
+  f: `Hello ${LiteralType}`
 }

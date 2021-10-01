@@ -19,6 +19,8 @@ export type AssertsPredicateType = (a: string | number) => asserts a is string
 export type QueryType = typeof testConstA
 export type ObjectLiteralIntersection = { a1: string; a2?: number } & { b1: boolean }
 export type ObjectLiteralUnion = { a1: string; a2?: number } | { b1: boolean }
+export type TemplateLiteralType = `Hello ${LiteralType}`
+export type TemplateLiteralUnionType = `Test${TemplateLiteralHeads | TemplateLiteralTails}`
 
 /**
  * Description
@@ -169,6 +171,11 @@ export type WithNestedObjectLiteralTypes = {
   c: { c1: { c1a: boolean; c1b: number[] }; c2: number }
 }
 
+export type WithTemplateLiteralTypes = {
+  a: `${LiteralType} 1, ${LiteralType} 2`
+  b: `${TemplateLiteralHeads | TemplateLiteralTails}_test`
+}
+
 /**
  * Description
  */
@@ -206,6 +213,9 @@ type TestTypeB = {
 type TestTypeC = number
 
 type TestTypeD = string & { da: boolean[] }
+
+type TemplateLiteralHeads = 'headA' | 'headB'
+type TemplateLiteralTails = 'tailA' | 'tailB'
 
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
 const testConstA: number = 1

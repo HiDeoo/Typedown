@@ -1,46 +1,40 @@
-import { assertMarkdownDefinitions, fileToMd, withFixture } from '../utils'
+import type { Definitions } from 'typedown-shared'
+import { assertMarkdownDefinitions, fileToMd, getDefinitionsFromFixture } from '../utils'
 
-const fixture = 'file/src/imports.ts'
+describe('imports', () => {
+  let definitions: Definitions = []
 
-describe.only('imports', () => {
+  before(async () => {
+    definitions = await getDefinitionsFromFixture('file/src/imports.ts', fileToMd)
+  })
+
   it('should export a type alias of imported type', () =>
-    withFixture(fixture, async () => {
-      const markdown = await fileToMd(['ImportedType'])
-
-      return assertMarkdownDefinitions(markdown, [{ name: 'ImportedType', type: 'IntrinsicType' }])
-    }))
+    assertMarkdownDefinitions(definitions, [{ name: 'ImportedType', type: 'IntrinsicType' }]))
 
   it('should export an object type alias with imported types', () =>
-    withFixture(fixture, async () => {
-      const markdown = await fileToMd(['WithImportedTypes'])
-
-      return assertMarkdownDefinitions(markdown, [
-        {
-          name: 'WithImportedTypes',
-          children: [
-            { name: 'a', type: 'WithIntrinsicTypes' },
-            { name: 'b', type: 'QueryType', optional: true },
-            { name: 'c', type: 'ReadonlyArrayType | LiteralType' },
-          ],
-        },
-      ])
-    }))
+    assertMarkdownDefinitions(definitions, [
+      {
+        name: 'WithImportedTypes',
+        children: [
+          { name: 'a', type: 'WithIntrinsicTypes' },
+          { name: 'b', type: 'QueryType', optional: true },
+          { name: 'c', type: 'ReadonlyArrayType | LiteralType' },
+        ],
+      },
+    ]))
 
   it('should export an interface with imported interfaces', () =>
-    withFixture(fixture, async () => {
-      const markdown = await fileToMd(['WithImportedInterfaces'])
-
-      return assertMarkdownDefinitions(markdown, [
-        {
-          name: 'WithImportedInterfaces',
-          children: [
-            { name: 'd', type: 'WithLiteralTypes', optional: true },
-            { name: 'e', type: 'WithGenerics<string, number[]>' },
-            { name: 'a', type: 'string[]' },
-            { name: 'b', type: 'number[]' },
-            { name: 'c', type: 'boolean[]' },
-          ],
-        },
-      ])
-    }))
+    assertMarkdownDefinitions(definitions, [
+      {
+        name: 'WithImportedInterfaces',
+        children: [
+          { name: 'd', type: 'WithLiteralTypes', optional: true },
+          { name: 'e', type: 'WithGenerics<string, number[]>' },
+          { name: 'f', type: "'Hello test'" },
+          { name: 'a', type: 'string[]' },
+          { name: 'b', type: 'number[]' },
+          { name: 'c', type: 'boolean[]' },
+        ],
+      },
+    ]))
 })

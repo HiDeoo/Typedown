@@ -152,6 +152,8 @@ function getType(reflectionOrType: DeclarationReflection | SomeType): string {
       return getPredicateType(type)
     } else if (isQueryType(type)) {
       return getQueryType(type)
+    } else if (isTemplateLiteralType(type)) {
+      return getTemplateLiteralType(type)
     }
   } else if (isDeclarationReflection(reflectionOrType)) {
     const reflection = reflectionOrType
@@ -259,6 +261,22 @@ function getPredicateType(type: TypeDoc.JSONOutput.PredicateType): string {
 
 function getQueryType(type: TypeDoc.JSONOutput.QueryType): string {
   return `typeof ${getType(type.queryType)}`
+}
+
+function getTemplateLiteralType(type: TypeDoc.JSONOutput.TemplateLiteralType): string {
+  const components = [type.head]
+
+  components.push(
+    ...type.tail.reduce<string[]>((acc, [tailType, tailString]) => {
+      if (isSomeType(tailType)) {
+        acc.push(`$\{${getType(tailType)}}${tailString}`)
+      }
+
+      return acc
+    }, [])
+  )
+
+  return `\`${components.join('')}\``
 }
 
 function getTypeOperatorType(type: TypeDoc.JSONOutput.TypeOperatorType): string {
@@ -396,6 +414,10 @@ function isQueryType(someType: SomeType): someType is TypeDoc.JSONOutput.QueryTy
   return someType.type === 'query'
 }
 
+function isTemplateLiteralType(someType: SomeType): someType is TypeDoc.JSONOutput.TemplateLiteralType {
+  return someType.type === 'template-literal'
+}
+
 function isInterface(reflection: DeclarationReflection): boolean {
   return reflection.kind === TypeDoc.ReflectionKind.Interface
 }
@@ -427,7 +449,11 @@ function isObjectLiteralReflection(
   )
 }
 
-type SomeType = TypeDoc.JSONOutput.SomeType | TypeDoc.JSONOutput.MappedType
+function isSomeType(type: TypeDoc.JSONOutput.Type): type is SomeType {
+  return typeof (type as SomeType).type !== 'undefined'
+}
+
+type SomeType = TypeDoc.JSONOutput.SomeType | TypeDoc.JSONOutput.MappedType | TypeDoc.JSONOutput.TemplateLiteralType
 
 type DeclarationOrSignatureReflection = DeclarationReflection | TypeDoc.JSONOutput.SignatureReflection
 
