@@ -1,7 +1,7 @@
 import type { Definitions } from 'typedown-shared'
 import { assertMarkdownDefinitions, fileToMd, getDefinitionsFromFixture } from '../utils'
 
-describe.only('mixed', () => {
+describe('mixed', () => {
   let definitions: Definitions = []
 
   before(async () => {
