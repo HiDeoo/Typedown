@@ -1,6 +1,6 @@
 import assert from 'assert'
 import sinon from 'sinon'
-import { window } from 'vscode'
+import { Uri, window } from 'vscode'
 
 import { fileToMd, folderToMd, getDefinitionsFromFixture } from '../utils'
 
@@ -41,7 +41,7 @@ describe('no ts-config', () => {
   })
 
   it('should error for a folder in a workspace without a TSConfig resolved', async () => {
-    await folderToMd()
+    await folderToMd(Uri.file(__dirname))
 
     assertNoTSConfigErrors()
   })

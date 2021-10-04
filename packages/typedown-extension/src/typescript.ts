@@ -92,7 +92,7 @@ function isValidDeclarationReflection(reflection: DeclarationReflection): boolea
 }
 
 function isValidModuleReflection(reflection: TypeDoc.JSONOutput.ProjectReflection): reflection is Schema {
-  return isValidDeclarationReflection(reflection) && reflection.kind === TypeDoc.ReflectionKind.Module
+  return reflection.kind === TypeDoc.ReflectionKind.Module
 }
 
 interface Schema extends TypeDoc.JSONOutput.ProjectReflection {

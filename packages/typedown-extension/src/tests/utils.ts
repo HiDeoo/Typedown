@@ -1,7 +1,7 @@
 import path from 'path'
 import Mocha from 'mocha'
 import { sync as glob } from 'glob'
-import { CancellationTokenSource, commands, env, WebviewPanel, window, workspace } from 'vscode'
+import { CancellationTokenSource, commands, env, Uri, WebviewPanel, window, workspace } from 'vscode'
 import sinon from 'sinon'
 import { Definitions, isMessage } from 'typedown-shared'
 import assert from 'assert'
@@ -41,16 +41,51 @@ export async function getDefinitionsFromFixture(
 ): Promise<Definitions> {
   await commands.executeCommand('workbench.action.closeAllEditors')
 
-  const document = await workspace.openTextDocument(path.join(__dirname, '../../fixtures', fixtureFilePath))
+  const document = await workspace.openTextDocument(getFixturesPath(fixtureFilePath))
 
   await window.showTextDocument(document)
 
   return getDefinitions()
 }
 
-export async function fileToMd(): Promise<Definitions> {
-  let definitions: Definitions = []
+export async function getDefinitionsFromFixtures(
+  fixturesFolderPath: string,
+  getDefinitions: (folderUri: Uri) => Promise<Definitions>
+): Promise<Definitions> {
+  await commands.executeCommand('workbench.action.closeAllEditors')
 
+  return getDefinitions(Uri.file(getFixturesPath(fixturesFolderPath)))
+}
+
+export async function fileToMd(): Promise<Definitions> {
+  const definitions: Definitions = []
+
+  mockWebview(definitions)
+
+  await commands.executeCommand(COMMANDS.fileToMd)
+
+  sinon.restore()
+
+  return definitions
+}
+
+export async function folderToMd(folderUri: Uri): Promise<Definitions> {
+  const definitions: Definitions = []
+
+  sinon.stub(window, 'showQuickPick').callsFake(() => {
+    return Promise.resolve({ label: folderUri.fsPath, absolutePath: folderUri })
+  })
+
+  mockWebview(definitions)
+
+  await commands.executeCommand(COMMANDS.folderToMd)
+
+  sinon.restore()
+
+  return definitions
+}
+
+function mockWebview(definitions: Definitions) {
   const noop: unknown = () => undefined
   let onDidReceiveMessage: (event: unknown) => unknown
   let onDidDisposeListener: () => unknown
@@ -75,7 +110,7 @@ export async function fileToMd(): Promise<Definitions> {
             return Promise.reject()
           }
 
-          definitions = message.definitions
+          definitions.push(...message.definitions)
 
           onDidDisposeListener()
 
@@ -84,16 +119,10 @@ export async function fileToMd(): Promise<Definitions> {
       },
     } as WebviewPanel
   })
-
-  await commands.executeCommand(COMMANDS.fileToMd)
-
-  sinon.restore()
-
-  return definitions
 }
 
-export function folderToMd(): Thenable<void> {
-  return commands.executeCommand(COMMANDS.folderToMd)
+function getFixturesPath(fixturesPath: string): string {
+  return path.join(__dirname, '../../fixtures', fixturesPath)
 }
 
 export async function assertMarkdownDefinitions(

@@ -24,6 +24,19 @@
       "preLaunchTask": "npm: pretest"
     },
     {
+      "name": "Test Extension (folder)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "${workspaceFolder}/fixtures/folder",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/dist/tests/folder",
+        "--disable-extensions"
+      ],
+      "outFiles": ["${workspaceFolder}/dist/tests/**/*.js"],
+      "preLaunchTask": "npm: pretest"
+    },
+    {
       "name": "Test Extension (no-tsconfig)",
       "type": "extensionHost",
       "request": "launch",
