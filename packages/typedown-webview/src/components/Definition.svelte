@@ -1,8 +1,17 @@
 <script lang="ts">
-  import type { DefinitionIdentifier } from 'typedown-shared'
+  import {
+    DefinitionIdentifier,
+    isInterfaceDefinition,
+    isObjectTypeAliasDefinition,
+    isTypeAliasDefinition,
+  } from 'typedown-shared'
 
   import { definitions } from '../stores/definitions'
   import Checkbox from './Checkbox.svelte'
+  import Table from './Table.svelte'
+  import DefinitionChildren from './DefinitionChildren.svelte'
+  import DefinitionHeader from './DefinitionHeader.svelte'
+  import DefinitionTypeAlias from './DefinitionTypeAlias.svelte'
 
   export let identifier: DefinitionIdentifier
 
@@ -21,9 +30,16 @@
       <div class="definitionIndicator" />
     {/if}
     <strong>{definition.name}</strong>
-    <Checkbox checked={exported} on:change={onChangeExported}
-      ><div style="white-space: pre;">{JSON.stringify(definition, null, '\t')}</div></Checkbox
-    >
+    <Checkbox checked={exported} on:change={onChangeExported}>
+      <Table>
+        <DefinitionHeader {definition} />
+        {#if isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)}
+          <DefinitionChildren children={definition.children} />
+        {:else if isTypeAliasDefinition(definition)}
+          <DefinitionTypeAlias {definition} />
+        {/if}
+      </Table>
+    </Checkbox>
   </div>
 {/if}
 
