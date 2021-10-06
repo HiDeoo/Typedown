@@ -74,7 +74,11 @@
   }
 
   strong {
+    display: block;
     font-size: 1.1em;
+    overflow: hidden;
     position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>
