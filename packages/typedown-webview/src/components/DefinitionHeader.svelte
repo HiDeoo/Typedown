@@ -30,11 +30,11 @@
   }
 
   th:nth-child(3) {
-    width: 19%;
+    width: 18%;
   }
 
   th:nth-child(4) {
-    width: 7%;
+    width: 8%;
   }
 
   th:nth-child(5) {
