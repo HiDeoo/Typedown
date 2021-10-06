@@ -10,7 +10,11 @@
       <td>{child[0]}</td>
       <td>{child[1]}</td>
       <td>{child[2]}</td>
-      <td>{child[3] ? '✓' : ''}</td>
+      <td>
+        {#if child[3]}
+          <i class="codicon codicon-check" />
+        {/if}
+      </td>
       <td>{child[4]}</td>
     </tr>
   {/each}
