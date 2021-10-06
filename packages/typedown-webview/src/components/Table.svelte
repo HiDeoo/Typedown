@@ -29,5 +29,6 @@
   table :global(td) {
     background-color: var(--vscode-list-hoverBackground);
     position: relative;
+    vertical-align: text-top;
   }
 </style>
