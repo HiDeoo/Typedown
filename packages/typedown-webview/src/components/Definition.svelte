@@ -17,6 +17,10 @@
 
   $: definition = $definitions.byId[identifier]
   $: exported = definition?.exported === true
+  $: hasDescription =
+    definition &&
+    (isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)) &&
+    definition.description.length > 0
 
   function onChangeExported() {
     definitions.toggle(identifier)
@@ -30,6 +34,9 @@
       <div class="definitionIndicator" />
     {/if}
     <strong>{definition.name}</strong>
+    {#if hasDescription}
+      <div class="description">{definition.description}</div>
+    {/if}
     <Checkbox checked={exported} on:change={onChangeExported}>
       <Table>
         <DefinitionHeader {definition} />
@@ -80,5 +87,11 @@
     position: relative;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .description {
+    margin-bottom: 12px;
+    margin-top: 6px;
+    position: relative;
   }
 </style>
