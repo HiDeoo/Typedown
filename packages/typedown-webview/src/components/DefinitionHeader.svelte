@@ -30,11 +30,11 @@
   }
 
   th:nth-child(3) {
-    width: 25%;
+    width: 19%;
   }
 
   th:nth-child(4) {
-    width: 1%;
+    width: 7%;
   }
 
   th:nth-child(5) {
@@ -42,10 +42,10 @@
   }
 
   tr.typeAlias th:nth-child(1) {
-    width: 55%;
+    width: 59%;
   }
 
   tr.typeAlias th:nth-child(2) {
-    width: 45%;
+    width: 41%;
   }
 </style>

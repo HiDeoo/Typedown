@@ -5,6 +5,7 @@
 <style>
   table {
     border-collapse: collapse;
+    table-layout: fixed;
     width: 100%;
   }
 
@@ -17,6 +18,7 @@
   table :global(th),
   table :global(td) {
     padding: 4px 6px;
+    overflow-wrap: break-word;
   }
 
   table :global(th) {
