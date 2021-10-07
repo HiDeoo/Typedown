@@ -27,6 +27,11 @@ export type TemplateLiteralUnionType = `Test${TemplateLiteralHeads | TemplateLit
  */
 export type DescriptionType = number[]
 
+/**
+ * @description Description
+ */
+export type DescriptionTagType = boolean
+
 export type WithIntrinsicTypes = {
   a: boolean
   b: string
@@ -96,8 +101,9 @@ export type WithPropertyDescriptions = {
   // Description B
   b: string
   /**
-   * Description C
+   * Description C1
    * multiline.
+   * @description Description C2
    */
   c: boolean
   /**
@@ -106,6 +112,10 @@ export type WithPropertyDescriptions = {
    * Multiline
    */
   d: boolean[]
+  /**
+   * @description Description E
+   */
+  e: number
 }
 
 export type WithFunctionTypes = {
@@ -186,6 +196,21 @@ export type WithDescriptions = {
    * Description C
    */
   c: number[]
+}
+
+/**
+ * @description Description
+ */
+export type WithDescriptionTags = {
+  /**
+   * @description Description A
+   */
+  a: boolean
+  /**
+   * Description B1
+   * @description Description B2
+   */
+  b: string
 }
 
 export type WithMappedType<T> = {

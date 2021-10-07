@@ -83,6 +83,15 @@ describe('types', () => {
         },
       ]))
 
+    it('should export a type alias with a description tag', () =>
+      assertMarkdownDefinitions(definitions, [
+        {
+          name: 'DescriptionTagType',
+          description: 'Description',
+          type: 'boolean',
+        },
+      ]))
+
     it('should export a type alias of conditional type', () =>
       assertMarkdownDefinitions(definitions, [
         {
@@ -263,8 +272,9 @@ describe('types', () => {
           children: [
             { name: 'a', type: 'number[]', description: 'Description A' },
             { name: 'b', type: 'string' },
-            { name: 'c', type: 'boolean', description: 'Description C multiline.' },
+            { name: 'c', type: 'boolean', description: 'Description C1 multiline. Description C2' },
             { name: 'd', type: 'boolean[]', description: 'Description D' },
+            { name: 'e', type: 'number', description: 'Description E' },
           ],
         },
       ]))
@@ -418,6 +428,18 @@ describe('types', () => {
             { name: 'a', type: 'boolean' },
             { name: 'b', type: 'string' },
             { name: 'c', type: 'number[]', description: 'Description C' },
+          ],
+        },
+      ]))
+
+    it('should export an object type alias with a description tag', () =>
+      assertMarkdownDefinitions(definitions, [
+        {
+          name: 'WithDescriptionTags',
+          description: 'Description',
+          children: [
+            { name: 'a', type: 'boolean', description: 'Description A' },
+            { name: 'b', type: 'string', description: 'Description B1 Description B2' },
           ],
         },
       ]))
