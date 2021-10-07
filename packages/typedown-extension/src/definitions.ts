@@ -51,9 +51,16 @@ function getName(reflection: DeclarationReflection): string {
 }
 
 function getDescription(reflection: DeclarationReflection): string {
-  const description = reflection.comment?.shortText ?? ''
+  let description = reflection.comment?.shortText ?? ''
+  description = description.replace(/(?:\r\n?|\n)/, ' ')
 
-  return description.replace(/(?:\r\n?|\n)/, ' ')
+  const descriptionTag = getCommentTag(reflection, 'description')
+
+  if (descriptionTag) {
+    description = description.concat(` ${descriptionTag}`)
+  }
+
+  return description.trim()
 }
 
 function getChildren(reflection: DeclarationReflection): DefinitionChild[] {
@@ -100,14 +107,14 @@ function getChildName(reflection: DeclarationOrSignatureReflection): string {
   return reflection.name
 }
 
+function getCommentTag(reflection: DeclarationReflection, tagName: string): string | undefined {
+  const content = reflection.comment?.tags?.find(({ tag }) => tag === tagName)
+
+  return content?.text.replace(/(?:\r\n?|\n)+$/, '')
+}
+
 function getChildDefaultValue(reflection: DeclarationReflection): string {
-  const defaultTag = reflection.comment?.tags?.find(({ tag }) => tag === 'default')
-
-  if (!defaultTag) {
-    return ''
-  }
-
-  return defaultTag.text.replace(/(?:\r\n?|\n)+$/, '')
+  return getCommentTag(reflection, 'default') ?? ''
 }
 
 function getType(reflectionOrType: DeclarationReflection | SomeType): string {

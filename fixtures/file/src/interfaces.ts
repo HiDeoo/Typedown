@@ -67,8 +67,9 @@ export interface WithPropertyDescriptions {
   // Description B
   b: number
   /**
-   * Description C
+   * Description C1
    * multiline.
+   * @description Description C2
    */
   c: boolean
   /**
@@ -77,6 +78,10 @@ export interface WithPropertyDescriptions {
    * Multiline
    */
   d: string[]
+  /**
+   * @description Description E
+   */
+  e: number
 }
 
 export interface WithFunctionTypes {
@@ -174,6 +179,21 @@ export interface WithDescriptions {
    */
   b: number
   c: boolean
+}
+
+/**
+ * @description Description
+ */
+export interface WithDescriptionTags {
+  /**
+   * @description Description A
+   */
+  a: string
+  /**
+   * Description B1
+   * @description Description B2
+   */
+  b: number
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

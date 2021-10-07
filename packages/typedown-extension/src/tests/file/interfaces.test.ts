@@ -124,8 +124,9 @@ describe('interfaces', () => {
         children: [
           { name: 'a', type: 'string', description: 'Description A' },
           { name: 'b', type: 'number' },
-          { name: 'c', type: 'boolean', description: 'Description C multiline.' },
+          { name: 'c', type: 'boolean', description: 'Description C1 multiline. Description C2' },
           { name: 'd', type: 'string[]', description: 'Description D' },
+          { name: 'e', type: 'number', description: 'Description E' },
         ],
       },
     ]))
@@ -325,6 +326,18 @@ describe('interfaces', () => {
           { name: 'a', type: 'string' },
           { name: 'b', type: 'number', description: 'Description B' },
           { name: 'c', type: 'boolean' },
+        ],
+      },
+    ]))
+
+  it('should export an interface with a description tag', () =>
+    assertMarkdownDefinitions(definitions, [
+      {
+        name: 'WithDescriptionTags',
+        description: 'Description',
+        children: [
+          { name: 'a', type: 'string', description: 'Description A' },
+          { name: 'b', type: 'number', description: 'Description B1 Description B2' },
         ],
       },
     ]))
