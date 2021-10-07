@@ -44,7 +44,7 @@ function getDefinitionDescription(definition: Definition): string {
 
 function getDefinitionChildren(children: DefinitionChild[]): string {
   return getTable([
-    ...getTableHeader(['Name', 'Description', 'Type', 'Optional', 'Default value']),
+    ...getTableHeader(['Name', 'Description', 'Type', { title: 'Optional', centered: true }, 'Default value']),
     ...children.map(getDefinitionChild),
   ])
 }
@@ -74,10 +74,22 @@ function getTable(rows: string[]): string {
   return rows.join('\n')
 }
 
-function getTableHeader(headers: string[]): string[] {
-  return [getTableRow(headers), getTableRow(new Array(headers.length).fill('---'))]
+function getTableHeader(headers: TableHeader[]): string[] {
+  const titles: string[] = []
+  const separators: string[] = []
+
+  headers.forEach((header) => {
+    const isStringHeader = typeof header === 'string'
+
+    titles.push(isStringHeader ? header : header.title)
+    separators.push(!isStringHeader && header.centered ? ':---:' : '---')
+  })
+
+  return [getTableRow(titles), getTableRow(separators)]
 }
 
 function getTableRow(columns: string[]): string {
   return `| ${columns.join('|')} |`
 }
+
+type TableHeader = string | { title: string; centered: boolean }

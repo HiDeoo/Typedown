@@ -176,7 +176,7 @@ export async function assertMarkdownDefinitions(
       if (assertion.children) {
         components.push(
           '| Name | Description | Type | Optional | Default value |',
-          '| --- | --- | --- | --- | --- |',
+          '| --- | --- | --- | :---: | --- |',
           ...assertion.children.map((child) => {
             const childComponents = [
               child.name,
