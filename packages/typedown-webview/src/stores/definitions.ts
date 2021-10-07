@@ -39,6 +39,19 @@ function createDefinitions() {
         return currentValue
       })
     },
+    selectAll(selected: boolean) {
+      store.update((currentValue) => {
+        currentValue.allIds.forEach((identifier) => {
+          const definition = currentValue.byId[identifier]
+
+          if (definition) {
+            definition.exported = selected
+          }
+        })
+
+        return currentValue
+      })
+    },
     getExportedDefinitions(): Definitions {
       const definitions = get(store)
 

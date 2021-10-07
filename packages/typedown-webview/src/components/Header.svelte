@@ -7,6 +7,11 @@
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
+  $: selectAllLabel = exportedCount === 0 ? 'Select All' : 'Clear All'
+
+  function onClickSelectAll() {
+    definitions.selectAll(exportedCount === 0)
+  }
 
   function onClickExport() {
     vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
@@ -17,7 +22,10 @@
   <header>
     <div class="details">
       {#if showDetails}
-        <span>{exportedCount} definition{exportedCount !== 1 ? 's' : ''} selected</span>
+        {exportedCount} definition{exportedCount !== 1 ? 's' : ''} selected (<button
+          type="button"
+          on:click={onClickSelectAll}>{selectAllLabel}</button
+        >)
       {/if}
     </div>
     <div>
@@ -39,5 +47,25 @@
 
   .details {
     color: var(--vscode-tab-inactiveForeground);
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    outline: inherit;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  button:hover {
+    text-decoration: none;
+  }
+
+  button:focus-visible {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: 4px;
   }
 </style>
