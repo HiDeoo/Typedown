@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { DefinitionChild } from 'typedown-shared'
 
+  import Code from './Code.svelte'
+
   export let children: DefinitionChild[]
 </script>
 
@@ -9,7 +11,7 @@
     <tr>
       <td>{child[0]}</td>
       <td>{child[1]}</td>
-      <td>{child[2]}</td>
+      <td><Code>{child[2]}</Code></td>
       <td>
         {#if child[3]}
           <i class="codicon codicon-check" />

@@ -3,8 +3,8 @@
 </script>
 
 <label>
-  <div><slot /></div>
   <input type="checkbox" {checked} on:change />
+  <div><slot /></div>
   <span class="checkmark" />
 </label>
 

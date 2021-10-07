@@ -17,6 +17,7 @@
 
   table :global(th),
   table :global(td) {
+    height: 25px;
     padding: 4px 6px;
     overflow-wrap: break-word;
   }
@@ -29,6 +30,6 @@
   table :global(td) {
     background-color: var(--vscode-list-hoverBackground);
     position: relative;
-    vertical-align: text-top;
+    vertical-align: top;
   }
 </style>
