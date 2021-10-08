@@ -3,15 +3,17 @@
 
   import Section from './Section.svelte'
   import Button from './Button.svelte'
+  import Input from './Input.svelte'
   import { definitions } from '../stores/definitions'
   import { filter } from '../stores/filters'
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
-  $: selectAllLabel = exportedCount === 0 ? 'Select All' : 'Clear All'
+  $: hasExported = exportedCount === 0
+  $: selectAllLabel = hasExported ? 'Select All' : 'Clear All'
 
   function onClickSelectAll() {
-    definitions.selectAll(exportedCount === 0)
+    definitions.selectAll(hasExported)
   }
 
   function onClickExport() {
@@ -27,11 +29,11 @@
           type="button"
           on:click={onClickSelectAll}>{selectAllLabel}</button
         >)
-        <input type="text" bind:value={$filter} />
       {/if}
     </div>
     <div>
-      <Button on:click={onClickExport} disabled={exportedCount === 0}>Export</Button>
+      <Input bind:value={$filter} disabled={!showDetails} placeholder="Filter" />
+      <Button on:click={onClickExport} disabled={hasExported}>Export</Button>
     </div>
   </header>
 </Section>
