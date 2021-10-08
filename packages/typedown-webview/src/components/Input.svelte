@@ -20,7 +20,7 @@
 
 <div>
   <input bind:this={input} type="text" bind:value {disabled} {placeholder} aria-label={placeholder} />
-  <button on:click={onReset} disabled={value.length === 0} aria-label="Clear filter">
+  <button on:click={onReset} disabled={value.length === 0} title="Clear filter" aria-label="Clear filter">
     <i class="codicon codicon-clear-all" />
   </button>
 </div>
