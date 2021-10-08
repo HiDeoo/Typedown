@@ -4,6 +4,7 @@
   import Section from './Section.svelte'
   import Button from './Button.svelte'
   import { definitions } from '../stores/definitions'
+  import { filter } from '../stores/filters'
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
@@ -26,6 +27,7 @@
           type="button"
           on:click={onClickSelectAll}>{selectAllLabel}</button
         >)
+        <input type="text" bind:value={$filter} />
       {/if}
     </div>
     <div>
