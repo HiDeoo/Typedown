@@ -19,6 +19,10 @@
   function onClickExport() {
     vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
   }
+
+  function onResetFilter() {
+    filter.reset()
+  }
 </script>
 
 <Section sticky class="header">
@@ -31,8 +35,8 @@
         >)
       {/if}
     </div>
-    <div>
-      <Input bind:value={$filter} disabled={!showDetails} placeholder="Filter" />
+    <div class="controls">
+      <Input bind:value={$filter} on:reset={onResetFilter} disabled={!showDetails} placeholder="Filter" />
       <Button on:click={onClickExport} disabled={hasExported}>Export</Button>
     </div>
   </header>
@@ -51,6 +55,10 @@
 
   .details {
     color: var(--vscode-tab-inactiveForeground);
+  }
+
+  .controls {
+    display: flex;
   }
 
   button {
