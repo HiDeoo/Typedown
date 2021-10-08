@@ -43,7 +43,7 @@
     color: var(--vscode-input-placeholderForeground);
   }
 
-  input:focus {
+  input:focus-visible {
     outline: 1px solid var(--vscode-focusBorder);
   }
 
@@ -59,23 +59,28 @@
   button {
     background: none;
     border: none;
+    border-radius: 2px;
     color: inherit;
     cursor: pointer;
     font: inherit;
     outline: inherit;
-    padding: 0;
+    padding: 2px 2px 1px 2px;
     position: absolute;
     right: 10px;
     top: 50%;
-    transform: translateY(calc(-50% + 1px));
+    transform: translateY(-50%);
   }
 
   button:disabled {
     opacity: 0.2;
   }
 
-  button:focus {
+  button:focus-visible {
     outline: 1px solid var(--vscode-focusBorder);
     outline-offset: 1px;
+  }
+
+  button:hover:enabled {
+    background-color: var(--vscode-button-secondaryBackground);
   }
 </style>
