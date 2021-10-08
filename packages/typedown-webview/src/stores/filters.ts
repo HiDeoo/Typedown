@@ -1,9 +1,25 @@
-import { derived, Readable, writable } from 'svelte/store'
+import { derived, Readable } from 'svelte/store'
 import type { DefinitionIdentifier } from 'typedown-shared'
 
 import { definitions } from './definitions'
+import { persistentWritable } from '../lib/persistentWritable'
 
-export const filter = writable('')
+const filterInitialState = ''
+
+function createFilter() {
+  const store = persistentWritable<string>('filter', filterInitialState)
+
+  return {
+    persist: store.persist,
+    subscribe: store.subscribe,
+    set: store.set,
+    reset() {
+      store.set(filterInitialState)
+    },
+  }
+}
+
+export const filter = createFilter()
 
 export const isFiltering = derived(filter, ($filter) => $filter.length > 0)
 
