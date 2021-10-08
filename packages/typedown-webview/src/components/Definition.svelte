@@ -37,7 +37,7 @@
     {#if hasDescription}
       <div class="description">{definition.description}</div>
     {/if}
-    <Checkbox checked={exported} on:change={onChangeExported}>
+    <Checkbox checked={exported} on:change={onChangeExported} label={definition.name}>
       <Table>
         <DefinitionHeader {definition} />
         {#if isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)}

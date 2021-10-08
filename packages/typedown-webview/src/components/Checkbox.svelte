@@ -1,9 +1,10 @@
 <script lang="ts">
   export let checked: boolean
+  export let label: string
 </script>
 
 <label>
-  <input type="checkbox" {checked} on:change />
+  <input type="checkbox" {checked} on:change aria-checked={checked} aria-required={false} aria-label={label} />
   <div><slot /></div>
   <span class="checkmark" />
 </label>

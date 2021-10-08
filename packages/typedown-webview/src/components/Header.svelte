@@ -36,7 +36,7 @@
 
 <style>
   :global(.header) {
-    box-shadow: 0 1px 4px 0 rgb(0 0 0 / 45%);
+    box-shadow: 0 1px 4px 0 var(--vscode-widget-shadow);
   }
 
   header {

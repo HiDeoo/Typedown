@@ -12,7 +12,7 @@
   table,
   table :global(th),
   table :global(td) {
-    border: 1px solid var(--vscode-checkbox-border);
+    border: 1px solid var(--vscode-panel-border);
   }
 
   table :global(th),
