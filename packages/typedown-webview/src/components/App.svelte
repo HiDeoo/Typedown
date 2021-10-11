@@ -52,6 +52,7 @@
 <style>
   :root {
     cursor: default;
+    user-select: none;
   }
 
   :global(body) {
