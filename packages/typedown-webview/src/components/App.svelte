@@ -5,11 +5,13 @@
   import Header from './Header.svelte'
   import Definitions from './Definitions.svelte'
   import { definitions } from '../stores/definitions'
+  import { filter } from '../stores/filters'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
     const didRestoreDefinitions = definitions.persist()
+    filter.persist()
 
     if (!didRestoreDefinitions) {
       vscode.postMessage<WebviewMessageInit>({ type: 'init' })
@@ -29,6 +31,7 @@
         }
         case 'reset': {
           definitions.reset()
+          filter.reset()
           break
         }
         default: {
@@ -49,6 +52,7 @@
 <style>
   :root {
     cursor: default;
+    user-select: none;
   }
 
   :global(body) {

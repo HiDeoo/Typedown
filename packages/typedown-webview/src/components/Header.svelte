@@ -3,18 +3,25 @@
 
   import Section from './Section.svelte'
   import Button from './Button.svelte'
+  import Input from './Input.svelte'
   import { definitions } from '../stores/definitions'
+  import { filter } from '../stores/filters'
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
-  $: selectAllLabel = exportedCount === 0 ? 'Select All' : 'Clear All'
+  $: hasExported = exportedCount === 0
+  $: selectAllLabel = hasExported ? 'Select All' : 'Clear All'
 
   function onClickSelectAll() {
-    definitions.selectAll(exportedCount === 0)
+    definitions.selectAll(hasExported)
   }
 
   function onClickExport() {
     vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
+  }
+
+  function onResetFilter() {
+    filter.reset()
   }
 </script>
 
@@ -28,8 +35,9 @@
         >)
       {/if}
     </div>
-    <div>
-      <Button on:click={onClickExport} disabled={exportedCount === 0}>Export</Button>
+    <div class="controls">
+      <Input bind:value={$filter} on:reset={onResetFilter} disabled={!showDetails} placeholder="Filter" />
+      <Button primary on:click={onClickExport} disabled={hasExported}>Export</Button>
     </div>
   </header>
 </Section>
@@ -47,6 +55,14 @@
 
   .details {
     color: var(--vscode-tab-inactiveForeground);
+    margin-right: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .controls {
+    display: flex;
   }
 
   button {

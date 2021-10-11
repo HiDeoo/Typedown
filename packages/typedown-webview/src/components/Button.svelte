@@ -1,15 +1,16 @@
 <script lang="ts">
   export let disabled = false
+  export let primary = false
 </script>
 
-<button on:click {disabled}><slot /></button>
+<button on:click class:primary {disabled}><slot /></button>
 
 <style>
   button {
-    background-color: var(--vscode-button-background);
+    background-color: var(--vscode-button-secondaryBackground);
     border: 1px solid var(--vscode-button-border);
     border-radius: 0;
-    color: var(--vscode-button-foreground);
+    color: var(--vscode-button-secondaryForeground);
     cursor: pointer;
     line-height: 1.4em;
     margin-right: 4px;
@@ -17,7 +18,7 @@
   }
 
   button:hover:enabled {
-    background-color: var(--vscode-button-hoverBackground);
+    background-color: var(--vscode-button-secondaryHoverBackground);
   }
 
   button:focus-visible {
@@ -30,5 +31,14 @@
   button:disabled {
     cursor: not-allowed;
     opacity: 0.4;
+  }
+
+  button.primary {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+  }
+
+  button.primary:hover:enabled {
+    background-color: var(--vscode-button-hoverBackground);
   }
 </style>
