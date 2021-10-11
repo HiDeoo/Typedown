@@ -37,7 +37,7 @@
     </div>
     <div class="controls">
       <Input bind:value={$filter} on:reset={onResetFilter} disabled={!showDetails} placeholder="Filter" />
-      <Button on:click={onClickExport} disabled={hasExported}>Export</Button>
+      <Button primary on:click={onClickExport} disabled={hasExported}>Export</Button>
     </div>
   </header>
 </Section>
