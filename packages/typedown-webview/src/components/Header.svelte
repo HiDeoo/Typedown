@@ -55,6 +55,10 @@
 
   .details {
     color: var(--vscode-tab-inactiveForeground);
+    margin-right: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .controls {
