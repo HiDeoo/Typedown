@@ -12,7 +12,8 @@
     "lint": "svelte-check --tsconfig tsconfig.json --fail-on-warnings --fail-on-hints"
   },
   "dependencies": {
-    "@vscode/codicons": "0.0.22"
+    "@vscode/codicons": "0.0.22",
+    "highlight-words": "1.2.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "1.0.0-next.22",

@@ -5,8 +5,10 @@
     isObjectTypeAliasDefinition,
     isTypeAliasDefinition,
   } from 'typedown-shared'
+  import highlightWords, { HighlightWords } from 'highlight-words'
 
   import { definitions } from '../stores/definitions'
+  import { filter, isFiltering } from '../stores/filters'
   import Checkbox from './Checkbox.svelte'
   import Table from './Table.svelte'
   import DefinitionChildren from './DefinitionChildren.svelte'
@@ -22,6 +24,9 @@
     (isInterfaceDefinition(definition) || isObjectTypeAliasDefinition(definition)) &&
     definition.description.length > 0
 
+  let nameChunks: HighlightWords.Chunk[]
+  $: nameChunks = definition && $isFiltering ? highlightWords({ text: definition.name, query: $filter }) : []
+
   function onChangeExported() {
     definitions.toggle(identifier)
   }
@@ -33,7 +38,15 @@
     {#if exported}
       <div class="definitionIndicator" />
     {/if}
-    <strong>{definition.name}</strong>
+    <strong>
+      {#if $isFiltering}
+        {#each nameChunks as nameChunk (nameChunk.key)}
+          <span class:highlight={nameChunk.match}>{nameChunk.text}</span>
+        {/each}
+      {:else}
+        {definition.name}
+      {/if}
+    </strong>
     {#if hasDescription}
       <div class="description">{definition.description}</div>
     {/if}
@@ -87,6 +100,10 @@
     position: relative;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  strong .highlight {
+    background-color: var(--vscode-editor-findMatchBackground);
   }
 
   .description {
