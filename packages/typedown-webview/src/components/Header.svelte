@@ -29,10 +29,9 @@
   <header>
     <div class="details">
       {#if showDetails}
-        {exportedCount} definition{exportedCount !== 1 ? 's' : ''} selected (<button
-          type="button"
-          on:click={onClickSelectAll}>{selectAllLabel}</button
-        >)
+        <span>{exportedCount} definition{exportedCount !== 1 ? 's' : ''} selected (</span>
+        <button type="button" on:click={onClickSelectAll}>{selectAllLabel}</button>
+        <span>)</span>
       {/if}
     </div>
     <div class="controls">
@@ -48,13 +47,15 @@
   }
 
   header {
-    align-items: center;
+    align-items: stretch;
     display: flex;
     justify-content: space-between;
   }
 
   .details {
+    align-items: center;
     color: var(--vscode-tab-inactiveForeground);
+    display: flex;
     margin-right: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
