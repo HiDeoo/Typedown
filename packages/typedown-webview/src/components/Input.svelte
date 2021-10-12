@@ -77,7 +77,6 @@
 
   button:focus-visible {
     outline: 1px solid var(--vscode-focusBorder);
-    outline-offset: 1px;
   }
 
   button:hover:enabled {
