@@ -14,7 +14,7 @@
     cursor: pointer;
     line-height: 1.4em;
     margin-right: 4px;
-    padding: 2px 14px;
+    padding: 4px 14px;
   }
 
   button:hover:enabled {
