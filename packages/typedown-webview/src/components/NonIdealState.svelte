@@ -9,7 +9,7 @@
     <p class="icon" class:rotate={iconRotate}><i class="codicon codicon-{icon}" /></p>
   {/if}
   <p class="text">{@html text}</p>
-  <div><slot /></div>
+  <div class="content"><slot /></div>
 </div>
 
 <style>
@@ -47,5 +47,10 @@
     to {
       transform: rotate(360deg);
     }
+  }
+
+  .content {
+    overflow: visible;
+    margin-bottom: 14px;
   }
 </style>
