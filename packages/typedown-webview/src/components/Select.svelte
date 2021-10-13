@@ -1,30 +1,46 @@
-<script lang="ts" context="module">
-  export interface Item {
-    label: string
-    value: string
-  }
-</script>
-
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import Select from 'svelte-select'
 
-  export let items: Item[]
-  export let value: Item
+  type Option = $$Generic
+
+  export let options: Option[]
+  export let value: Option
   export let disabled = false
+  export let optionRenderer: (option: Option) => string
 
-  const dispatch = createEventDispatcher<{ select: Item }>()
+  const dispatch = createEventDispatcher<{ select: Option }>()
 
-  function onInternalSelect(event: CustomEvent<Item>) {
-    dispatch('select', event.detail)
+  function onInternalSelect(event: CustomEvent<InternalOption>) {
+    dispatch('select', event.detail.value)
+  }
+
+  function onInternalOptionRenderer(option: InternalOption) {
+    return optionRenderer(option.value)
+  }
+
+  function onInternalSRenderer(option: Option | InternalOption) {
+    return optionRenderer(isInternalOption(option) ? option.value : option)
+  }
+
+  function isInternalOption(option: Option | InternalOption): option is InternalOption {
+    return typeof option === 'object' && typeof (option as InternalOption).value !== 'undefined'
+  }
+
+  interface InternalOption {
+    index: number
+    label: string
+    value: Option
   }
 </script>
 
 <div class="wrapper">
   <Select
-    {items}
+    items={options}
     {value}
     on:select={onInternalSelect}
+    getOptionLabel={onInternalOptionRenderer}
+    getSelectionLabel={onInternalSRenderer}
     isDisabled={disabled}
     listAutoWidth={false}
     isSearchable={false}
