@@ -64,6 +64,7 @@
 
   .controls {
     display: flex;
+    gap: 4px;
   }
 
   button {

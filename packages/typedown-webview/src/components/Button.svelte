@@ -13,7 +13,6 @@
     color: var(--vscode-button-secondaryForeground);
     cursor: pointer;
     line-height: 1.4em;
-    margin-right: 4px;
     padding: 4px 14px;
   }
 
