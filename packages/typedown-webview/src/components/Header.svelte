@@ -9,11 +9,11 @@
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length
-  $: hasExported = exportedCount === 0
-  $: selectAllLabel = hasExported ? 'Select All' : 'Clear All'
+  $: hasNoExported = exportedCount === 0
+  $: selectAllLabel = hasNoExported ? 'Select All' : 'Clear All'
 
   function onClickSelectAll() {
-    definitions.selectAll(hasExported)
+    definitions.selectAll(hasNoExported)
   }
 
   function onClickExport() {
@@ -36,7 +36,7 @@
     </div>
     <div class="controls">
       <Input bind:value={$filter} on:reset={onResetFilter} disabled={!showDetails} placeholder="Filter" />
-      <Button primary on:click={onClickExport} disabled={hasExported}>Export</Button>
+      <Button primary on:click={onClickExport} disabled={!showDetails || hasNoExported}>Export</Button>
     </div>
   </header>
 </Section>
