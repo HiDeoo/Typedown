@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@vscode/codicons": "0.0.22",
-    "highlight-words": "1.2.0"
+    "highlight-words": "1.2.0",
+    "svelte-select": "4.4.3"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "1.0.0-next.22",
