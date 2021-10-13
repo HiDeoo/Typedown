@@ -7,7 +7,7 @@
 
   let input: HTMLInputElement
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher<{ reset: void }>()
 
   function onReset() {
     dispatch('reset')
