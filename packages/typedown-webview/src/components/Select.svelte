@@ -36,7 +36,7 @@
   }
 </script>
 
-<div class="wrapper">
+<div class="select">
   <Select
     items={options}
     {value}
@@ -54,7 +54,7 @@
 </div>
 
 <style>
-  .wrapper {
+  .select {
     --background: var(--vscode-dropdown-background);
     --border: 1px solid var(--vscode-dropdown-border);
     --borderFocusColor: var(--vscode-focusBorder);
@@ -81,13 +81,13 @@
     --padding: 0 10px;
   }
 
-  .wrapper :global(.item) {
+  .select :global(.item) {
     border: 1px solid transparent;
     cursor: pointer;
     margin: 1px;
   }
 
-  .wrapper :global(.item.hover) {
+  .select :global(.item.hover) {
     border: 1px solid var(--vscode-focusBorder);
   }
 
@@ -96,7 +96,7 @@
     opacity: 0.4;
   }
 
-  .wrapper :global(input:disabled) {
+  .select :global(input:disabled) {
     cursor: not-allowed;
   }
 </style>

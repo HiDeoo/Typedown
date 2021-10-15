@@ -22,3 +22,9 @@
   on:select={onSelect}
   optionRenderer={renderHeadingOption}
 />
+
+<style>
+  :global(.select) {
+    width: 110px;
+  }
+</style>
