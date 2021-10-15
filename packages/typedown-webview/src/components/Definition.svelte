@@ -17,6 +17,7 @@
 
   export let identifier: DefinitionIdentifier
 
+  $: headingLevelIndicator = '#'.repeat($definitions.headingLevel)
   $: definition = $definitions.byId[identifier]
   $: exported = definition?.exported === true
   $: hasDescription =
@@ -39,6 +40,7 @@
       <div class="definitionIndicator" />
     {/if}
     <strong>
+      <span class="headingLevel">{headingLevelIndicator}</span>
       {#if $isFiltering}
         {#each nameChunks as nameChunk (nameChunk.key)}
           <span class:highlight={nameChunk.match}>{nameChunk.text}</span>
@@ -104,6 +106,12 @@
 
   strong .highlight {
     background-color: var(--vscode-editor-findMatchBackground);
+  }
+
+  .headingLevel {
+    font-weight: 400;
+    margin-right: 1px;
+    opacity: 0.7;
   }
 
   .description {
