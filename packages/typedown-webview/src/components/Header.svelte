@@ -4,6 +4,7 @@
   import Section from './Section.svelte'
   import Button from './Button.svelte'
   import Input from './Input.svelte'
+  import HeadingLevelPicker from './HeadingLevelPicker.svelte'
   import { definitions } from '../stores/definitions'
   import { filter } from '../stores/filters'
 
@@ -35,6 +36,7 @@
       {/if}
     </div>
     <div class="controls">
+      <HeadingLevelPicker disabled={!showDetails} />
       <Input bind:value={$filter} on:reset={onResetFilter} disabled={!showDetails} placeholder="Filter" />
       <Button primary on:click={onClickExport} disabled={!showDetails || hasNoExported}>Export</Button>
     </div>

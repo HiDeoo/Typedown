@@ -11,8 +11,10 @@
 
   const dispatch = createEventDispatcher<{ select: Option }>()
 
-  function onInternalSelect(event: CustomEvent<InternalOption>) {
-    dispatch('select', event.detail.value)
+  function onInternalSelect(event: CustomEvent<InternalOption | number>) {
+    if (isInternalOption(event.detail)) {
+      dispatch('select', event.detail.value)
+    }
   }
 
   function onInternalOptionRenderer(option: InternalOption) {
@@ -23,7 +25,7 @@
     return optionRenderer(isInternalOption(option) ? option.value : option)
   }
 
-  function isInternalOption(option: Option | InternalOption): option is InternalOption {
+  function isInternalOption(option: Option | InternalOption | number): option is InternalOption {
     return typeof option === 'object' && typeof (option as InternalOption).value !== 'undefined'
   }
 
