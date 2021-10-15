@@ -3,7 +3,8 @@
     "browser": true
   },
   "globals": {
-    "vscode": "readonly"
+    "vscode": "readonly",
+    "$$Generic": "readonly"
   },
   "plugins": ["@typescript-eslint", "svelte3"],
   "overrides": [

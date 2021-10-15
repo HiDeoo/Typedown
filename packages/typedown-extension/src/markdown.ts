@@ -10,10 +10,15 @@ import {
 import prettier from 'prettier/standalone'
 import parserMarkdown from 'prettier/parser-markdown'
 
-export function getDefinitionsMarkdown(definitions: Definitions): string {
+export function getDefinitionsMarkdown(definitions: Definitions, headingLevel: number): string {
   const markdown = definitions
     .map((definition) =>
-      [`# ${definition.name}`, '\n', getDefinitionDescription(definition), getDefinitionContent(definition)].join('\n')
+      [
+        getDefinitionHeading(definition, headingLevel),
+        '\n',
+        getDefinitionDescription(definition),
+        getDefinitionContent(definition),
+      ].join('\n')
     )
     .join('\n\n')
 
@@ -26,6 +31,10 @@ export function escapeMarkdown(markdown: string): string {
 
 export function formatMarkdown(markdown: string): string {
   return prettier.format(markdown, { parser: 'markdown', plugins: [parserMarkdown] })
+}
+
+function getDefinitionHeading(definition: Definition, headingLevel: number): string {
+  return `${'#'.repeat(headingLevel)} ${definition.name}`
 }
 
 function getDefinitionContent(definition: Definition): string {

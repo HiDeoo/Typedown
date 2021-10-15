@@ -75,7 +75,7 @@ function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
           }
           case 'export': {
             panel.dispose()
-            exportDefinitions(event.definitions)
+            exportDefinitions(event.definitions, event.headingLevel)
             break
           }
           case 'error': {
@@ -108,11 +108,11 @@ async function getWorkspaceTSConfig(): Promise<Uri> {
   return tsConfig
 }
 
-export async function exportDefinitions(definitions: Definitions): Promise<string | undefined> {
+export async function exportDefinitions(definitions: Definitions, headingLevel: number): Promise<string | undefined> {
   await window.withProgress(
     { location: ProgressLocation.Notification, title: 'Exporting definitions to Markdown' },
     async () => {
-      const markdown = getDefinitionsMarkdown(definitions)
+      const markdown = getDefinitionsMarkdown(definitions, headingLevel)
 
       return env.clipboard.writeText(markdown)
     }

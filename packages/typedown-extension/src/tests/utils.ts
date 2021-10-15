@@ -127,7 +127,8 @@ function getFixturesPath(fixturesPath: string): string {
 
 export async function assertMarkdownDefinitions(
   definitions: Definitions,
-  assertions: DefinitionAssertion[]
+  assertions: DefinitionAssertion[],
+  headingLevel = 1
 ): Promise<void> {
   let markdown: string | undefined
 
@@ -162,14 +163,14 @@ export async function assertMarkdownDefinitions(
     return acc
   }, [])
 
-  await exportDefinitions(markdownDefinitions)
+  await exportDefinitions(markdownDefinitions, headingLevel)
 
   sinon.restore()
 
   const assertionsMarkdown = assertions
     .map((assertion) => {
       const components = [
-        `# ${assertion.name}`,
+        `${'#'.repeat(headingLevel)} ${assertion.name}`,
         assertion.description && typeof assertion.type === 'undefined' ? `${assertion.description}\n` : '',
       ]
 
