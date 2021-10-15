@@ -14,6 +14,7 @@ export interface WebviewMessageInit extends Message {
 export interface WebviewMessageExport extends Message {
   type: 'export'
   definitions: Definitions
+  headingLevel: number
 }
 
 export interface WebviewMessageError extends Message {

@@ -18,7 +18,11 @@
   }
 
   function onClickExport() {
-    vscode.postMessage<WebviewMessageExport>({ type: 'export', definitions: definitions.getExportedDefinitions() })
+    vscode.postMessage<WebviewMessageExport>({
+      type: 'export',
+      definitions: definitions.getExportedDefinitions(),
+      headingLevel: $definitions.headingLevel,
+    })
   }
 
   function onResetFilter() {
