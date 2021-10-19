@@ -1,6 +1,7 @@
 {
   "name": "typedown",
   "version": "0.0.1",
+  "publisher": "hideoo",
   "author": "HiDeoo",
   "license": "MIT",
   "private": true,
@@ -57,5 +58,9 @@
   "lint-staged": {
     "*.{ts,svelte}": "yarn lint",
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HiDeoo/Typedown"
   }
 }
