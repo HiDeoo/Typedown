@@ -7,6 +7,7 @@ import {
   Uri,
   WebviewPanel,
   window,
+  workspace,
 } from 'vscode'
 import { Definitions, isMessage } from 'typedown-shared'
 
@@ -18,11 +19,15 @@ import { getDefinitionsMarkdown } from './markdown'
 export const COMMANDS = {
   fileToMd: 'typedown.fileToMd',
   folderToMd: 'typedown.folderToMd',
+  openExampleProject: 'typedown.openExampleProject',
+  openFileExample: 'typedown.openFileExample',
 } as const
 
 export function activate(context: ExtensionContext): void {
   context.subscriptions.push(commands.registerCommand(COMMANDS.fileToMd, () => tsToMd(context, Mode.File)))
   context.subscriptions.push(commands.registerCommand(COMMANDS.folderToMd, () => tsToMd(context, Mode.Folder)))
+  context.subscriptions.push(commands.registerCommand(COMMANDS.openExampleProject, () => openExampleProject(context)))
+  context.subscriptions.push(commands.registerCommand(COMMANDS.openFileExample, () => openFileExample(context)))
 }
 
 async function tsToMd(context: ExtensionContext, mode: Mode) {
@@ -62,6 +67,19 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
   } finally {
     statusBarItem.dispose()
   }
+}
+
+function openExampleProject(context: ExtensionContext) {
+  return commands.executeCommand('vscode.openFolder', Uri.joinPath(context.extensionUri, 'examples'), {
+    forceNewWindow: false,
+    noRecentEntry: true,
+  })
+}
+
+async function openFileExample(context: ExtensionContext) {
+  const document = await workspace.openTextDocument(Uri.joinPath(context.extensionUri, 'examples/src/index.ts'))
+
+  return window.showTextDocument(document)
 }
 
 function showWebview(context: ExtensionContext): Promise<WebviewPanel> {
