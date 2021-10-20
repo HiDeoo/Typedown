@@ -34,6 +34,7 @@
     background-color: var(--vscode-input-background);
     border: 1px solid var(--vscode-input-border);
     color: var(--vscode-input-foreground);
+    height: 26px;
     line-height: 1.4em;
     padding: 3px 28px 3px 4px;
   }
