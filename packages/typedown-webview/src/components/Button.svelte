@@ -12,6 +12,7 @@
     border-radius: 0;
     color: var(--vscode-button-secondaryForeground);
     cursor: pointer;
+    height: 26px;
     line-height: 1.4em;
     padding: 4px 14px;
   }
