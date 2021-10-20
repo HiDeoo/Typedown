@@ -66,7 +66,7 @@
     top: 0;
     width: 6px;
     height: 12px;
-    border: solid white;
+    border: solid var(--vscode-foreground);
     border-width: 0 1px 1px 0;
     transform: rotate(50deg) skew(15deg);
   }

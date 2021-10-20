@@ -74,7 +74,7 @@
     --itemIsActiveBG: var(--vscode-dropdown-listBackground);
     --itemIsActiveColor: var(--vscode-dropdown-foreground);
     --itemPadding: 0 6px;
-    --listBackground: var(--vscode-dropdown-listBackground);
+    --listBackground: var(--vscode-dropdown-listBackground, var(--vscode-dropdown-background));
     --listBorder: 1px solid var(--vscode-focusBorder);
     --listBorderRadius: 0;
     --listLeft: -1px;

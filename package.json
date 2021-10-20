@@ -1,6 +1,7 @@
 {
   "name": "typedown",
   "version": "0.0.1",
+  "publisher": "hideoo",
   "author": "HiDeoo",
   "license": "MIT",
   "private": true,
@@ -20,7 +21,9 @@
   },
   "activationEvents": [
     "onCommand:typedown.fileToMd",
-    "onCommand:typedown.folderToMd"
+    "onCommand:typedown.folderToMd",
+    "onCommand:typedown.openExampleProject",
+    "onCommand:typedown.openFileExample"
   ],
   "contributes": {
     "commands": [
@@ -42,7 +45,59 @@
           "when": "editorLangId == typescript || editorLangId == typescriptreact"
         }
       ]
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "typedown-walkthrough",
+        "title": "Getting started with TypeDown",
+        "description": "Quickly export your TypeScript definitions to Markdown.",
+        "steps": [
+          {
+            "id": "typedown-walkthrough-install",
+            "title": "Install TypeDown",
+            "media": {
+              "altText": "TypeDown",
+              "image": "assets/icon.png"
+            },
+            "completionEvents": [
+              "extensionInstalled:hideoo.typedown"
+            ]
+          },
+          {
+            "id": "typedown-walkthrough-example-project",
+            "title": "Open example",
+            "description": "TypeDown exports your TypeScript definitions to Markdown from either a file or a folder and make them accessible from your clipboard.\nThe extension can be invoked using the **\"Typedown: File Definitions to Markdown\"** or **\"Typedown: Folder Definitions to Markdown\"** commands from the Command Palette.\nYou can also use an example project to quickly test the extension.\n[Open Example Project](command:typedown.openExampleProject)",
+            "media": {
+              "altText": "TypeDown Command Palette",
+              "image": {
+                "dark": "assets/typedown-walkthrough-example-project-dark.png",
+                "hc": "assets/typedown-walkthrough-example-project-hc.png",
+                "light": "assets/typedown-walkthrough-example-project-light.png"
+              }
+            },
+            "completionEvents": [
+              "onCommand:typedown.openExampleProject"
+            ]
+          },
+          {
+            "id": "typedown-walkthrough-example-file",
+            "title": "Export definitions",
+            "description": "To export your definitions, run the **\"Typedown: File Definitions to Markdown\"** command from the Command Palette.\nThis will open a new view where you will be able to select which definitions to export.\nUse the **\"Export\"** button to copy the selected definitions to your clipboard.\n[Open TypeScript File](command:typedown.openFileExample)",
+            "media": {
+              "altText": "TypeDown Export",
+              "image": {
+                "dark": "assets/typedown-walkthrough-example-file-dark.png",
+                "hc": "assets/typedown-walkthrough-example-file-hc.png",
+                "light": "assets/typedown-walkthrough-example-file-light.png"
+              }
+            },
+            "completionEvents": [
+              "onCommand:typedown.fileToMd"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "main": "dist",
   "devDependencies": {
@@ -57,5 +112,9 @@
   "lint-staged": {
     "*.{ts,svelte}": "yarn lint",
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HiDeoo/Typedown"
   }
 }
