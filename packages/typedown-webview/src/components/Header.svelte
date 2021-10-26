@@ -7,6 +7,7 @@
   import HeadingLevelPicker from './HeadingLevelPicker.svelte'
   import { definitions } from '../stores/definitions'
   import { filter } from '../stores/filters'
+  import vscode from '../lib/vscode'
 
   $: showDetails = $definitions.allIds.length > 0
   $: exportedCount = $definitions.allIds.filter((id) => $definitions.byId[id]?.exported).length

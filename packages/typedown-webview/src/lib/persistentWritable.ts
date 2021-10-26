@@ -1,6 +1,8 @@
 import type { Writable } from 'svelte/store'
 import { writable } from 'svelte/store'
 
+import vscode from './vscode'
+
 export function persistentWritable<T>(key: string, initialValue: T): PersistentWritable<T> {
   const store = writable<T>(initialValue)
 

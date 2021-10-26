@@ -6,6 +6,7 @@
   import Definitions from './Definitions.svelte'
   import { definitions } from '../stores/definitions'
   import { filter } from '../stores/filters'
+  import vscode from '../lib/vscode'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)

@@ -43,9 +43,6 @@ export function createWebviewPanel(
   </head>
   <body>
     <div id="app"></div>
-    <script>
-      const vscode = acquireVsCodeApi();
-    </script>
   </body>
 </html>`
 
