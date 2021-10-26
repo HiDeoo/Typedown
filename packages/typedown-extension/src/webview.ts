@@ -27,6 +27,8 @@ export function createWebviewPanel(
     context.subscriptions
   )
 
+  const cspSource = panel.webview.cspSource
+
   const jsURI = getWebviewPanelAssetURI(panel, 'index.js', context)
   const cssURI = getWebviewPanelAssetURI(panel, 'index.css', context)
   const codiconsURI = getWebviewPanelNodeModulesAssetURI(panel, '@vscode/codicons/dist/codicon.css', context)
@@ -36,6 +38,7 @@ export function createWebviewPanel(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${cspSource}; style-src ${cspSource} 'unsafe-hashes' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-4w766hJ6r2rXuCmeA4zgIjVc5QvMLcvdhD8m6sJjLKY='; font-src ${cspSource};" />
     <title>Typedown</title>
     <script type="module" crossorigin src="${jsURI}"></script>
     <link rel="stylesheet" href="${cssURI}">
