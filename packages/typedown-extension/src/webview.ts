@@ -12,7 +12,10 @@ export function createWebviewPanel(
     return [panel, true]
   }
 
-  panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, { enableScripts: true })
+  panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, {
+    enableScripts: true,
+    localResourceRoots: [context.extensionUri],
+  })
 
   panel.webview.onDidReceiveMessage(onDidReceiveMessage)
 
