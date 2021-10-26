@@ -50,14 +50,14 @@
     "walkthroughs": [
       {
         "id": "typedown-walkthrough",
-        "title": "Getting started with TypeDown",
+        "title": "Getting started with Typedown",
         "description": "Quickly export your TypeScript definitions to Markdown.",
         "steps": [
           {
             "id": "typedown-walkthrough-install",
-            "title": "Install TypeDown",
+            "title": "Install Typedown",
             "media": {
-              "altText": "TypeDown",
+              "altText": "Typedown",
               "image": "assets/icon.png"
             },
             "completionEvents": [
@@ -67,9 +67,9 @@
           {
             "id": "typedown-walkthrough-example-project",
             "title": "Open example",
-            "description": "TypeDown exports your TypeScript definitions to Markdown from either a file or a folder and make them accessible from your clipboard.\nThe extension can be invoked using the **\"Typedown: File Definitions to Markdown\"** or **\"Typedown: Folder Definitions to Markdown\"** commands from the Command Palette.\nYou can also use an example project to quickly test the extension.\n[Open Example Project](command:typedown.openExampleProject)",
+            "description": "Typedown exports your TypeScript definitions to Markdown from either a file or a folder and make them accessible from your clipboard.\nThe extension can be invoked using the **\"Typedown: File Definitions to Markdown\"** or **\"Typedown: Folder Definitions to Markdown\"** commands from the Command Palette.\nYou can also use an example project to quickly test the extension.\n[Open Example Project](command:typedown.openExampleProject)",
             "media": {
-              "altText": "TypeDown Command Palette",
+              "altText": "Typedown Command Palette",
               "image": {
                 "dark": "assets/walkthrough-example-project-dark.png",
                 "hc": "assets/walkthrough-example-project-hc.png",
@@ -85,7 +85,7 @@
             "title": "Export definitions",
             "description": "To export your definitions, run the **\"Typedown: File Definitions to Markdown\"** command from the Command Palette.\nThis will open a new view where you will be able to select which definitions to export.\nUse the **\"Export\"** button to copy the selected definitions to your clipboard.\n[Open TypeScript File](command:typedown.openFileExample)",
             "media": {
-              "altText": "TypeDown Export",
+              "altText": "Typedown Export",
               "image": {
                 "dark": "assets/walkthrough-example-file-dark.png",
                 "hc": "assets/walkthrough-example-file-hc.png",
