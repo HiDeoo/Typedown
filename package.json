@@ -103,6 +103,11 @@
       }
     ]
   },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
   "main": "dist",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.30.0",
