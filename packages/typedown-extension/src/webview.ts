@@ -13,6 +13,7 @@ export function createWebviewPanel(
   }
 
   panel = window.createWebviewPanel('typedown', 'Typedown', ViewColumn.Active, {
+    enableForms: false,
     enableScripts: true,
     localResourceRoots: [context.extensionUri],
   })
