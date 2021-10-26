@@ -19,6 +19,7 @@
     "vscode:prepublish": "yarn build",
     "prepare": "husky install"
   },
+  "icon": "assets/icon.png",
   "activationEvents": [
     "onCommand:typedown.fileToMd",
     "onCommand:typedown.folderToMd",
@@ -70,9 +71,9 @@
             "media": {
               "altText": "TypeDown Command Palette",
               "image": {
-                "dark": "assets/typedown-walkthrough-example-project-dark.png",
-                "hc": "assets/typedown-walkthrough-example-project-hc.png",
-                "light": "assets/typedown-walkthrough-example-project-light.png"
+                "dark": "assets/walkthrough-example-project-dark.png",
+                "hc": "assets/walkthrough-example-project-hc.png",
+                "light": "assets/walkthrough-example-project-light.png"
               }
             },
             "completionEvents": [
@@ -86,9 +87,9 @@
             "media": {
               "altText": "TypeDown Export",
               "image": {
-                "dark": "assets/typedown-walkthrough-example-file-dark.png",
-                "hc": "assets/typedown-walkthrough-example-file-hc.png",
-                "light": "assets/typedown-walkthrough-example-file-light.png"
+                "dark": "assets/walkthrough-example-file-dark.png",
+                "hc": "assets/walkthrough-example-file-hc.png",
+                "light": "assets/walkthrough-example-file-light.png"
               }
             },
             "completionEvents": [
