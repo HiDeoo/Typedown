@@ -1,6 +1,9 @@
 {
   "name": "typedown",
   "version": "0.0.1",
+  "displayName": "Typedown",
+  "description": "Export your TypeScript definitions to Markdown.",
+  "homepage": "https://github.com/HiDeoo/Typedown",
   "publisher": "hideoo",
   "author": "HiDeoo",
   "license": "MIT",
@@ -114,8 +117,34 @@
     "*.{ts,svelte}": "yarn lint",
     "**/*": "prettier --write --ignore-unknown"
   },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "export",
+    "TypeScript",
+    "definition",
+    "Markdown"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "galleryBanner": {
+    "color": "#7a8194",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml/badge.svg",
+      "href": "https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml",
+      "description": "Integration Status"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/HiDeoo/Typedown"
+  },
+  "bugs": {
+    "url": "https://github.com/HiDeoo/Typedown/issues"
   }
 }
