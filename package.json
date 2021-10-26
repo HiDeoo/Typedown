@@ -19,6 +19,7 @@
     "vscode:prepublish": "yarn build",
     "prepare": "husky install"
   },
+  "icon": "assets/icon.png",
   "activationEvents": [
     "onCommand:typedown.fileToMd",
     "onCommand:typedown.folderToMd",
