@@ -2,7 +2,7 @@
   "name": "typedown-shared",
   "version": "0.0.1",
   "author": "HiDeoo",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "main": "dist",
   "types": "dist/index.d.ts",
