@@ -2,7 +2,7 @@
   "name": "typedown",
   "version": "0.0.1",
   "displayName": "Typedown",
-  "description": "Export your TypeScript definitions to Markdown.",
+  "description": "Quickly export your TypeScript definitions to Markdown.",
   "homepage": "https://github.com/HiDeoo/Typedown",
   "publisher": "hideoo",
   "author": "HiDeoo",
