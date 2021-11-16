@@ -62,8 +62,31 @@ async function tsToMd(context: ExtensionContext, mode: Mode) {
     // @see https://github.com/microsoft/TypeScript/issues/44880
     const message = error instanceof TypedownError ? error.message : 'Something went wrong!'
     const detail = error instanceof TypedownError ? error.detail : error instanceof Error ? error.message : undefined
+    const outputChannelOnlyDetail =
+      error instanceof TypedownError && error.outputChannelOnlyDetail ? error.outputChannelOnlyDetail : undefined
 
-    window.showErrorMessage(message, { detail, modal: true })
+    const output = window.createOutputChannel('Typedown')
+    output.appendLine(message)
+
+    if (detail) {
+      output.appendLine(`${detail}\n`)
+    }
+
+    if (outputChannelOnlyDetail) {
+      output.appendLine(outputChannelOnlyDetail)
+    }
+
+    const errorActions: string[] = []
+
+    if (outputChannelOnlyDetail) {
+      errorActions.push(ErrorAction.ShowDetails)
+    }
+
+    const action = await window.showErrorMessage(message, { detail, modal: true }, ...errorActions)
+
+    if (action === ErrorAction.ShowDetails) {
+      output.show(false)
+    }
   } finally {
     statusBarItem.dispose()
   }
@@ -142,4 +165,8 @@ export async function exportDefinitions(definitions: Definitions, headingLevel: 
 enum Mode {
   File,
   Folder,
+}
+
+enum ErrorAction {
+  ShowDetails = 'Show Details',
 }

@@ -100,7 +100,7 @@ async function getWorkspaceIgnoreGlobs(location: Uri): Promise<string[]> {
 }
 
 export class TypedownError extends Error {
-  constructor(message: string, public detail?: string) {
+  constructor(message: string, public detail?: string, public outputChannelOnlyDetail?: string) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
   }
