@@ -1,5 +1,6 @@
 import { Uri } from 'vscode'
 import * as TypeDoc from 'typedoc'
+import { Logger, LogLevel } from 'typedoc/dist/lib/utils'
 import { DefinitionIdentifier, Definitions } from 'typedown-shared'
 import { findConfigFile } from 'typescript'
 import { existsSync } from 'fs'
@@ -33,6 +34,7 @@ export function getDefinitions(tsConfig: Uri, entryPoint: Uri): Definitions {
 }
 
 function getSchema(tsConfig: Uri, entryPoint: Uri): Schema {
+  const logger = new TypeDocLogger()
   const app = new TypeDoc.Application()
   app.options.addReader(new TypeDoc.TSConfigReader())
 
@@ -49,10 +51,16 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): Schema {
     tsconfig: tsConfig.fsPath,
   })
 
+  app.logger = logger
+
   const reflections = app.convert()
 
   if (!reflections) {
-    throw new TypedownError('Could not generate definitions for your TypeScript project.')
+    throw new TypedownError(
+      'Could not generate definitions for your TypeScript project.',
+      'Your project may contain errors.',
+      logger.errors
+    )
   }
 
   const reflection = app.serializer.projectToObject(reflections)
@@ -101,4 +109,31 @@ interface Schema extends TypeDoc.JSONOutput.ProjectReflection {
 
 export interface DeclarationReflection extends TypeDoc.JSONOutput.DeclarationReflection {
   id: DefinitionIdentifier
+}
+
+class TypeDocLogger extends Logger {
+  private logs: [string, LogLevel?][] = []
+
+  override log(message: string, level?: LogLevel): void {
+    super.log(message, level)
+
+    this.logs.push([message, level])
+  }
+
+  get errors(): string {
+    return this.logs
+      .reduce<string[]>((acc, [message, level]) => {
+        if (level === LogLevel.Error) {
+          acc.push(this.getRawMessage(message))
+        }
+
+        return acc
+      }, [])
+      .join('\n')
+  }
+
+  private getRawMessage(message: string): string {
+    // eslint-disable-next-line no-control-regex
+    return message.replace(/\x1b\[(?:91|93|96|90|0)m/gu, '')
+  }
 }
