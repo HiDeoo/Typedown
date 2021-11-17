@@ -42,6 +42,7 @@ function getSchema(tsConfig: Uri, entryPoint: Uri): Schema {
     disableSources: true,
     emit: false,
     entryPoints: [entryPoint.fsPath],
+    exclude: ['**/@types/**/*.d.ts'],
     excludeInternal: true,
     excludePrivate: true,
     excludeProtected: true,
