@@ -11,9 +11,7 @@ function createFilter() {
   const store = persistentWritable<string>('filter', filterInitialState)
 
   return {
-    persist: store.persist,
-    subscribe: store.subscribe,
-    set: store.set,
+    ...store,
     reset() {
       store.set(filterInitialState)
     },

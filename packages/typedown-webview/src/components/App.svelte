@@ -6,16 +6,24 @@
   import Definitions from './Definitions.svelte'
   import { definitions } from '../stores/definitions'
   import { filter } from '../stores/filters'
+  import { scrollY } from '../stores/position'
   import vscode from '../lib/vscode'
 
   onMount(() => {
     window.addEventListener('message', onVSCodeMessage)
 
     const didRestoreDefinitions = definitions.persist()
+    const didRestoreScrollY = scrollY.persist()
     filter.persist()
 
     if (!didRestoreDefinitions) {
       vscode.postMessage<WebviewMessageInit>({ type: 'init' })
+    }
+
+    if (didRestoreScrollY) {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, $scrollY)
+      })
     }
   })
 
@@ -32,6 +40,7 @@
         }
         case 'reset': {
           definitions.reset()
+          scrollY.reset()
           filter.reset()
           break
         }
@@ -46,6 +55,8 @@
     }
   }
 </script>
+
+<svelte:window bind:scrollY={$scrollY} />
 
 <Header />
 <Definitions />
