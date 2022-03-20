@@ -7,10 +7,10 @@
   <p><strong>Quickly export your TypeScript definitions to Markdown…</strong></p>
   <p>
   <a href="https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml">
-    <img alt="Integration Status" src="https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml/badge.svg" />
+    <img alt="Integration Status" src="https://github.com/HiDeoo/Typedown/workflows/integration/badge.svg" />
   </a>
   <a href="https://github.com/HiDeoo/Typedown/blob/main/LICENSE.md">
-    <img alt="License" src="https://badgen.now.sh/badge/license/MIT/blue" />
+    <img alt="License" src="https://badgen.net/github/license/hideoo/Typedown" />
   </a>
   </p>
   <p>

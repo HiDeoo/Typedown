@@ -140,9 +140,14 @@
   },
   "badges": [
     {
-      "url": "https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml/badge.svg",
+      "url": "https://github.com/HiDeoo/Typedown/workflows/integration/badge.svg",
       "href": "https://github.com/HiDeoo/Typedown/actions/workflows/integration.yml",
       "description": "Integration Status"
+    },
+    {
+      "url": "https://badgen.net/github/license/hideoo/Typedown",
+      "href": "https://github.com/HiDeoo/Typedown/blob/main/LICENSE.md",
+      "description": "License"
     }
   ],
   "repository": {
