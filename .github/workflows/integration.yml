@@ -6,7 +6,7 @@ jobs:
   lint_and_test:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     # Run on external PRs, but not on internal PRs as they'll be run by the push event to the branch.
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
